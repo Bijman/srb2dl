@@ -2,25 +2,25 @@
 
 This script extracts links and information from mb.srb2.org, GitHub and GitLab and lists them in a simple format including title, author, upload/update date and category. This allows more straightforward and centralized approach to downloading everything related to SRB2 and SRB2Kart.
 
-Features:
-    - Browsing SRB2/SRB2Kart content by categories,
-    - Downloading multiple resources at the same time,
-    - Searching content by keyword or user,
-    - Filtering content by reusable,
-    - Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
-    - Runs on Linux and Windows (Cygwin, Git Bash),
+**Features:**
+- Browsing SRB2/SRB2Kart content by categories,
+- Downloading multiple resources at the same time,
+- Searching content by keyword or user,
+- Filtering content by reusable,
+- Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
+- Runs on Linux and Windows (Cygwin, Git Bash),
 
-Dependencies:
-    - GNU Coreutils,
-    - Bash or any POSIX compliant shell,
-    - Curl,
-    - Gawk,
-    - Optionally: w3m or any web browser for previewing resources in mb.srb2.org.
+**Dependencies:**
+- GNU Coreutils,
+- Bash or any POSIX compliant shell,
+- Curl,
+- Gawk,
+- Optionally: w3m or any web browser for previewing resources in mb.srb2.org.
 
 Additionally, Windows users need to have installed Cygwin or Git Bash to run this script.
 
 
-Usage (from help text):
+```Usage (from help text):
 Download SRB2/SRB2Kart addons, software and builds.
 
 Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
@@ -61,3 +61,4 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
 
    Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
+```
