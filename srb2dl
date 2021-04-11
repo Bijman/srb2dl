@@ -47,7 +47,7 @@ choosepage() {
 
     TAGLINES=$(printf "%s\n" "$PAGECODE" | awk -F'<div class="structItem-resourceTagLine">|</div>' '/<div class="structItem-resourceTagLine">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
     USERS=$(printf "%s\n" "$PAGECODE" | awk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
-    DATE=$(printf "%s\n" "$PAGECODE" | awk -F'<li class="structItem-startDate"><a href="*.*" rel="nofollow"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">|</time></a></li>' '/<li class="structItem-startDate">/ {print $2}')
+    DATE=$(printf "%s\n" "$PAGECODE" | awk -F'class="u-concealed"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">|</time></a></dd>' '/class="u-concealed"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">/ {print $2}')
 
     if [ "$SEARCH" = 1 ]; then
         if [ -z "$arrayfile" ] && [ -z "$arrayfilename" ]; then
@@ -134,7 +134,7 @@ for (i = 1; i in l; i++)
         count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
         clear
-        printf "\033[1m\033[34m\n%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
         printf "%s\n" "$arraypagename" | awk '{print NR")", $0}'
         while true; do
             printf "#? "
@@ -486,9 +486,11 @@ choosefile() {
                         FILELISTTMP="$OPTFILE"
                         FILELIST="$FILELIST
 $FILELISTTMP"
+			FILELIST=$(printf "%s\n" "$FILELIST" | awk '!a[$0]++')
                         FILELISTNAMETMP="$OPTFILENAME"
                         FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
+			FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | awk '!a[$0]++')
                     elif [ "$OPTURL" = "SRB2KartMoeMansion" ]; then
                         if [ -n "$(printf "%s\n" "$OPTFILE" | awk '/gitlab.com/ {print}')" ]; then
                             FILELISTTMP="$OPTFILE"
@@ -497,9 +499,12 @@ $FILELISTNAMETMP"
                         fi
                         FILELIST="$FILELIST
 $FILELISTTMP"
+			FILELIST=$(printf "%s\n" "$FILELIST" | awk '!a[$0]++')
+
                         FILELISTNAMETMP="$OPTFILENAME"
                         FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
+			FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | awk '!a[$0]++')
                     elif [ "$OPTURL" = "SRB2KartVRMod" ]; then
                         if [ -n "$(printf "%s\n" "$OPTFILE" | awk '/gitlab.com/ {print}')" ]; then
                             FILELISTTMP="$OPTFILE"
@@ -508,16 +513,20 @@ $FILELISTNAMETMP"
                         fi
                         FILELIST="$FILELIST
 $FILELISTTMP"
+			FILELIST=$(printf "%s\n" "$FILELIST" | awk '!a[$0]++')
                         FILELISTNAMETMP="$OPTFILENAME"
                         FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
+			FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | awk '!a[$0]++')
                     else
                         FILELISTTMP="https://mb.srb2.org/$OPTFILE"
                         FILELIST="$FILELIST
 $FILELISTTMP"
+			FILELIST=$(printf "%s\n" "$FILELIST" | awk '!a[$0]++')
                         FILELISTNAMETMP="$OPTFILENAME"
                         FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
+			FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | awk '!a[$0]++')
                     fi
                 fi
                 break
@@ -1297,7 +1306,7 @@ case "$2" in
             while
                 clear
                 srb2kartlogo
-                printf "\033[1m\033[34m\n%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 for loop in "Kart Characters" "Kart Maps" "Kart Miscellaneous" "Kart Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do echo "$((i += 1))) $loop"; done
                 printf "#? "
                 read -r choose
@@ -1667,7 +1676,7 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
             while
                 clear
                 srb2kartlogo
-                printf "\033[1m\033[34m\n%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 for loop in "Kart Characters" "Kart Maps" "Kart Miscellaneous" "Kart Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do echo "$((i += 1))) $loop"; done
                 printf "#? "
                 read -r choose
@@ -1765,7 +1774,7 @@ if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" =
     while
         clear
         srb2logo
-        printf "\033[1m\033[34m\n%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
         for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do echo "$((i += 1))) $loop"; done
         printf "#? "
         read -r choose
