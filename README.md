@@ -2,6 +2,8 @@
 
 This script extracts links and information from mb.srb2.org, GitHub and GitLab and lists them in a simple format including title, author, upload/update date and category. This allows more straightforward and centralized approach to downloading everything related to SRB2 and SRB2Kart.
 
+![srb2dl](https://user-images.githubusercontent.com/16626326/114288816-a7607d80-9a72-11eb-8509-a62fa1829405.gif)
+
 
 **Features:**
 - Browsing SRB2/SRB2Kart content by categories,
