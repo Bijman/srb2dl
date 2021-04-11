@@ -2,13 +2,15 @@
 
 This script extracts links and information from mb.srb2.org, GitHub and GitLab and lists them in a simple format including title, author, upload/update date and category. This allows more straightforward and centralized approach to downloading everything related to SRB2 and SRB2Kart.
 
+
 **Features:**
 - Browsing SRB2/SRB2Kart content by categories,
 - Downloading multiple resources at the same time,
 - Searching content by keyword or user,
 - Filtering content by reusable,
 - Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
-- Runs on Linux and Windows (Cygwin, Git Bash),
+- Runs on Linux and Windows (Cygwin, Git Bash).
+
 
 **Dependencies:**
 - GNU Coreutils,
@@ -20,7 +22,14 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 Additionally, Windows users need to have installed Cygwin or Git Bash to run this script.
 
 
-```Usage (from help text):
+**Installation:**
+1. Enter `git clone https://github.com/Bijman/srb2dl` .
+
+2. Enter `sudo make install`, which will install to /usr/bin, or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl` .
+
+
+**Usage (from help text):**
+```
 Download SRB2/SRB2Kart addons, software and builds.
 
 Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
