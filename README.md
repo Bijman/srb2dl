@@ -25,6 +25,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 **Dependencies Installation:**
 - **Linux:**
+
 In terminal enter this following commands:
 1. Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install coreutils bash curl gawk`.
 2. Arch/Arch based: `sudo pacman -S coreutils bash curl gawk`.
@@ -32,13 +33,12 @@ In terminal enter this following commands:
 
 - **Windows:**
 1. Installing Git Bash:
-- Watch this video from 7:19 to 9:33 : ![video](https://youtu.be/SWYqp7iY_Tc?t=439)
+- Watch this video from 7:19 to 9:33 : [video](https://youtu.be/SWYqp7iY_Tc?t=439)
 2. Git Bash can be found on start menu.
 3. The rest of dependencies are installed, if you followed video.
 
 - **MacOS**:
-In terminal enter this following command:
-1. `brew install gawk curl` .
+1. In terminal enter this following command: `brew install gawk curl` .
 
 **Script Installation:**
 - **Linux:**
