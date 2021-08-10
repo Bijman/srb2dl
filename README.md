@@ -53,13 +53,13 @@ In terminal enter this following commands:
 5. Copy script to "~/bin": `cp /path/to/srb2dl ~/bin`,
 6. Change script's permissions to be executable: `chmod 755 ~/bin/srb2dl`,
 7. Open text editor for "~/.bash_profile": `nano ~/.bash_profile`,
-8. Write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in ~/.bash_profile,
+8. Write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
 9. Check if you set properly other environment variables from "Configuration" section,
 10. Enter `source ~/.bash_profile` or restart Git Bash.
 
 - **MacOS:**
 1. Enter `git clone https://github.com/Bijman/srb2dl`,
-2. Enter `sudo make install`, which will install to "/usr/local/bin", or just place script in your directory and change script's permissions to be executable: chmod 755 srb2dl.
+2. Enter `sudo make install`, which will install to "/usr/local/bin", or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl`.
 
 
 **Usage (from help text):**
