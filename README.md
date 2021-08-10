@@ -43,11 +43,11 @@ In terminal enter this following commands:
 **Script Installation:**
 - **Linux:**
 1. Enter `git clone https://github.com/Bijman/srb2dl`,
-2. Enter `sudo make install`, which will install to "/usr/bin" or "/usr/local/bin", if path exists, or just place script in your directory and change script's permissions to be executable: chmod 755 srb2dl.
+2. Enter `sudo make install`, which will install to "/usr/bin" or "/usr/local/bin", if path exists, or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl`.
 
 - **Windows:**
 1. Open Git Bash,
-2. Go to your user directory (usuallly "C:/Users/[Your username]"): cd ~,
+2. Go to your user directory (usuallly "C:/Users/[Your username]"): `cd ~`,
 3. Enter `git clone https://github.com/Bijman/srb2dl`,
 4. Create directory "bin" with command: `mkdir ~/bin`,
 5. Copy script to "~/bin": `cp /path/to/srb2dl ~/bin`,
