@@ -1,6 +1,16 @@
 PROG=srb2dl
 
-PREFIX = /usr/bin
+UNAME := $(shell uname)
+ifeq ($(UNAME), Darwin)
+    PREFIX = /usr/local/bin
+endif
+ifeq ($(UNAME), Linux)
+ifeq ("$(wildcard $(/usr/local/bin))","")
+    PREFIX = /usr/local/bin
+else
+    PREFIX = /usr/bin
+endif
+endif
 
 install:
 	chmod 755 $(PROG)
