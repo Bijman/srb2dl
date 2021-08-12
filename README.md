@@ -125,4 +125,4 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 **2021-08-11:**
 1. Download archived content for previous versions of SRB2 and SRB2Kart.
 
-![srb2dlold]https://user-images.githubusercontent.com/16626326/128992658-eab52b02-78dc-45e6-9715-5759904c7de1.gif
+![srb2dlold](https://user-images.githubusercontent.com/16626326/128992658-eab52b02-78dc-45e6-9715-5759904c7de1.gif)
