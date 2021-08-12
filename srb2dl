@@ -1523,14 +1523,14 @@ case "$1" in
         printf "%s\n" "
 Download SRB2/SRB2Kart addons, software and builds.
 
-Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
+Usage: srb2dl [OPTIONS] <search-query> <directory-path>
   OPTIONS:
-     -h, --help                             Show this help text
-     -k, --kart                             Go to SRB2Kart resources
-     -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions
-     -r, --reusable                         Filter resources by reusable
-     -s, --search         <search-query>    Search resources by keyword
-     -u, --search-user    <search-query>    Search resources by user
+     -h, --help                             Show this help text.
+     -k, --kart                             Go to SRB2Kart resources.
+     -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions.
+     -r, --reusable                         Filter resources by reusable.
+     -s, --search         <search-query>    Search resources by keyword.
+     -u, --search-user    <search-query>    Search resources by user.
 
   EXAMPLES:
      1. Show SRB2 resources and download them to chosen path:
