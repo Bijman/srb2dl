@@ -24,7 +24,8 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 # Dependencies Installation
 **Linux:**
 1. In terminal enter this following commands:
-- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install coreutils bash curl gawk`,- Arch/Arch based: `sudo pacman -S coreutils bash curl gawk`,
+- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install coreutils bash curl gawk`,
+- Arch/Arch based: `sudo pacman -S coreutils bash curl gawk`,
 - Gentoo: `sudo emerge coreutils bash curl gawk`.
 
 **Windows:**
