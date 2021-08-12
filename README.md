@@ -55,7 +55,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 4. Create directory "bin" with command: `mkdir ~/bin`,
 
-5. Copy script to "~/bin": `cp <path-to-srb2dl> ~/bin`,
+5. Copy script to "~/bin": `cp /path/to/srb2dl ~/bin`,
 
 6. Change script's permissions to be executable: `chmod 755 ~/bin/srb2dl`,
 
@@ -79,17 +79,17 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
   OPTIONS:
 
-     -h, --help                             Show this help text
+     -h, --help                             Show this help text.
 
-     -k, --kart                             Go to SRB2Kart resources
+     -k, --kart                             Go to SRB2Kart resources.
 
-     -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions
+     -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions.
 
-     -r, --reusable                         Filter resources by reusable
+     -r, --reusable                         Filter resources by reusable.
 
-     -s, --search         <search-query>    Search resources by keyword
+     -s, --search         <search-query>    Search resources by keyword.
 
-     -u, --search-user    <search-query>    Search resources by user
+     -u, --search-user    <search-query>    Search resources by user.
 
 
   EXAMPLES:
