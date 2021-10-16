@@ -88,7 +88,7 @@ for (i = 1; i in l; i++)
 
         arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
-        arraypagename=$(printf "\033[1mSRB2\033[0m\n\033[1mSRB2 - Uncapped Plus\033[1m\n\033[1mSRB2 - Android Port\033[0m\n\033[1mSRB2 - Switch Port\033[0m\n\033[1mSRB2 2.1\033[0m\n\033[1mSRB2 2.1 - SEGA Genesis/Mega Drive Port\033[0m\n\033[1mSRB2 - Archived versions\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+        arraypagename=$(printf "\033[1mSRB2\033[0m\n\033[1mSRB2 - Uncapped Plus\033[1m\n\033[1mSRB2 - Android Port\033[0m\n\033[1mSRB2 - Switch Port\033[0m\n\033[1mSRB2 2.1\033[0m\n\033[1mSRB2 2.1 - SEGA Genesis/Mega Drive Port\033[0m\n\033[1mSRB/SRB2 - Archived Versions\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
             gawk -v left="$arraypagenametmp" -v leftcenter="$TAGLINES" -v rightcenter="$USERS" -v right="$STARS" 'BEGIN{
 split(left,l,/\n/)
 split(leftcenter,lc,/\n/)
