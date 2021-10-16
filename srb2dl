@@ -1574,8 +1574,8 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
         if [ -z "$OLD" ]; then
             PAGECODE=$(curl -Ls "https://mb.srb2.org")
-            arraypage=$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')
-            arraypagename=$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')
+            arraypage=$(printf "%s\nSRB2-2.1\nSRB2Archive" "$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
+            arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
             count="$(printf "%s\n" "$arraypage" | wc -l)"
             n=""
             printf "\033[1m\033[34m%s\n\033[0m" "Please choose SRB2 version by typing number and then pressing enter. Press enter or ctrl+c to quit."
@@ -1609,6 +1609,10 @@ for (i = 1; i in l; i++)
 {print l[i] " - " "\033[37mUser: "r[i]"\033[0m"}}'
                 )")
                 printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
+            elif [ "$OPTURL" = "SRB2-2.1" ]; then
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2-2.1" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+            elif [ "$OPTURL" = "SRB2Archive" ]; then
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2Archive" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
             else
                 PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$PAGE")
                 arraypage=$(printf "%s\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="|"' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
@@ -1686,11 +1690,11 @@ for (i = 1; i in l; i++)
                 printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
-            elif [ -n "$(printf "%s\n" "$URL" | gawk '/threads/')" ]; then
+            elif [ -n "$(printf "%s\n" "$URL" | gawk '/threads/')" ] || [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2Archive" ]; then
 
                 if [ -z "$(printf "%s\n" "$arrayfile")" ]; then
 
-                    if [ "$SRB2DLPREVIEW" = 1 ]; then
+                    if [ "$SRB2DLPREVIEW" = 1 ] && [ "$URL" != "SRB2-2.1" ] && [ "$URL" != "SRB2Archive" ]; then
                         if [ -n "$BROWSER" ]; then
                             printf "%s\n\n" "Opening link to files."
                             "$BROWSER" "https://mb.srb2.org/$OPTURL" > /dev/null &
@@ -1699,17 +1703,33 @@ for (i = 1; i in l; i++)
                         fi
                     fi
 
-                    ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$URL")
-                    arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
-                    arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF')
-                    if [ -n "$arrayattachment" ]; then
+                    if [ "$URL" = "SRB2-2.1" ]; then
+                        SRB2OLD21=$(curl -s "https://api.github.com/repos/STJr/SRB2/releases/19358575" | gawk -F'"' '/browser_download_url.*zip/ || /browser_download_url.*exe/ || /browser_download_url.*dmg/ {print $4}')
+                        SOURCECODEZIP="https://api.github.com/repos/stjr/srb2/zipball/SRB2_release_2.1.25"
+                        SOURCECODETAR="https://api.github.com/repos/stjr/srb2/tarball/SRB2_release_2.1.25"
+                        arrayattachment=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR" "$SRB2OLD21")
+                        arrayattachmentname=$(printf "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)" "$(printf "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
+                    elif [ "$URL" = "SRB2Archive" ]; then
+                        ATTACHMENTCODE=$(curl -Ls "https://files.srb2.org/srb2.org/history")
+                        arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
+                        arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
+                    else
+                        ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$URL")
+                        arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
+                        arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF')
+                    fi
 
+                    if [ -n "$arrayattachment" ] && ([ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2Archive" ]); then
+                        arrayfile=$(printf "%s\nBack2Cat\nDone" "$arrayattachment")
+                        arrayfilename=$(printf "%s\n$BACK2CAT\n$DONE" "$arrayattachmentname")
+                    elif [ -n "$arrayattachment" ]; then
                         arrayfile=$(printf "%s\nBack2Cat\nBack2Addon\nDone" "$arrayattachment")
                         arrayfilename=$(printf "%s\n$BACK2CAT\n$BACK2ADDON\n$DONE" "$arrayattachmentname")
                     else
                         arrayfile=$(printf "Back2Cat\nBack2Addon\nDone")
                         arrayfilename=$(printf "$BACK2CAT\n$BACK2ADDON\n$DONE")
                     fi
+
                 else
                     arrayfile="$arrayfile"
                     arrayfilename="$arrayfilename"
@@ -1744,7 +1764,13 @@ for (i = 1; i in l; i++)
 
                             OPTFILE=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
                             OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk NR=="${n}")
-                            FILELISTTMP="https://mb.srb2.org/$OPTFILE"
+                            if [ "$URL" = "SRB2-2.1" ]; then
+                                FILELISTTMP="$OPTFILE"
+                            elif [ "$URL" = "SRB2Archive" ]; then
+                                FILELISTTMP="https://files.srb2.org/srb2.org/history/$OPTFILE"
+                            else
+                                FILELISTTMP="https://mb.srb2.org/$OPTFILE"
+                            fi
                             FILELIST="$FILELIST
 $FILELISTTMP"
                             FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++')
