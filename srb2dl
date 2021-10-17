@@ -57,6 +57,7 @@ choosepage() {
                 SEARCHPAGECODE=$(curl -s "$SEARCHURL&page=$PAGE")
             fi
         fi
+
         USERS=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'data-author="|"' '/data-author=/ {print $4}' | gawk '{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print}')
         CATEGORIES=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'<li>Category: <a href="/addons/categories/*.*">|</a></li>' '/<li>Category: <a href="\/addons\/categories/ {print $2}')
         DATE=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'<li><time  class="*.*">|</time></li>' '/<li><time  class=/ {print $2}')
@@ -84,11 +85,11 @@ for (i = 1; i in l; i++)
         fi
 
     elif [ "$BUILD" = 1 ]; then
-        arraypage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+        arraypage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
 
         arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
-        arraypagename=$(printf "\033[1mSRB2\033[0m\n\033[1mSRB2 - Uncapped Plus\033[1m\n\033[1mSRB2 - Android Port\033[0m\n\033[1mSRB2 - Switch Port\033[0m\n\033[1mSRB2 2.1\033[0m\n\033[1mSRB2 2.1 - SEGA Genesis/Mega Drive Port\033[0m\n\033[1mSRB/SRB2 - Archived Versions\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+        arraypagename=$(printf "\033[1mSRB2\033[0m\n\033[1mSRB2 - Uncapped Plus\033[0m\n\033[1mSRB2 - NetPlus\033[0m\n\033[1mSRB2 - Android Port\033[0m\n\033[1mSRB2 - Switch Port\033[0m\n\033[1mSRB2 2.1\033[0m\n\033[1mSRB2 2.1 - Legacy\033[0m\n\033[1mSRB2 2.1 - SEGA Genesis/Mega Drive Port\033[0m\n\033[1mSRB/SRB2 - Archived Versions\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
             gawk -v left="$arraypagenametmp" -v leftcenter="$TAGLINES" -v rightcenter="$USERS" -v right="$STARS" 'BEGIN{
 split(left,l,/\n/)
 split(leftcenter,lc,/\n/)
@@ -158,17 +159,17 @@ choosefile() {
         clear
 
         if [ "$SRB2DLPREVIEW" = 1 ]; then
-            if [ -n "$BROWSER" ] && [ "$FILES" = 0 ] && [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVRMod" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
+            if [ -n "$BROWSER" ] && [ "$FILES" = 0 ] && [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2NetPlus" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-Legacy" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVRMod" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
                 printf "%s\n\n" "Opening link to files."
                 $BROWSER "https://mb.srb2.org/addons/$OPTURL" > /dev/null &
-            elif [ -x "/usr/bin/w3m" ] && [ "$FILES" = 0 ] && [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVRMod" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
+            elif [ -x "/usr/bin/w3m" ] && [ "$FILES" = 0 ] && [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2NetPlus" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-Legacy" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVRMod" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
                 w3m "https://mb.srb2.org/addons/$OPTURL"
             fi
         fi
 
         printf "\033[1m\033[34m%s\n\033[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
         if [ -z "$arrayfile" ] && [ -z "$arrayfilename" ]; then
-            if [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVRMod" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
+            if [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2NetPlus" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-Legacy" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVRMod" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
                 OPTURLTHREAD=$(curl -s "https://mb.srb2.org/addons/$OPTURL/" | gawk -F'/|"|\\\' '/discussionUrl/ {print $12}')
                 DOWNLOADHEADER=$(curl -Is "https://mb.srb2.org/addons/$OPTURL/download/" | gawk -F'"' '/filename/ {print $2}')
                 ATTACHMENTCODE=$(curl -s "https://mb.srb2.org/threads/$OPTURLTHREAD/")
@@ -209,7 +210,12 @@ choosefile() {
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/226/repository/archive.zip?sha=uncapped-plus"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/226/repository/archive.tar.gz?sha=uncapped-plus"
                     arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone" "$SRB2UNCAPPEDPLUS")
-                    arrayfilename=$(printf "%s\nSRB2 Uncapped Plus Source Code (zip)\nSRB2Kart Uncapped Plus Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE" "$SRB2UNCAPPEDPLUS")
+                    arrayfilename=$(printf "%s\nSRB2 Uncapped Plus Source Code (zip)\nSRB2 Uncapped Plus Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE" "$SRB2UNCAPPEDPLUS")
+                elif [ "$OPTURL" = "SRB2NetPlus" ]; then
+                    SOURCECODEZIP="https://git.netplus.friskyfox.art/NetPlus/netplus/archive/master.zip"
+                    SOURCECODETAR="https://git.netplus.friskyfox.art/NetPlus/netplus/archive/master.tar.gz"
+                    arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone")
+                    arrayfilename=$(printf "SRB2 NetPlus Source Code (zip)\nSRB2 NetPlus Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE")
                 elif [ "$OPTURL" = "SRB2Android" ]; then
                     SRB2ANDROID=$(curl -s "https://api.github.com/repos/Lactozilla/SRB2-Android/releases" | gawk -F'"' '/browser_download_url.*./ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/Lactozilla/SRB2-Android/zipball"
@@ -228,6 +234,11 @@ choosefile() {
                     SOURCECODETAR="https://api.github.com/repos/stjr/srb2/tarball/SRB2_release_2.1.25"
                     arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone" "$SRB2OLD21")
                     arrayfilename=$(printf "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE" "$(printf "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
+                elif [ "$OPTURL" = "SRB2-2.1-Legacy" ]; then
+                    SOURCECODEZIP="https://api.github.com/repos/PandaSRC/srb2-legacy/zipball"
+                    SOURCECODETAR="https://api.github.com/repos/PandaSRC/srb2-legacy/tarball"
+                    arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone")
+                    arrayfilename=$(printf "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE")
                 elif [ "$OPTURL" = "SRB2-2.1-MegaDrive" ]; then
                     SRB2MEGADRIVE=$(curl -s "https://api.github.com/repos/mazmazz/SRB2/releases" | gawk -F'"' '/browser_download_url.*md/ && !/.msi/ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/mazmazz/srb2/zipball/SRB2_release_2.1.23a"
@@ -492,7 +503,7 @@ choosefile() {
                 elif [ "$OPTFILE" = "Done" ]; then
                     dl
                 else
-                    if [ "$OPTURL" = "SRB2" ] || [ "$OPTURL" = "SRB2Android" ] || [ "$OPTURL" = "SRB2Switch" ] || [ "$OPTURL" = "SRB2-2.1" ] || [ "$OPTURL" = "SRB2-2.1-MegaDrive" ] || [ "$OPTURL" = "SRB2Kart" ] || [ "$OPTURL" = "SRB2KartSwitch" ]; then
+                    if [ "$OPTURL" = "SRB2" ] || [ "$OPTURL" = "SRB2NetPlus" ] || [ "$OPTURL" = "SRB2Android" ] || [ "$OPTURL" = "SRB2Switch" ] || [ "$OPTURL" = "SRB2-2.1" ] || [ "$OPTURL" = "SRB2-2.1-Legacy" ] || [ "$OPTURL" = "SRB2-2.1-MegaDrive" ] || [ "$OPTURL" = "SRB2Kart" ] || [ "$OPTURL" = "SRB2KartSwitch" ]; then
                         FILELISTTMP="$OPTFILE"
                     elif [ "$OPTURL" = "SRB2UncappedPlus" ]; then
                         if [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ]; then
@@ -738,7 +749,7 @@ $FILELISTNAMETMP"
         if [ "$SEARCH" = 1 ]; then
             arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Search\nDone" "$(curl -s "$SEARCHURL&page=$((PAGE - 1))" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')")
         elif [ "$BUILD" = 1 ]; then
-            arrayprevpage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+            arrayprevpage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
         elif [ "$KARTBUILD" = 1 ]; then
             arrayprevpage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVRMod\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
         else
@@ -1574,8 +1585,8 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
         if [ -z "$OLD" ]; then
             PAGECODE=$(curl -Ls "https://mb.srb2.org")
-            arraypage=$(printf "%s\nSRB2-2.1\nSRB2Archive" "$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
-            arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
+            arraypage=$(printf "%s\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2Archive" "$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
+            arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB2 2.1 Legacy Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
             count="$(printf "%s\n" "$arraypage" | wc -l)"
             n=""
             printf "\033[1m\033[34m%s\n\033[0m" "Please choose SRB2 version by typing number and then pressing enter. Press enter or ctrl+c to quit."
@@ -1611,6 +1622,8 @@ for (i = 1; i in l; i++)
                 printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
             elif [ "$OPTURL" = "SRB2-2.1" ]; then
                 FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2-2.1" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+            elif [ "$OPTURL" = "SRB2-2.1-Legacy" ]; then
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2-2.1-Legacy" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
             elif [ "$OPTURL" = "SRB2Archive" ]; then
                 FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2Archive" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
             else
@@ -1690,11 +1703,11 @@ for (i = 1; i in l; i++)
                 printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
-            elif [ -n "$(printf "%s\n" "$URL" | gawk '/threads/')" ] || [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2Archive" ]; then
+            elif [ -n "$(printf "%s\n" "$URL" | gawk '/threads/')" ] || [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ] || [ "$URL" = "SRB2Archive" ]; then
 
                 if [ -z "$(printf "%s\n" "$arrayfile")" ]; then
 
-                    if [ "$SRB2DLPREVIEW" = 1 ] && [ "$URL" != "SRB2-2.1" ] && [ "$URL" != "SRB2Archive" ]; then
+                    if [ "$SRB2DLPREVIEW" = 1 ] && [ "$URL" != "SRB2-2.1" ] && [ "$URL" != "SRB2-2.1-Legacy" ] && [ "$URL" != "SRB2Archive" ]; then
                         if [ -n "$BROWSER" ]; then
                             printf "%s\n\n" "Opening link to files."
                             "$BROWSER" "https://mb.srb2.org/$OPTURL" > /dev/null &
@@ -1709,6 +1722,11 @@ for (i = 1; i in l; i++)
                         SOURCECODETAR="https://api.github.com/repos/stjr/srb2/tarball/SRB2_release_2.1.25"
                         arrayattachment=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR" "$SRB2OLD21")
                         arrayattachmentname=$(printf "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)" "$(printf "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
+                    elif [ "$URL" = "SRB2-2.1-Legacy" ]; then
+                        SOURCECODEZIP="https://api.github.com/repos/PandaSRC/srb2-legacy/zipball"
+                        SOURCECODETAR="https://api.github.com/repos/PandaSRC/srb2-legacy/tarball"
+                        arrayattachment=$(printf "$SOURCECODEZIP\n$SOURCECODETAR")
+                        arrayattachmentname=$(printf "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)")
                     elif [ "$URL" = "SRB2Archive" ]; then
                         ATTACHMENTCODE=$(curl -Ls "https://files.srb2.org/srb2.org/history")
                         arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
@@ -1719,7 +1737,7 @@ for (i = 1; i in l; i++)
                         arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF')
                     fi
 
-                    if [ -n "$arrayattachment" ] && ([ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2Archive" ]); then
+                    if [ -n "$arrayattachment" ] && ([ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ] || [ "$URL" = "SRB2Archive" ]); then
                         arrayfile=$(printf "%s\nBack2Cat\nDone" "$arrayattachment")
                         arrayfilename=$(printf "%s\n$BACK2CAT\n$DONE" "$arrayattachmentname")
                     elif [ -n "$arrayattachment" ]; then
@@ -1764,7 +1782,7 @@ for (i = 1; i in l; i++)
 
                             OPTFILE=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
                             OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk NR=="${n}")
-                            if [ "$URL" = "SRB2-2.1" ]; then
+                            if [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ]; then
                                 FILELISTTMP="$OPTFILE"
                             elif [ "$URL" = "SRB2Archive" ]; then
                                 FILELISTTMP="https://files.srb2.org/srb2.org/history/$OPTFILE"
