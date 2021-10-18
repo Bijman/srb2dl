@@ -8,7 +8,7 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 - Searching content by keyword or user,
 - Filtering content by reusable,
 - Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
-- Runs on Linux and Windows (Cygwin, Git Bash).
+- Runs on Linux, Windows (Cygwin, Git Bash) and MacOS.
 
 
 # Dependencies
