@@ -10,23 +10,28 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 - Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
 - Runs on Linux, Windows (Cygwin, Git Bash) and MacOS.
 
-
 # Dependencies
 - GNU Coreutils,
 - Bash or any POSIX compliant shell,
 - Curl,
 - Gawk,
+- Ncurses,
 - Optionally: w3m or any web browser for previewing resources in mb.srb2.org.
 
 Additionally, Windows users need to have installed Cygwin or Git Bash to run this script.
 
-
 # Dependencies Installation
 **Linux:**
-1. In terminal enter this following commands:
-- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install coreutils bash curl gawk`,
-- Arch/Arch based: `sudo pacman -S coreutils bash curl gawk`,
-- Gentoo: `sudo emerge coreutils bash curl gawk`.
+1. In terminal enter this following command:
+- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install coreutils bash ncurses-bin curl gawk`,
+- Arch/Arch based: `sudo pacman -S coreutils bash ncurses curl gawk`,
+- Gentoo: `sudo emerge coreutils bash ncurses curl gawk`,
+- Fedora/Fedora based: `sudo dnf install make git coreutils findutils bash ncurses curl gawk`,
+- OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils findutils bash ncurses curl gawk`,
+- Void/Void based: `sudo xbps-install -S make git coreutils findutils bash ncurses curl gawk`,
+- Alpine/Alpine based: `sudo apk add make git coreutils findutils bash ncurses curl gawk`,
+- Solus/Solus based: `sudo eopkg it make git coreutils findutils bash ncurses curl gawk`,
+- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils findutils bash ncurses curl gawk` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
 
 **Windows:**
 1. Installing Git Bash:
@@ -38,13 +43,16 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 **MacOS:**
 1. In terminal enter this following command:
-- `brew install gawk curl`.
+- Homebrew: `brew install curl gawk`,
+- MacPorts: `sudo port install curl gawk`.
 
 # Script Installation
 **Linux:**
 1. Enter `git clone https://github.com/Bijman/srb2dl`,
 
 2. Enter `sudo make install`, which will install to "/usr/bin" or "/usr/local/bin", if path exists, or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl`.
+
+3. Go to downloaded directory: `cd srb2bld`,
 
 **Windows:**
 1. Open Git Bash,
@@ -55,21 +63,24 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 4. Create directory "bin" with command: `mkdir ~/bin`,
 
-5. Copy script to "~/bin": `cp /path/to/srb2dl ~/bin`,
+5. Copy script to "~/bin": `cp ~/srb2dl/srb2dl ~/bin`,
 
 6. Change script's permissions to be executable: `chmod 755 ~/bin/srb2dl`,
 
-7. Open text editor for "~/.bash_profile": `nano ~/.bash_profile`,
+7. In the opened text editor from previous step write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
 
 8. Write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
 
 9. Enter `source ~/.bash_profile` or restart Cygwin or Git Bash.
 
 **MacOS:**
-1. Enter `git clone https://github.com/Bijman/srb2dl`,
+1. Open terminal,
 
-2. Enter `sudo make install`, which will install to "/usr/local/bin", or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl`.
+2. Enter `git clone https://github.com/Bijman/srb2dl`,
 
+3. Go to downloaded directory: `cd srb2dl`,
+
+4. Enter `sudo make install`, which will install to "/usr/local/bin", if path exists. Alternatively manually place script to your path, which is readable by shell (PATH environment variable), and change script's permissions to be executable: `chmod 755 [path to srb2dl script]`.
 
 # Usage (from help text)
 ```
