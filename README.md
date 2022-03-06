@@ -52,7 +52,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 2. Enter `sudo make install`, which will install to "/usr/bin" or "/usr/local/bin", if path exists, or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl`.
 
-3. Go to downloaded directory: `cd srb2bld`,
+3. Go to downloaded directory: `cd srb2bld`.
 
 **Windows:**
 1. Open Git Bash,
