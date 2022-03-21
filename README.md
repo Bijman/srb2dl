@@ -23,15 +23,15 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 # Dependencies Installation
 **Linux:**
 1. In terminal enter this following command:
-- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install coreutils bash ncurses-bin curl gawk`,
-- Arch/Arch based: `sudo pacman -S coreutils bash ncurses curl gawk`,
-- Gentoo: `sudo emerge coreutils bash ncurses curl gawk`,
-- Fedora/Fedora based: `sudo dnf install make git coreutils findutils bash ncurses curl gawk`,
-- OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils findutils bash ncurses curl gawk`,
-- Void/Void based: `sudo xbps-install -S make git coreutils findutils bash ncurses curl gawk`,
-- Alpine/Alpine based: `sudo apk add make git coreutils findutils bash ncurses curl gawk`,
-- Solus/Solus based: `sudo eopkg it make git coreutils findutils bash ncurses curl gawk`,
-- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils findutils bash ncurses curl gawk` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
+- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install make git coreutils bash ncurses-bin curl gawk`,
+- Arch/Arch based: `sudo pacman -S --needed make git coreutils bash ncurses curl gawk`,
+- Gentoo: `sudo emerge -av git coreutils bash ncurses curl gawk`,
+- Fedora/Fedora based: `sudo dnf install make git coreutils bash ncurses curl gawk`,
+- OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils bash ncurses curl gawk`,
+- Void/Void based: `sudo xbps-install -S make git coreutils bash ncurses curl gawk`,
+- Alpine/Alpine based: `sudo apk add make git coreutils bash ncurses curl gawk`,
+- Solus/Solus based: `sudo eopkg it make git coreutils bash ncurses curl gawk`,
+- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils bash ncurses curl gawk` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
 
 **Windows:**
 1. Installing Git Bash:
