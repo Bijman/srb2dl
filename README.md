@@ -11,7 +11,7 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 - Runs on Linux, Windows (Cygwin, Git Bash) and MacOS.
 
 # Dependencies
-- GNU Coreutils,
+- Basic system utilities like GNU Coreutils, BusyBox or macOS out-of-the-box system utilities,
 - Bash or any POSIX compliant shell,
 - Curl,
 - Gawk,
