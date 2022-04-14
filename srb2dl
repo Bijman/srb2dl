@@ -1844,18 +1844,11 @@ dl() {
 
     fi
 
-    if [ ! -f "$SRB2DLROOT/srb2dl" ]; then
-
-        touch "$SRB2DLROOT/srb2dl"
-
-    fi
-
     printf "%s\n" "$THREADLIST" | gawk 'NF{print}' >> "$SRB2DLROOT/srb2dl"
     sort -u "$SRB2DLROOT/srb2dl" > /tmp/srb2dl
     mv /tmp/srb2dl "$SRB2DLROOT/srb2dl"
 
     printf "$SUCCESS\n%s\n\e[0m\a" "Downloading is successful."
-
     exit
 }
 
@@ -3476,7 +3469,7 @@ $FILELISTNAMETMP"
                 REMOTEFILESIZE=$(printf "%s\n" "$REMOTEFILECODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1)
                 REMOTEFILENAME=$(printf "%s\n" "$REMOTEFILECODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')
 
-                if [ "$REMOTEFILESIZE" != "$FILESIZE" ] && [ "$(printf "%s\n" "$REMOTEFILENAME" | gawk -F'-' '{print $1}')" = "$(printf "%s\n" "$FILENAME" | gawk -F'-' '{print $1}')" ]; then
+                if [ "$REMOTEFILESIZE" != "$FILESIZE" ] && [ "$(printf "%s\n" "$REMOTEFILENAME" | gawk -F'.' '{IGNORECASE=1} {gsub("[0-9]|-|_","");print toupper($1)}')" = "$(printf "%s\n" "$FILENAME" | gawk -F'.' '{IGNORECASE=1} {gsub("[0-9]|-|_","");print toupper($1)}')" ]; then
 
                     DIRECTORY="$2"
 
