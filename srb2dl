@@ -1,12 +1,26 @@
 #!/bin/sh
 
+# Set environment variables.
 FAILURE="\e[1;91m"
 SUCCESS="\e[1;92m"
 NOTICE="\e[1;93m"
 MESSAGE="\e[1;94m"
-PROMPT="\e[1;97m"
 SRB2PERSONAFILEID="5neoderzan6mbh3"
 SRB2PERSONAAPPIMAGEID="1PS5QHiuWXR4NrfB_ifAb2dQ7F1tAHrT1"
+
+if [ "$OS" = "Darwin" ]; then
+
+    SRB2DLROOT="$HOME/Library"
+
+elif [ "$(printf "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW64" ] || [ "$(printf "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW" ]; then
+
+    SRB2DLROOT="$HOME/AppData/Roaming"
+
+else
+
+    SRB2DLROOT="$HOME/.local/share"
+
+fi
 
 choosepage() {
     # Display page of chosen category.
@@ -108,7 +122,7 @@ choosepage() {
 
         arraypagesearch=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')
 
-        arraypagesearchnametmp=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'">|</a>|<span class="label label--primary" dir="auto|&nbsp;</span>|<em class="textHighlight|</span><span class="label-append|</em>' '/\/addons\// && !/categories/ {for (i = 2; i <= NF; i++) printf "\033[1m"$i"\033[0m"; print ""}' | gawk '{for (i = 1 ; i <= NF ; i++) {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","")}}1' | gawk 'NF {gsub(/\[Reusable\]/,"\033[34;7m[Reusable]\033[0m "); print "\033[1m"$0"\033[0m"}')
+        arraypagesearchnametmp=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'">|</a>|<span class="label label--primary" dir="auto|&nbsp;</span>|<em class="textHighlight|</span><span class="label-append|</em>' '/\/addons\// && !/categories|https/ {for (i = 2; i <= NF; i++) printf "\033[1m"$i"\033[0m"; print ""}' | gawk '{for (i = 1 ; i <= NF ; i++) {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","")}}1' | gawk 'NF {gsub(/\[Reusable\]/,"\033[34;7m[Reusable]\033[0m "); print "\033[1m"$0"\033[0m"}')
 
         arraypagesearchname=$(printf "%s\n" "$(
             gawk -v left="$arraypagesearchnametmp" -v leftcenter="$USERS" -v rightcenter="$DATE" -v right="$CATEGORIES" 'BEGIN{
@@ -134,7 +148,7 @@ for (i = 1; i in l; i++)
 
     elif [ "$BUILD" = 1 ]; then
 
-        arraypage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+        arraypage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
@@ -150,7 +164,7 @@ for (i = 1; i in l; i++)
 
     elif [ "$KARTBUILD" = 1 ]; then
 
-        arraypage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+        arraypage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
@@ -166,7 +180,7 @@ for (i = 1; i in l; i++)
 
     else
 
-        arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+        arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
@@ -188,7 +202,7 @@ for (i = 1; i in l; i++)
         count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
         clear
-        printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
         printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
         while true; do
@@ -240,7 +254,7 @@ choosefile() {
 
         fi
 
-        printf "\033[1m\033[34m%s\n\033[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        printf "$MESSAGE\n%s\n\e[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
         if [ -z "$arrayfile" ] && [ -z "$arrayfilename" ]; then
 
@@ -253,8 +267,8 @@ choosefile() {
                 if [ -z "$DOWNLOADHEADER" ]; then
 
                     LATESTCODE=$(curl -s "https://mb.srb2.org/addons/$OPTURL/download/")
-                    LATEST=$(printf "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF')
-                    LATESTNAME=$(printf "%s\n" "$LATESTCODE" | gawk -F'<h3 class="contentRow-title">|</h3>' '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) {print $2}' | gawk 'NF')
+                    LATEST=$(printf "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF{print}')
+                    LATESTNAME=$(printf "%s\n" "$LATESTCODE" | gawk -F'<h3 class="contentRow-title">|</h3>' '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) {print $2}' | gawk 'NF{print}')
 
                 else
 
@@ -306,15 +320,15 @@ choosefile() {
                 elif [ "$OPTURL" = "SRB2UncappedPlus" ]; then
 
                     SRB2UNCAPPEDPLUS=$(curl -s "http://srb2.mooo.com/srb2builds/uncapped-plus/" | gawk -F'">|</a>' '/.exe<\/a>/ {print $3}')
-                    SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/226/repository/archive.zip?sha=uncapped-plus"
-                    SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/226/repository/archive.tar.gz?sha=uncapped-plus"
+                    SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/276/repository/archive.zip?sha=uncapped-plus"
+                    SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/276/repository/archive.tar.gz?sha=uncapped-plus"
                     arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone" "$SRB2UNCAPPEDPLUS")
                     arrayfilename=$(printf "%s\nSRB2 Uncapped Plus Source Code (zip)\nSRB2 Uncapped Plus Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE" "$SRB2UNCAPPEDPLUS")
 
                 elif [ "$OPTURL" = "SRB2NetPlus" ]; then
 
-                    SOURCECODEZIP="https://git.netplus.friskyfox.art/NetPlus/netplus/archive/master.zip"
-                    SOURCECODETAR="https://git.netplus.friskyfox.art/NetPlus/netplus/archive/master.tar.gz"
+                    SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/275/repository/archive.zip?sha=master"
+                    SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/275/repository/archive.tar.gz?sha=master"
                     arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone")
                     arrayfilename=$(printf "SRB2 NetPlus Source Code (zip)\nSRB2 NetPlus Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE")
 
@@ -333,7 +347,7 @@ choosefile() {
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/97/repository/archive.zip?sha=srb2p_22"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/97/repository/archive.tar.gz?sha=srb2p_22"
                     arrayfile=$(printf "$SRB2PERSONA\n$SRB2PERSONAAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Cat\nBack2Addon\nDone")
-                    arrayfilename=$(printf "$(curl -LIs "https://www.dropbox.com/s/$SRB2PERSONAFILEID" | gawk -F'"' '/content-disposition:/ {print $2}')\n$(curl -X GET -LIs "https://drive.google.com/uc?id=$SRB2PERSONAAPPIMAGEID" | gawk -F'"' '/content-disposition:/ {print $2}')\nSRB2 Persona Source Code (zip)\nSRB2 Persona Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE")
+                    arrayfilename=$(printf "$(curl -LIs "https://www.dropbox.com/s/$SRB2PERSONAFILEID" | gawk -F'"' '{IGNORECASE=1} /Content-Disposition:/ {print $2}')\n$(curl -X GET -LIs "https://drive.google.com/uc?id=$SRB2PERSONAAPPIMAGEID" | gawk -F'"' '{IGNORECASE=1} /Content-Disposition:/ {print $2}')\nSRB2 Persona Source Code (zip)\nSRB2 Persona Source Code (tar.gz)\n$BACK2CAT\n$BACK2ADDON\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2Android" ]; then
 
@@ -461,67 +475,67 @@ choosefile() {
                         if [ "$CHARACTER" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$MAP" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$GAMETYPE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$ASSET" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$LUA" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$PLAYERCOLOR" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$MISC" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$SOFTWARE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$BUILD" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$KARTCHARACTER" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         elif [ "$KARTMAP" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         elif [ "$KARTMISC" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         elif [ "$KARTBUILD" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         fi
 
@@ -530,67 +544,67 @@ choosefile() {
                         if [ "$CHARACTER" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$MAP" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$GAMETYPE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$ASSET" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$LUA" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$PLAYERCOLOR" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$MISC" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$SOFTWARE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$BUILD" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$KARTCHARACTER" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         elif [ "$KARTMAP" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         elif [ "$KARTMISC" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         elif [ "$KARTBUILD" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 PAGECODE="$PAGECODE" arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         fi
 
@@ -605,67 +619,67 @@ choosefile() {
                         if [ "$CHARACTER" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$MAP" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$GAMETYPE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$ASSET" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$LUA" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$PLAYERCOLOR" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$MISC" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$SOFTWARE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$BUILD" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0"
 
                         elif [ "$KARTCHARACTER" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         elif [ "$KARTMAP" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         elif [ "$KARTMISC" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         elif [ "$KARTBUILD" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --kart
 
                         fi
 
@@ -674,67 +688,67 @@ choosefile() {
                         if [ "$CHARACTER" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$MAP" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$GAMETYPE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$ASSET" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$LUA" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$PLAYERCOLOR" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$MISC" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$SOFTWARE" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$BUILD" = 1 ]; then
 
                             unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 arrayfile="" arrayfilename="" FILES=0 exec "$0"
 
                         elif [ "$KARTCHARACTER" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         elif [ "$KARTMAP" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         elif [ "$KARTMISC" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         elif [ "$KARTBUILD" = 1 ]; then
 
                             unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --kart
 
                         fi
 
@@ -746,11 +760,11 @@ choosefile() {
 
                         if [ "$REUSABLE" = 1 ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search-user
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search-user
 
                         fi
 
@@ -758,11 +772,11 @@ choosefile() {
 
                         if [ "$REUSABLE" = 1 ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search
 
                         fi
 
@@ -774,11 +788,11 @@ choosefile() {
 
                         if [ "$REUSABLE" = 1 ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search-user
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search-user
 
                         fi
 
@@ -786,11 +800,11 @@ choosefile() {
 
                         if [ "$REUSABLE" = 1 ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 REUSABLE=1 exec "$0" --search
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 arrayfile="" arrayfilename="" FILES=0 exec "$0" --search
 
                         fi
 
@@ -876,13 +890,22 @@ choosefile() {
 
                     fi
 
+                    if [ -n "$(printf "%s\n" "$FILELISTTMP" | gawk '/mb.srb2.org/ {print}')" ]; then
+
+                        THREADNAME="$OPTURLTHREAD$THREADNAME"
+                        FILELISTCODE=$(curl -X GET -LIs "$FILELISTTMP")
+                        THREADLIST="$THREADLIST
+$THREADNAME $(printf "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP $(printf "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')"
+
+                    fi
+
                     FILELIST="$FILELIST
 $FILELISTTMP"
-                    FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++')
+                    FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
                     FILELISTNAMETMP="$OPTFILENAME"
                     FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
-                    FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++')
+                    FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
 
                 fi
                 break
@@ -906,7 +929,7 @@ $FILELISTNAMETMP"
 
         else
 
-            arraynextpage=$(curl -s "$CATURL=$((PAGE + 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')
+            arraynextpage=$(curl -s "$CATURL=$((PAGE + 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')
 
         fi
 
@@ -918,78 +941,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE="$MAPPAGE" MAP=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE="$MAPPAGE" MAP=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE="$ASSETPAGE" ASSET=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE="$ASSETPAGE" ASSET=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE="$LUAPAGE" LUA=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE="$LUAPAGE" LUA=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE="$MISCPAGE" MISC=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE="$MISCPAGE" MISC=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE="$BUILDPAGE" BUILD=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE="$BUILDPAGE" BUILD=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 fi
 
@@ -999,78 +1022,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 FILES=0 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE="$MAPPAGE" MAP=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE="$MAPPAGE" MAP=1 FILES=0 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 FILES=0 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE="$ASSETPAGE" ASSET=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE="$ASSETPAGE" ASSET=1 FILES=0 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE="$LUAPAGE" LUA=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE="$LUAPAGE" LUA=1 FILES=0 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 FILES=0 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE="$MISCPAGE" MISC=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE="$MISCPAGE" MISC=1 FILES=0 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 FILES=0 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE="$BUILDPAGE" BUILD=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE="$BUILDPAGE" BUILD=1 FILES=0 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 FILES=0 exec "$0" --kart
 
                 fi
 
@@ -1084,78 +1107,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 fi
 
@@ -1165,78 +1188,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 exec "$0" --kart
 
                 fi
 
@@ -1254,15 +1277,15 @@ $FILELISTNAMETMP"
 
         elif [ "$BUILD" = 1 ]; then
 
-            arrayprevpage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+            arrayprevpage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         elif [ "$KARTBUILD" = 1 ]; then
 
-            arrayprevpage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+            arrayprevpage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         else
 
-            arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF')")
+            arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         fi
 
@@ -1274,78 +1297,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 fi
 
@@ -1355,78 +1378,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 FILES=0 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=1 FILES=0 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 FILES=0 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 FILES=0 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=1 FILES=0 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 FILES=0 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=1 FILES=0 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 FILES=0 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 FILES=0 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 FILES=0 exec "$0" --kart
 
                 fi
 
@@ -1440,78 +1463,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 2)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 2)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 REUSABLE=1 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 2)) CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 2)) CHARACTER=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 2)) MAP=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 2)) MAP=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 2)) GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 2)) GAMETYPE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 2)) ASSET=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 2)) ASSET=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 2)) LUA=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 2)) LUA=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 2)) PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 2)) PLAYERCOLOR=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 2)) MISC=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 2)) MISC=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 2)) SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 2)) SOFTWARE=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 2)) BUILD=1 FILES=0 REUSABLE=1 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 2)) BUILD=1 FILES=0 REUSABLE=1 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 2)) KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 2)) KARTCHARACTER=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 2)) KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 2)) KARTMAP=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 2)) KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 2)) KARTMISC=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 2)) KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 2)) KARTBUILD=1 FILES=0 REUSABLE=1 exec "$0" --kart
 
                 fi
 
@@ -1521,78 +1544,78 @@ $FILELISTNAMETMP"
 
                     if [ -n "$SEARCHQUERYUSER" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 FILES=0 exec "$0" --search-user
 
                     else
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 2)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 2)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 FILES=0 exec "$0" --search
 
                     fi
 
                 elif [ "$CHARACTER" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 2)) CHARACTER=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 2)) CHARACTER=1 FILES=0 exec "$0"
 
                 elif [ "$MAP" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 2)) MAP=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 2)) MAP=1 FILES=0 exec "$0"
 
                 elif [ "$GAMETYPE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 2)) GAMETYPE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 2)) GAMETYPE=1 FILES=0 exec "$0"
 
                 elif [ "$ASSET" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 2)) ASSET=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 2)) ASSET=1 FILES=0 exec "$0"
 
                 elif [ "$LUA" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 2)) LUA=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 2)) LUA=1 FILES=0 exec "$0"
 
                 elif [ "$PLAYERCOLOR" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 2)) PLAYERCOLOR=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 2)) PLAYERCOLOR=1 FILES=0 exec "$0"
 
                 elif [ "$MISC" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 2)) MISC=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 2)) MISC=1 FILES=0 exec "$0"
 
                 elif [ "$SOFTWARE" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 2)) SOFTWARE=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 2)) SOFTWARE=1 FILES=0 exec "$0"
 
                 elif [ "$BUILD" = 1 ]; then
 
                     unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 2)) BUILD=1 FILES=0 exec "$0"
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 2)) BUILD=1 FILES=0 exec "$0"
 
                 elif [ "$KARTCHARACTER" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 2)) KARTCHARACTER=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 2)) KARTCHARACTER=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMAP" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 2)) KARTMAP=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 2)) KARTMAP=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTMISC" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 2)) KARTMISC=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 2)) KARTMISC=1 FILES=0 exec "$0" --kart
 
                 elif [ "$KARTBUILD" = 1 ]; then
 
                     unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 2)) KARTBUILD=1 FILES=0 exec "$0" --kart
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 2)) KARTBUILD=1 FILES=0 exec "$0" --kart
 
                 fi
 
@@ -1609,68 +1632,68 @@ $FILELISTNAMETMP"
             if [ "$CHARACTER" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$MAP" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$GAMETYPE" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$ASSET" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$LUA" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$PLAYERCOLOR" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$MISC" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$SOFTWARE" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$BUILD" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 FILES=0 REUSABLE=1 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 FILES=0 REUSABLE=1 exec "$0"
 
             elif [ "$KARTCHARACTER" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 FILES=0 REUSABLE=1 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 FILES=0 REUSABLE=1 exec "$0" --kart
 
             elif [ "$KARTMAP" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 FILES=0 REUSABLE=1 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 FILES=0 REUSABLE=1 exec "$0" --kart
 
             elif [ "$KARTMISC" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 FILES=0 REUSABLE=1 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 FILES=0 REUSABLE=1 exec "$0" --kart
 
             elif [ "$KARTBUILD" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 FILES=0 REUSABLE=1 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 FILES=0 REUSABLE=1 exec "$0" --kart
 
             fi
 
@@ -1679,66 +1702,66 @@ $FILELISTNAMETMP"
             if [ "$CHARACTER" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=0 FILES=0 exec "$0"
 
             elif [ "$MAP" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MAPPAGE=$((MAPPAGE - 1)) MAP=0 FILES=0 exec "$0"
 
             elif [ "$GAMETYPE" = 1 ]; then
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=0 FILES=0 exec "$0"
 
             elif [ "$ASSET" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=0 FILES=0 exec "$0"
 
             elif [ "$LUA" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" LUAPAGE=$((LUAPAGE - 1)) LUA=0 FILES=0 exec "$0"
 
             elif [ "$PLAYERCOLOR" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=0 FILES=0 exec "$0"
 
             elif [ "$MISC" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" MISCPAGE=$((MISCPAGE - 1)) MISC=0 FILES=0 exec "$0"
 
             elif [ "$SOFTWARE" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=0 FILES=0 exec "$0"
 
             elif [ "$BUILD" = 1 ]; then
 
                 unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 FILES=0 exec "$0"
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=0 FILES=0 exec "$0"
 
             elif [ "$KARTCHARACTER" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 FILES=0 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=0 FILES=0 exec "$0" --kart
 
             elif [ "$KARTMAP" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 FILES=0 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=0 FILES=0 exec "$0" --kart
 
             elif [ "$KARTMISC" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 FILES=0 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=0 FILES=0 exec "$0" --kart
 
             elif [ "$KARTBUILD" = 1 ]; then
 
                 unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 FILES=0 exec "$0" --kart
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=0 FILES=0 exec "$0" --kart
 
             fi
 
@@ -1750,11 +1773,11 @@ $FILELISTNAMETMP"
 
             if [ "$REUSABLE" = 1 ]; then
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 REUSABLE=1 exec "$0" --search-user
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 REUSABLE=1 exec "$0" --search-user
 
             else
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 exec "$0" --search-user
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 exec "$0" --search-user
 
             fi
 
@@ -1762,11 +1785,11 @@ $FILELISTNAMETMP"
 
             if [ "$REUSABLE" = 1 ]; then
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 REUSABLE=1 exec "$0" --search
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 REUSABLE=1 exec "$0" --search
 
             else
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 exec "$0" --search
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="" DIRECTORY="$DIRECTORY" SEARCHPAGE="" SEARCHURL="" SEARCH=0 FILES=0 exec "$0" --search
 
             fi
 
@@ -1781,13 +1804,13 @@ $FILELISTNAMETMP"
 
 dl() {
     # Download files when done with selecting.
-    if [ -n "$DIRECTORY" ]; then
+    printf "$MESSAGE\n%s\n\e[0m" "Downloading chosen files. Please wait.."
 
-        printf "\n%s\n" "Downloading chosen files. Please wait.."
+    for i in $FILELIST; do
 
-        for i in $FILELIST; do
+        FILENAME="$(curl -X GET -LIs "$i" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')"
 
-            FILENAME="$(curl -X GET -LIs "$i" | gawk -F'=|;' '/content-disposition:/ {gsub("\r|\"","");print $3}')"
+        if [ -n "$DIRECTORY" ]; then
 
             if [ -n "$FILENAME" ]; then
 
@@ -1799,16 +1822,7 @@ dl() {
 
             fi
 
-        done | cat
-        exit
-
-    else
-
-        printf "\n%s\n" "Downloading chosen files. Please wait.."
-
-        for i in $FILELIST; do
-
-            FILENAME="$(curl -X GET -LIs "$i" | gawk -F'=|;' '/content-disposition:/ {gsub("\r|\"","");print $3}')"
+        else
 
             if [ -n "$FILENAME" ]; then
 
@@ -1820,11 +1834,29 @@ dl() {
 
             fi
 
-        done | cat
-        exit
+        fi
+
+    done | cat
+
+    if [ ! -d "$SRB2DLROOT" ]; then
+
+        mkdir -p "$SRB2DLROOT"
 
     fi
 
+    if [ ! -f "$SRB2DLROOT/srb2dl" ]; then
+
+        touch "$SRB2DLROOT/srb2dl"
+
+    fi
+
+    printf "%s\n" "$THREADLIST" | gawk 'NF{print}' >> "$SRB2DLROOT/srb2dl"
+    sort -u "$SRB2DLROOT/srb2dl" > /tmp/srb2dl
+    mv /tmp/srb2dl "$SRB2DLROOT/srb2dl"
+
+    printf "$SUCCESS\n%s\n\e[0m\a" "Downloading is successful."
+
+    exit
 }
 
 dlanother() {
@@ -1863,78 +1895,78 @@ $DIRECTORY"
 
                         if [ -n "$SEARCHQUERYUSER" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search-user
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search
 
                         fi
 
                     elif [ "$CHARACTER" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$MAP" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE="$MAPPAGE" MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE="$MAPPAGE" MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$GAMETYPE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$ASSET" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE="$ASSETPAGE" ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE="$ASSETPAGE" ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$LUA" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE="$LUAPAGE" LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE="$LUAPAGE" LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$PLAYERCOLOR" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$MISC" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE="$MISCPAGE" MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE="$MISCPAGE" MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$SOFTWARE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$BUILD" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE="$BUILDPAGE" BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE="$BUILDPAGE" BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$KARTCHARACTER" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     elif [ "$KARTMAP" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     elif [ "$KARTMISC" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     elif [ "$KARTBUILD" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     fi
 
@@ -1944,86 +1976,86 @@ $DIRECTORY"
 
                         if [ -n "$SEARCHQUERYUSER" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search-user
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search
 
                         fi
 
                     elif [ "$OLD3" = 1 ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" BACK2ADDONURL="" BACK2ADDONURL2="$BACK2ADDONURL2" OLD=1 OLD2=1 OLD3=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" BACK2ADDONURL="" BACK2ADDONURL2="$BACK2ADDONURL2" OLD=1 OLD2=1 OLD3=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
 
                     elif [ "$OLD" = 1 ] && [ -z "$OLD3" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" BACK2ADDONURL="$BACK2ADDONURL" BACK2ADDONURL2="" OLD=1 OLD2=1 OLD3="" arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" BACK2ADDONURL="$BACK2ADDONURL" BACK2ADDONURL2="" OLD=1 OLD2=1 OLD3="" arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
 
                     elif [ "$CHARACTER" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$MAP" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE="$MAPPAGE" MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE="$MAPPAGE" MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$GAMETYPE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$ASSET" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE="$ASSETPAGE" ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE="$ASSETPAGE" ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$LUA" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE="$LUAPAGE" LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE="$LUAPAGE" LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$PLAYERCOLOR" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$MISC" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE="$MISCPAGE" MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE="$MISCPAGE" MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$SOFTWARE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$BUILD" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE="$BUILDPAGE" BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE="$BUILDPAGE" BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0"
 
                     elif [ "$KARTCHARACTER" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
 
                     elif [ "$KARTMAP" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
 
                     elif [ "$KARTMISC" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
 
                     elif [ "$KARTBUILD" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0" --kart
 
                     fi
 
@@ -2227,7 +2259,7 @@ case "$2" in
 
                 clear
                 srb2kartlogo
-                printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 for loop in "Kart Characters" "Kart Maps" "Kart Miscellaneous" "Kart Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
                 printf "#? "
                 read -r choose
@@ -2357,7 +2389,7 @@ case "$2" in
 
             else
 
-                printf "\n%s\n" "Please enter resource to search."
+                printf "$MESSAGE\n%s\n\e[0m" "Please enter resource to search."
                 read -r SEARCHQUERY
 
             fi
@@ -2432,7 +2464,7 @@ case "$2" in
 
             else
 
-                printf "\n%s\n" "Please enter resource to search."
+                printf "$MESSAGE\n%s\n\e[0m" "Please enter resource to search."
                 read -r SEARCHQUERYUSER
 
             fi
@@ -2471,10 +2503,13 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
   OPTIONS:
      -h, --help                             Show this help text.
      -k, --kart                             Go to SRB2Kart resources.
+     -lu, --listurl                         List URL from database of downloaded files.
      -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions.
+     -ru, --removeurl                       Remove URL from database of downloaded files (preventing of upgrading undesired resources).
      -r, --reusable                         Filter resources by reusable.
      -s, --search         <search-query>    Search resources by keyword.
      -u, --search-user    <search-query>    Search resources by user.
+     -up, --upgrade                         Upgrade previously downloaded resources, according to database of URLs (only mb.srb2.org is supported).
 
   EXAMPLES:
      1. Show SRB2 resources and download them to chosen path:
@@ -2491,6 +2526,12 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
      5. Go to archived resources for previous SRB2/SRB2Kart versions and download them to \"\$HOME/Downloads\" path (-r/--reusable option is not supported for -o/--old):
             srb2dl --old \"\$HOME/Downloads\"
+
+     6. Upgrade previously downloaded resources to \"\$HOME/Downloads\" path, according to database of URLs (only mb.srb2.org is supported):
+            srb2dl --upgrade \"\$HOME/Downloads\"
+
+     7. Remove URL from database of downloaded files (preventing of upgrading undesired resources):
+            srb2dl --removeurl
 
   Previewing resources is available by setting \"export SRB2DLPREVIEW=1\" and optionally variable BROWSER (for example \"export BROWSER=firefox\") in shell configuration file. Default previewer is w3m, if installed.
 "
@@ -2528,7 +2569,7 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
             arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB2 2.1 Legacy Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
             count="$(printf "%s\n" "$arraypage" | wc -l)"
             n=""
-            printf "\033[1m\033[34m%s\n\033[0m" "Please choose SRB2 version by typing number and then pressing enter. Press enter or ctrl+c to quit."
+            printf "$MESSAGE\n%s\n\e[0m" "Please choose SRB2 version by typing number and then pressing enter. Press enter or ctrl+c to quit."
             printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
             while true; do
 
@@ -2568,7 +2609,7 @@ for (i = 1; i in l; i++)
 {print l[i] " - " "\033[37mUser: "r[i]"\033[0m"}}'
                 )")
 
-                printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
             elif [ "$OPTURL" = "SRB2-2.1" ]; then
 
@@ -2587,7 +2628,7 @@ for (i = 1; i in l; i++)
                 PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$PAGE")
                 arraypage=$(printf "%s\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="|"' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
                 arraypagename=$(printf "%s\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
-                printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
             fi
 
@@ -2689,7 +2730,7 @@ for (i = 1; i in l; i++)
                 )")
 
                 count="$(printf "%s\n" "$arraypage" | wc -l)"
-                printf "\033[1m\033[34m%s\n\033[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
             elif [ -n "$(printf "%s\n" "$URL" | gawk '/threads/')" ] || [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ] || [ "$URL" = "SRB2Archive" ]; then
@@ -2766,7 +2807,7 @@ for (i = 1; i in l; i++)
                 fi
 
                 count="$(printf "%s\n" "$arrayfile" | wc -l)"
-                printf "\033[1m\033[34m%s\n\033[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 printf "%s\n" "$arrayfilename" | gawk '{print NR")", $0}'
 
             fi
@@ -2824,11 +2865,11 @@ for (i = 1; i in l; i++)
 
                             FILELIST="$FILELIST
 $FILELISTTMP"
-                            FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++')
+                            FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
                             FILELISTNAMETMP="$OPTFILENAME"
                             FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
-                            FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++')
+                            FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
                             OLD=1 OLD2=1 dlanother
 
                         fi
@@ -2933,7 +2974,7 @@ $FILELISTNAMETMP"
         count="$(printf "%s\n" "$arrayfile" | wc -l)"
         n=""
         clear
-        printf "\033[1m\033[34m%s\n\033[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        printf "$MESSAGE\n%s\n\e[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
         printf "%s\n" "$arrayfilename" | gawk '{print NR")", $0}'
 
         while true; do
@@ -2964,11 +3005,11 @@ $FILELISTNAMETMP"
                     FILELISTTMP="https://mb.srb2.org/$OPTFILE"
                     FILELIST="$FILELIST
 $FILELISTTMP"
-                    FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++')
+                    FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
                     FILELISTNAMETMP="$OPTFILENAME"
                     FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
-                    FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++')
+                    FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
                     OLD=1 OLD2=1 OLD3=1 dlanother
 
                 fi
@@ -2986,11 +3027,13 @@ $FILELISTNAMETMP"
 
     -r | --reusable)
 
+        # Reusable variable for various other script's options.
         REUSABLE=1
         ;;
 
     -s | --search)
 
+        # Make variables to be remembered after rerunning script with "exec $0".
         if [ "$SEARCH" = 1 ] && [ "$FILES" = 1 ] && [ -n "$SEARCHURL" ]; then
 
             SEARCH=1
@@ -3060,7 +3103,7 @@ $FILELISTNAMETMP"
 
             else
 
-                printf "\n%s\n" "Please enter resource to search."
+                printf "$MESSAGE\n%s\n\e[0m" "Please enter resource to search."
                 read -r SEARCHQUERY
 
             fi
@@ -3158,7 +3201,7 @@ $FILELISTNAMETMP"
 
             else
 
-                printf "\n%s\n" "Please enter resource to search."
+                printf "$MESSAGE\n%s\n\e[0m" "Please enter resource to search."
                 read -r SEARCHQUERYUSER
 
             fi
@@ -3236,7 +3279,7 @@ $FILELISTNAMETMP"
 
                 clear
                 srb2kartlogo
-                printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 for loop in "Kart Characters" "Kart Maps" "Kart Miscellaneous" "Kart Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
                 printf "#? "
                 read -r choose
@@ -3310,6 +3353,182 @@ $FILELISTNAMETMP"
         fi
 
         dlanother
+
+        ;;
+
+    -lu | --listurl)
+
+        clear
+
+        #List URL database of downloaded files.
+        if [ -z "$(find "$SRB2DLROOT/srb2dl" -type f 2> /dev/null)" ]; then
+
+            printf "$FAILURE%s\n\e[0m" "ERROR: Can't find URL database of downloaded files."
+            exit
+
+        fi
+
+        gawk -F'.' '{print $1}' "$SRB2DLROOT/srb2dl" | sort -u
+        exit
+
+        ;;
+
+    -ru | --removeurl)
+
+        clear
+
+        #Remove URL from database of downloaded files.
+        if [ -z "$(find "$SRB2DLROOT/srb2dl" -type f 2> /dev/null)" ]; then
+
+            printf "$FAILURE%s\n\e[0m" "ERROR: Can't find URL database of downloaded files."
+            exit
+
+        fi
+
+        printf "$MESSAGE\n%s\n\e[0m" "Please choose URL by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        array=$(gawk '{print $1}' "$SRB2DLROOT/srb2dl" | sort -u)
+        arrayname=$(gawk -F'.' '{print $1}' "$SRB2DLROOT/srb2dl" | sort -u)
+        count="$(printf "%s\n" "$array" | wc -l)"
+        n=""
+        printf "%s\n" "$arrayname" | awk '{print NR")", $0}'
+        while true; do
+
+            printf "#? "
+            read -r n
+
+            if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
+
+                URL=$(printf "%s\n" "$array" | awk NR=="${n}")
+                gawk -i inplace '!/'$URL'/ {print}' "$SRB2DLROOT/srb2dl"
+
+                break
+
+            else
+
+                printf "$NOTICE\n%s\n\e[0m" "No option has been chosen."
+                exit
+
+            fi
+
+        done
+
+        if [ -z "$(cat "$SRB2DLROOT/srb2dl")" ]; then
+
+            rm -rf "$SRB2DLROOT/srb2dl"
+
+        fi
+
+        printf "$SUCCESS\n%s\n\e[0m\a" "Removing URL for $(printf "%s\n" "$URL" | gawk -F'.' '{print $1}') is successful."
+        exit
+
+        ;;
+
+    -up | --upgrade)
+
+        clear
+
+        # Upgrade all downloaded files, that are saved in database.
+        if [ -z "$(find "$SRB2DLROOT/srb2dl" -type f 2> /dev/null)" ]; then
+
+            printf "$FAILURE%s\n\e[0m" "ERROR: Can't find URL database of downloaded files."
+            exit
+
+        fi
+
+        if [ -z "$(cat "$SRB2DLROOT/srb2dl")" ]; then
+
+            printf "$NOTICE%s\n\e[0m" "WARNING: Found database, but it is empty. Download resource."
+            exit
+
+        fi
+
+        while read -r u; do
+
+            FILETHREAD=$(printf "%s\n" "$u" | gawk '{print $1}' | gawk -F'.' '{print $2}')
+            FILESIZE=$(printf "%s\n" "$u" | gawk '{print $2}')
+            FILEURL=$(printf "%s\n" "$u" | gawk '{print $3}')
+            FILENAME=$(printf "%s\n" "$u" | gawk '{print $4}')
+            FILETHREADCODE=$(curl -sL "https://mb.srb2.org/threads/$FILETHREAD")
+            LATEST=$(printf "%s\n" "$FILETHREADCODE" | gawk -F'"' '/addons*.*download/ {print $2}')
+
+            if [ -z "$LATEST" ]; then
+
+                LATEST=$(printf "%s\n" "$FILETHREADCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}' | gawk '!a[$0]++ {print "/"$0}' | head -n1)
+
+            fi
+
+            DOWNLOADHEADER=$(curl -X GET -sLI "https://mb.srb2.org$LATEST" | gawk -F'"' '/filename/ {print $2}')
+
+            if [ -z "$DOWNLOADHEADER" ]; then
+
+                LATESTCODE=$(curl -s "https://mb.srb2.org$LATEST")
+                LATEST=$(printf "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF{print}')
+
+            fi
+
+            printf "$MESSAGE\n%s\n\e[0m" "Searching for updated $FILENAME. Please wait.."
+
+            for l in $LATEST; do
+
+                REMOTEFILETHREAD=$(printf "%s\n" "$FILETHREADCODE" | gawk -F'"|/' '/og:url/ {print $8}')
+                REMOTEFILEURL="https://mb.srb2.org$l"
+                REMOTEFILECODE=$(curl -X GET -sLI "$REMOTEFILEURL")
+                REMOTEFILESIZE=$(printf "%s\n" "$REMOTEFILECODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1)
+                REMOTEFILENAME=$(printf "%s\n" "$REMOTEFILECODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')
+
+                if [ "$REMOTEFILESIZE" != "$FILESIZE" ] && [ "$(printf "%s\n" "$REMOTEFILENAME" | gawk -F'-' '{print $1}')" = "$(printf "%s\n" "$FILENAME" | gawk -F'-' '{print $1}')" ]; then
+
+                    DIRECTORY="$2"
+
+                    printf "$MESSAGE\n%s\n\e[0m" "Downloading file $REMOTEFILENAME from $REMOTEFILEURL. Please wait.."
+
+                    if [ -n "$DIRECTORY" ]; then
+
+                        if [ -n "$REMOTEFILENAME" ]; then
+
+                            COLUMNS=27 curl -#LC - "$REMOTEFILEURL" -o "$REMOTEFILENAME" --output-dir "$DIRECTORY" 2>&1 &
+
+                        elif [ -z "$REMOTEFILENAME" ]; then
+
+                            COLUMNS=27 curl -#LOC - "$REMOTEFILEURL" --output-dir "$DIRECTORY" 2>&1 &
+
+                        fi
+
+                    else
+
+                        if [ -n "$REMOTEFILENAME" ]; then
+
+                            COLUMNS=27 curl -#LC - "$REMOTEFILEURL" -o "$REMOTEFILENAME" 2>&1 &
+
+                        elif [ -z "$REMOTEFILENAME" ]; then
+
+                            COLUMNS=27 curl -#LOC - "$REMOTEFILEURL" 2>&1 &
+
+                        fi
+
+                    fi
+
+                    FILEURL=$(printf "%s\n" "$FILEURL" | gawk '{gsub("/","\\/");print}')
+
+                    if [ -n "$(gawk '/'$FILEURL'/ && /'$FILESIZE'/ {print}' "$SRB2DLROOT/srb2dl")" ]; then
+
+                        gawk -i inplace '!/'$FILEURL'/ && !/'$FILESIZE'/ {print}' "$SRB2DLROOT/srb2dl"
+
+                    fi
+
+                    printf "%s\n" "$REMOTEFILETHREAD $REMOTEFILESIZE $REMOTEFILEURL $REMOTEFILENAME" | gawk 'NF{print}' >> "$SRB2DLROOT/srb2dl"
+
+                fi
+
+            done
+
+        done < "$SRB2DLROOT/srb2dl" | cat
+
+        sort -u "$SRB2DLROOT/srb2dl" > /tmp/srb2dl
+        mv /tmp/srb2dl "$SRB2DLROOT/srb2dl"
+        printf "$SUCCESS\n%s\n\e[0m\a" "Upgrading is successful."
+        exit
+
         ;;
 
 esac
@@ -3390,7 +3609,7 @@ if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" =
 
         clear
         srb2logo
-        printf "\033[1m\033[34m%s\n\033[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
         for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
 

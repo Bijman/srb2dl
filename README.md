@@ -7,6 +7,7 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 - Downloading multiple resources at the same time,
 - Searching content by keyword or user,
 - Filtering content by reusable,
+- Upgrade previously downloaded content,
 - Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
 - Runs on Linux, Windows (Cygwin, Git Bash) and MacOS.
 
@@ -94,7 +95,11 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
      -k, --kart                             Go to SRB2Kart resources.
 
+     -lu, --listurl                         List URL from database of downloaded files.
+
      -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions.
+
+     -ru, --removeurl                       Remove URL from database of downloaded files (preventing of upgrading undesired resources).
 
      -r, --reusable                         Filter resources by reusable.
 
@@ -102,6 +107,7 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
      -u, --search-user    <search-query>    Search resources by user.
 
+     -up, --upgrade                         Upgrade previously downloaded resources, according to database of URLs (only mb.srb2.org is supported).
 
   EXAMPLES:
 
@@ -129,12 +135,20 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
             srb2dl --old "$HOME/Downloads"
 
+
+     6. Upgrade previously downloaded resources to "$HOME/Downloads" path, according to database of URLs (only mb.srb2.org is supported):
+            srb2dl --upgrade "$HOME/Downloads"
+
+
+     7. Remove URL from database of downloaded files (preventing of upgrading undesired resources):
+            srb2dl --removeurl
+
    Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
 ```
 
-# Added features/content
+# Added feature
 
-**2021-08-11:**
-1. Download archived content for previous versions of SRB2 and SRB2Kart.
+**2022-04-14:**
+- Upgrade previously downloaded resources.
 
-![srb2dlold](https://user-images.githubusercontent.com/16626326/128992658-eab52b02-78dc-45e6-9715-5759904c7de1.gif)
+![srb2dlup](https://user-images.githubusercontent.com/16626326/163449927-9a157401-0101-422f-85c4-47b5a881dab5.gif)
