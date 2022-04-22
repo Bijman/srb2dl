@@ -214,6 +214,7 @@ for (i = 1; i in l; i++)
         count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
         checksrb2mb
+        clear
         printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
         printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
