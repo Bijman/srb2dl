@@ -24,7 +24,7 @@ fi
 
 checksrb2mb() {
     # Check connection to SRB2 Message Board.
-    if [ -z "$(curl -vI https://mb.srb2.org/addons 2>&1 | gawk '/> Host:/ {gsub("\r","");print $NF}')" ] || [ -z "$(printf "%s\n" "$PAGECODE" | gawk 'match($0, /ratingStars--larger|user/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
+    if [ -z "$(printf "%s\n" "$MBCODE" | gawk 'match($0, /ratingStars--larger|user/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
 
         clear
         printf "$FAILURE\n%s\n\e[0m" "ERROR: Can't connect to SRB2 Message Board. Try again later or check your internet connection."
@@ -213,6 +213,7 @@ for (i = 1; i in l; i++)
 
         count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
+        MBCODE="$PAGECODE"
         checksrb2mb
         clear
         printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
@@ -291,6 +292,9 @@ choosefile() {
                 fi
 
             fi
+
+            MBCODE="$ATTACHMENTCODE"
+            checksrb2mb
 
             arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
             arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
@@ -2570,8 +2574,10 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
             # Choose categories for old versions of SRB2/SRB2Kart resources.
             PAGECODE=$(curl -Ls "https://mb.srb2.org")
+            MBCODE="$PAGECODE"
             checksrb2mb
             srb2oldlogo
+
             arraypage=$(printf "%s\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2Archive" "$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
             arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB2 2.1 Legacy Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
             count="$(printf "%s\n" "$arraypage" | wc -l)"
@@ -2784,6 +2790,9 @@ for (i = 1; i in l; i++)
                     else
 
                         ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$URL")
+                        MBCODE="$ATTACHMENTCODE"
+                        checksrb2mb
+
                         arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
                         arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
 
