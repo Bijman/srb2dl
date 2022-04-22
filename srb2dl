@@ -22,6 +22,17 @@ else
 
 fi
 
+checksrb2mb() {
+    # Check connection to SRB2 Message Board.
+    if [ -z "$(curl -vI https://mb.srb2.org/addons 2>&1 | gawk '/> Host:/ {gsub("\r","");print $NF}')" ] || [ -z "$(printf "%s\n" "$PAGECODE" | gawk 'match($0, /ratingStars--larger|user/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
+
+        clear
+        printf "$FAILURE\n%s\n\e[0m" "ERROR: Can't connect to SRB2 Message Board. Try again later or check your internet connection."
+        exit
+
+    fi
+}
+
 choosepage() {
     # Display page of chosen category.
     NEXT="\033[1m\033[34mNext Page $((PAGE + 1))\033[0m"
@@ -31,6 +42,7 @@ choosepage() {
     BACK2SEARCHRESULT="\033[1m\033[34mBack to search results\033[0m"
     BACK2SEARCH="\033[1m\033[34mBack to search\033[0m"
     DONE="\033[1m\033[34mDone\033[0m"
+
     if [ -z "$arrayfile" ] && [ -z "$arrayfilename" ]; then
 
         if [ "$REUSABLE" = 1 ]; then
@@ -106,23 +118,23 @@ choosepage() {
 
             if [ -n "$SEARCHQUERYUSER" ]; then
 
-                SEARCHPAGECODE=$(curl -s "$SEARCHURL")
+                PAGECODE=$(curl -s "$SEARCHURL")
 
             else
 
-                SEARCHPAGECODE=$(curl -s "$SEARCHURL&page=$PAGE")
+                PAGECODE=$(curl -s "$SEARCHURL&page=$PAGE")
 
             fi
 
         fi
 
-        USERS=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'data-author="|"' '/data-author=/ {print $4}' | gawk '{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print}')
-        CATEGORIES=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'<li>Category: <a href="/addons/categories/*.*">|</a></li>' '/<li>Category: <a href="\/addons\/categories/ {print $2}')
-        DATE=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'<li><time  class="*.*">|</time></li>' '/<li><time  class=/ {print $2}')
+        USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|"' '/data-author=/ {print $4}' | gawk '{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print}')
+        CATEGORIES=$(printf "%s\n" "$PAGECODE" | gawk -F'<li>Category: <a href="/addons/categories/*.*">|</a></li>' '/<li>Category: <a href="\/addons\/categories/ {print $2}')
+        DATE=$(printf "%s\n" "$PAGECODE" | gawk -F'<li><time  class="*.*">|</time></li>' '/<li><time  class=/ {print $2}')
 
-        arraypagesearch=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')
+        arraypagesearch=$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')
 
-        arraypagesearchnametmp=$(printf "%s\n" "$SEARCHPAGECODE" | gawk -F'">|</a>|<span class="label label--primary" dir="auto|&nbsp;</span>|<em class="textHighlight|</span><span class="label-append|</em>' '/\/addons\// && !/categories|https/ {for (i = 2; i <= NF; i++) printf "\033[1m"$i"\033[0m"; print ""}' | gawk '{for (i = 1 ; i <= NF ; i++) {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","")}}1' | gawk 'NF {gsub(/\[Reusable\]/,"\033[34;7m[Reusable]\033[0m "); print "\033[1m"$0"\033[0m"}')
+        arraypagesearchnametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'">|</a>|<span class="label label--primary" dir="auto|&nbsp;</span>|<em class="textHighlight|</span><span class="label-append|</em>' '/\/addons\// && !/categories|https/ {for (i = 2; i <= NF; i++) printf "\033[1m"$i"\033[0m"; print ""}' | gawk '{for (i = 1 ; i <= NF ; i++) {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","")}}1' | gawk 'NF {gsub(/\[Reusable\]/,"\033[34;7m[Reusable]\033[0m "); print "\033[1m"$0"\033[0m"}')
 
         arraypagesearchname=$(printf "%s\n" "$(
             gawk -v left="$arraypagesearchnametmp" -v leftcenter="$USERS" -v rightcenter="$DATE" -v right="$CATEGORIES" 'BEGIN{
@@ -201,7 +213,7 @@ for (i = 1; i in l; i++)
 
         count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
-        clear
+        checksrb2mb
         printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
         printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
@@ -468,6 +480,7 @@ choosefile() {
                 OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk 'NR=='"${n}"'')
 
                 if [ "$OPTFILE" = "Back2Addon" ]; then
+
                     clear
 
                     if [ "$REUSABLE" = 1 ]; then
@@ -1853,7 +1866,6 @@ dl() {
 }
 
 dlanother() {
-    # Making sure to stack list of selected files ready to download.
     clear
     printf "\033[1m%s\n\033[0m" "Filelist: $FILELISTNAME"
 
@@ -1870,6 +1882,7 @@ $DIRECTORY"
     fi
 
     printf "\033[1m\033[34m\n%s\n\033[0m" "Do you want to download other stuff?"
+    # Making sure to stack list of selected files ready to download.
     while
 
         for loop in "Yes" "No"; do printf "%s\n" "$((i += 1))) $loop"; done
@@ -2389,8 +2402,8 @@ case "$2" in
 
             # Search resource functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
-            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$(printf "%s\n" "xf_csrf=$SEARCHCOOKIES" | head -n1)
+            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
             XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
             SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n'"$SEARCHQUERY"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
@@ -2464,8 +2477,8 @@ case "$2" in
 
             # Search user functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
-            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$(printf "%s\n" "xf_csrf=$SEARCHCOOKIES" | head -n1)
+            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
             XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
             SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n'"$SEARCHQUERYUSER"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
@@ -2539,8 +2552,6 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
         fi
 
-        clear
-        srb2oldlogo
         PAGE=$((OLDPAGE + 1))
         NEXT="\033[1m\033[34mNext Page $((PAGE + 1))\033[0m"
         PREV="\033[1m\033[34mPrevious Page $((PAGE - 1))\033[0m"
@@ -2558,6 +2569,8 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
             # Choose categories for old versions of SRB2/SRB2Kart resources.
             PAGECODE=$(curl -Ls "https://mb.srb2.org")
+            checksrb2mb
+            srb2oldlogo
             arraypage=$(printf "%s\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2Archive" "$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
             arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB2 2.1 Legacy Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
             count="$(printf "%s\n" "$arraypage" | wc -l)"
@@ -3103,8 +3116,8 @@ $FILELISTNAMETMP"
 
             # Search resource functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
-            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$(printf "%s\n" "xf_csrf=$SEARCHCOOKIES" | head -n1)
+            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
             XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
             SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n'"$SEARCHQUERY"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
@@ -3201,8 +3214,8 @@ $FILELISTNAMETMP"
 
             # Search user functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
-            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$(printf "%s\n" "xf_csrf=$SEARCHCOOKIES" | head -n1)
+            SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
             XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
             SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n'"$SEARCHQUERYUSER"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
@@ -3604,7 +3617,6 @@ if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" =
         clear
         srb2logo
         printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
-
         for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
 
         printf "#? "
