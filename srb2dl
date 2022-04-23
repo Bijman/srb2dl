@@ -24,7 +24,7 @@ fi
 
 checksrb2mb() {
     # Check connection to SRB2 Message Board.
-    if [ -z "$(printf "%s\n" "$MBCODE" | gawk 'match($0, /ratingStars--larger|user/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
+    if [ -z "$(printf "%s\n" "$MBCODE" | gawk 'match($0, /ratingStars--larger/ || /user/ || /'$XFTOKEN'/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
 
         clear
         printf "$FAILURE\n%s\n\e[0m" "ERROR: Can't connect to SRB2 Message Board. Try again later or check your internet connection."
@@ -213,8 +213,14 @@ for (i = 1; i in l; i++)
 
         count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
-        MBCODE="$PAGECODE"
-        checksrb2mb
+
+        if [ "$SEARCH" != 1 ]; then
+
+            MBCODE="$PAGECODE"
+            checksrb2mb
+
+        fi
+
         clear
         printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
         printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
@@ -2420,6 +2426,9 @@ case "$2" in
 
             fi
 
+            MBCODE="$XFTOKEN"
+            checksrb2mb
+
             SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
             dlanother
 
@@ -3138,6 +3147,9 @@ $FILELISTNAMETMP"
                 SEARCHURL=$(printf "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
 
             fi
+
+            MBCODE="$XFTOKEN"
+            checksrb2mb
 
             SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
             dlanother
