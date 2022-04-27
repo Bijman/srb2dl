@@ -1912,78 +1912,78 @@ $DIRECTORY"
 
                         if [ -n "$SEARCHQUERYUSER" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search-user
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --search
 
                         fi
 
                     elif [ "$CHARACTER" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$MAP" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE="$MAPPAGE" MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE=$((MAPPAGE - 1)) MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$GAMETYPE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$ASSET" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE="$ASSETPAGE" ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$LUA" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE="$LUAPAGE" LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE=$((LUAPAGE - 1)) LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$PLAYERCOLOR" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$MISC" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE="$MISCPAGE" MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE=$((MISCPAGE - 1)) MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$SOFTWARE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$BUILD" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE="$BUILDPAGE" BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0"
 
                     elif [ "$KARTCHARACTER" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     elif [ "$KARTMAP" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     elif [ "$KARTMISC" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     elif [ "$KARTBUILD" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 REUSABLE=1 exec "$0" --kart
 
                     fi
 
@@ -1993,86 +1993,86 @@ $DIRECTORY"
 
                         if [ -n "$SEARCHQUERYUSER" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search-user
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERYUSER="$SEARCHQUERYUSER" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search-user
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" SEARCHPAGE=$((SEARCHPAGE - 1)) SEARCHURL="$SEARCHURL" SEARCHQUERY="$SEARCHQUERY" SEARCH=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --search
 
                         fi
 
                     elif [ "$OLD3" = 1 ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" BACK2ADDONURL="" BACK2ADDONURL2="$BACK2ADDONURL2" OLD=1 OLD2=1 OLD3=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$OLDURL" BACK2ADDONURL="" BACK2ADDONURL2="$BACK2ADDONURL2" OLD=1 OLD2=1 OLD3=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
 
                     elif [ "$OLD" = 1 ] && [ -z "$OLD3" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" BACK2ADDONURL="$BACK2ADDONURL" BACK2ADDONURL2="" OLD=1 OLD2=1 OLD3="" arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$OLDURL" BACK2ADDONURL="$BACK2ADDONURL" BACK2ADDONURL2="" OLD=1 OLD2=1 OLD3="" arrayfile="$arrayfile" arrayfilename="$arrayfilename" exec "$0" --old
 
                     elif [ "$CHARACTER" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE="$CHARACTERPAGE" CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" CHARACTERPAGE=$((CHARACTERPAGE - 1)) CHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$MAP" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE="$MAPPAGE" MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MAPPAGE=$((MAPPAGE - 1)) MAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$GAMETYPE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE="$GAMETYPEPAGE" GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" GAMETYPEPAGE=$((GAMETYPEPAGE - 1)) GAMETYPE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$ASSET" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE="$ASSETPAGE" ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" ASSETPAGE=$((ASSETPAGE - 1)) ASSET=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$LUA" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE="$LUAPAGE" LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" LUAPAGE=$((LUAPAGE - 1)) LUA=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$PLAYERCOLOR" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE="$PLAYERCOLORPAGE" PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" PLAYERCOLORPAGE=$((PLAYERCOLORPAGE - 1)) PLAYERCOLOR=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$MISC" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE="$MISCPAGE" MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" MISCPAGE=$((MISCPAGE - 1)) MISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$SOFTWARE" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE="$SOFTWAREPAGE" SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" SOFTWAREPAGE=$((SOFTWAREPAGE - 1)) SOFTWARE=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0"
 
                     elif [ "$BUILD" = 1 ]; then
 
                         unset CHARACTER MAP GAMETYPE ASSET LUA PLAYERCOLOR MISC SOFTWARE BUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE="$BUILDPAGE" BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0"
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" BUILDPAGE=$((BUILDPAGE - 1)) BUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0"
 
                     elif [ "$KARTCHARACTER" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE="$KARTCHARACTERPAGE" KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTCHARACTERPAGE=$((KARTCHARACTERPAGE - 1)) KARTCHARACTER=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
 
                     elif [ "$KARTMAP" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE="$KARTMAPPAGE" KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMAPPAGE=$((KARTMAPPAGE - 1)) KARTMAP=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
 
                     elif [ "$KARTMISC" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE="$KARTMISCPAGE" KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTMISCPAGE=$((KARTMISCPAGE - 1)) KARTMISC=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" FILES=1 exec "$0" --kart
 
                     elif [ "$KARTBUILD" = 1 ]; then
 
                         unset KARTCHARACTER KARTMAP KARTMISC KARTBUILD
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE="$KARTBUILDPAGE" KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0" --kart
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" THREADLIST="$THREADLIST" THREADNAME="$THREADNAME" DIRECTORY="$DIRECTORY" PAGECODE="$PAGECODE" KARTBUILDPAGE=$((KARTBUILDPAGE - 1)) KARTBUILD=1 arrayfile="$arrayfile" arrayfilename="$arrayfilename" OPTURL="$OPTURL" FILES=1 exec "$0" --kart
 
                     fi
 
@@ -2332,19 +2332,23 @@ case "$2" in
 
         if [ "$KARTCHARACTER" = 1 ]; then
 
-            KARTCHARACTERPAGE=$((KARTCHARACTERPAGE + 1)) PAGE="$KARTCHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-characters.13/?page" choosepage
+            KARTCHARACTERPAGE=$((KARTCHARACTERPAGE + 1))
+            PAGE="$KARTCHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-characters.13/?page" choosepage
 
         elif [ "$KARTMAP" = 1 ]; then
 
-            KARTMAPPAGE=$((KARTMAPPAGE + 1)) PAGE="$KARTMAPPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-maps.14/?page" choosepage
+            KARTMAPPAGE=$((KARTMAPPAGE + 1))
+            PAGE="$KARTMAPPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-maps.14/?page" choosepage
 
         elif [ "$KARTMISC" = 1 ]; then
 
-            KARTMISCPAGE=$((KARTMISCPAGE + 1)) PAGE="$KARTMISCPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-miscellaneous.15/?page" choosepage
+            KARTMISCPAGE=$((KARTMISCPAGE + 1))
+            PAGE="$KARTMISCPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-miscellaneous.15/?page" choosepage
 
         elif [ "$KARTBUILD" = 1 ]; then
 
-            KARTBUILDPAGE=$((KARTBUILDPAGE + 1)) PAGE="$KARTBUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-custom-builds.16/?page" choosepage
+            KARTBUILDPAGE=$((KARTBUILDPAGE + 1))
+            PAGE="$KARTBUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-custom-builds.16/?page" choosepage
 
         fi
 
@@ -2376,7 +2380,8 @@ case "$2" in
 
         if ([ "$SEARCH" = 1 ] && [ "$FILES" = 1 ] && [ -n "$SEARCHURL" ]) || ([ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -n "$SEARCHURL" ]); then
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" choosepage
             dlanother
 
         elif [ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -z "$SEARCHURL" ]; then
@@ -2429,7 +2434,8 @@ case "$2" in
             MBCODE="$XFTOKEN"
             checksrb2mb
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" choosepage
             dlanother
 
         fi
@@ -2453,7 +2459,8 @@ case "$2" in
 
         if ([ "$SEARCH" = 1 ] && [ "$FILES" = 1 ] && [ -n "$SEARCHURL" ]) || ([ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -n "$SEARCHURL" ]); then
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" choosepage
             dlanother
 
         elif [ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -z "$SEARCHURL" ]; then
@@ -2504,7 +2511,8 @@ case "$2" in
 
             fi
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" choosepage
             dlanother
 
         fi
@@ -2558,6 +2566,221 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
         exit
         ;;
 
+    "")
+
+        ###SRB2###
+
+        # Make variables to be remembered after rerunning script with "exec $0".
+        if [ "$CHARACTER" = 1 ]; then
+
+            CHARACTER=1
+
+        elif [ "$MAP" = 1 ]; then
+
+            MAP=1
+
+        elif [ "$GAMETYPE" = 1 ]; then
+
+            GAMETYPE=1
+
+        elif [ "$ASSET" = 1 ]; then
+
+            ASSET=1
+
+        elif [ "$LUA" = 1 ]; then
+
+            LUA=1
+
+        elif [ "$PLAYERCOLOR" = 1 ]; then
+
+            PLAYERCOLOR=1
+
+        elif [ "$MISC" = 1 ]; then
+
+            MISC=1
+
+        elif [ "$SOFTWARE" = 1 ]; then
+
+            SOFTWARE=1
+
+        elif [ "$BUILD" = 1 ]; then
+
+            BUILD=1
+
+        else
+
+            CHARACTER=0
+            MAP=0
+            GAMETYPE=0
+            ASSET=0
+            LUA=0
+            PLAYERCOLOR=0
+            MISC=0
+            SOFTWARE=0
+            BUILD=0
+            FILES=0
+
+            if ([ "$1" = "-r" ] || [ "$1" = "--reusable" ]) && [ -z "$DIRECTORY" ]; then
+
+                REUSABLE=1
+                DIRECTORY="$2"
+
+            elif [ -z "$DIRECTORY" ]; then
+
+                DIRECTORY="$1"
+
+            else
+
+                DIRECTORY="$DIRECTORY"
+
+            fi
+
+        fi
+
+        if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" = 0 ] || [ "$LUA" = 0 ] || [ "$PLAYERCOLOR" = 0 ] || [ "$MISC" = 0 ] || [ "$SOFTWARE" = 0 ] || [ "$BUILD" = 0 ]; then
+
+            # Choose SRB2 category.
+            while
+
+                clear
+                srb2logo
+                printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+                for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
+
+                printf "#? "
+                read -r choose
+            do
+
+                unset i
+
+                if [ -n "$choose" ]; then
+
+                    case $choose in
+
+                        "1")
+
+                            CHARACTER=1
+                            break
+                            ;;
+
+                        "2")
+
+                            MAP=1
+                            break
+                            ;;
+
+                        "3")
+
+                            GAMETYPE=1
+                            break
+                            ;;
+
+                        "4")
+
+                            ASSET=1
+                            break
+                            ;;
+
+                        "5")
+
+                            LUA=1
+                            break
+                            ;;
+
+                        "6")
+
+                            PLAYERCOLOR=1
+                            break
+                            ;;
+
+                        "7")
+
+                            MISC=1
+                            break
+                            ;;
+
+                        "8")
+
+                            SOFTWARE=1
+                            break
+                            ;;
+
+                        "9")
+
+                            BUILD=1
+                            break
+                            ;;
+
+                        "10")
+
+                            dl
+                            ;;
+
+                    esac
+
+                else
+
+                    printf "$NOTICE\n%s\n\e[0m" "No category has been chosen."
+                    exit
+
+                fi
+
+            done
+
+        fi
+
+        # Switching to chosen category and page.
+        if [ "$CHARACTER" = 1 ]; then
+
+            CHARACTERPAGE=$((CHARACTERPAGE + 1))
+            PAGE="$CHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/characters.5/?page" choosepage
+
+        elif [ "$MAP" = 1 ]; then
+
+            MAPPAGE=$((MAPPAGE + 1))
+            PAGE="$MAPPAGE" CATURL="https://mb.srb2.org/addons/categories/maps.4/?page" choosepage
+
+        elif [ "$GAMETYPE" = 1 ]; then
+
+            GAMETYPEPAGE=$((GAMETYPEPAGE + 1))
+            PAGE="$GAMETYPEPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-gametypes.3/?page" choosepage
+
+        elif [ "$ASSET" = 1 ]; then
+
+            ASSETPAGE=$((ASSETPAGE + 1))
+            PAGE="$ASSETPAGE" CATURL="https://mb.srb2.org/addons/categories/assets.6/?page" choosepage
+
+        elif [ "$LUA" = 1 ]; then
+
+            LUAPAGE=$((LUAPAGE + 1))
+            PAGE="$LUAPAGE" CATURL="https://mb.srb2.org/addons/categories/lua.7/?page" choosepage
+
+        elif [ "$PLAYERCOLOR" = 1 ]; then
+
+            PLAYERCOLORPAGE=$((PLAYERCOLORPAGE + 1))
+            PAGE="$PLAYERCOLORPAGE" CATURL="https://mb.srb2.org/addons/categories/player-colors.11/?page" choosepage
+
+        elif [ "$MISC" = 1 ]; then
+
+            MISCPAGE=$((MISCPAGE + 1))
+            PAGE="$MISCPAGE" CATURL="https://mb.srb2.org/addons/categories/miscellaneous.8/?page" choosepage
+
+        elif [ "$SOFTWARE" = 1 ]; then
+
+            SOFTWAREPAGE=$((SOFTWAREPAGE + 1))
+            PAGE="$SOFTWAREPAGE" CATURL="https://mb.srb2.org/addons/categories/software.9/?page" choosepage
+
+        elif [ "$BUILD" = 1 ]; then
+
+            BUILDPAGE=$((BUILDPAGE + 1))
+            PAGE="$BUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-builds.10/?page" choosepage
+
+        fi
+
+        dlanother
+
+        ;;
+
     -o | --old)
 
         if [ "$(printf "%s\n" "@" | gawk 'match($NF, /--/) {print substr($NF, RSTART, RLENGTH)}')" ]; then
@@ -2599,8 +2822,9 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
                 read -r n
 
                 if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
+
                     OPTURL=$(printf "%s\n" "$arraypage" | gawk NR=="${n}")
-                    URL="$OPTURL"
+                    OLDURL="$OPTURL"
                     break
 
                 else
@@ -2617,9 +2841,9 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
             clear
 
-            if [ -n "$(printf "%s\n" "$URL" | gawk '/obsoleted|outdated-releases-0-x-1-x.53/')" ]; then
+            if [ -n "$(printf "%s\n" "$OLDURL" | gawk '/obsoleted|outdated-releases-0-x-1-x.53/')" ]; then
 
-                PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$PAGE")
+                PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$PAGE")
                 USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
                 arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
                 arraypagenametmp=$(printf "%s\n" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">|</a>' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}')")
@@ -2635,26 +2859,26 @@ for (i = 1; i in l; i++)
 
             elif [ "$OPTURL" = "SRB2-2.1" ]; then
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2-2.1" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="SRB2-2.1" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
             elif [ "$OPTURL" = "SRB2-2.1-Legacy" ]; then
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2-2.1-Legacy" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="SRB2-2.1-Legacy" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
             elif [ "$OPTURL" = "SRB2Archive" ]; then
 
-                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="SRB2Archive" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="SRB2Archive" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
             else
 
-                PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$PAGE")
+                PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$PAGE")
                 arraypage=$(printf "%s\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="|"' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
                 arraypagename=$(printf "%s\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
                 printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
             fi
 
-            BACK2ADDONURL="$URL"
+            BACK2ADDONURL="$OLDURL"
             count="$(printf "%s\n" "$arraypage" | wc -l)"
             n=""
             printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
@@ -2670,47 +2894,47 @@ for (i = 1; i in l; i++)
 
                     if [ "$OPTURL" = "Next" ] || [ "$OPTURL" = "Prev" ]; then
 
-                        URL="$URL"
+                        OLDURL="$OLDURL"
 
                     else
 
-                        URL="$OPTURL"
+                        OLDURL="$OPTURL"
 
                     fi
 
                     if [ "$OPTURL" = "Next" ]; then
 
-                        PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$((PAGE + 1))")
+                        PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE + 1))")
                         arraynextpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arraynextpage" != "$arraypage" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="$PAGE" URL="$URL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="$PAGE" OLDURL="$OLDURL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$OLDURL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
 
                         fi
 
                     elif [ "$OPTURL" = "Prev" ]; then
 
-                        PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$((PAGE - 2))")
+                        PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE - 2))")
                         arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arrayprevpage" = "$arraypage" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$OLDURL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 2)) URL="$URL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 2)) OLDURL="$OLDURL" OLD=1 OLD2="" OLD3="" FILES=0 exec "$0" --old
 
                         fi
 
                     elif [ "$OPTURL" = "Back2Cat" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="" OLD="" OLD2="" OLD3="" FILES=0 exec "$0" --old
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="" OLD="" OLD2="" OLD3="" FILES=0 exec "$0" --old
 
                     elif [ "$OPTURL" = "Done" ]; then
 
@@ -2737,9 +2961,9 @@ for (i = 1; i in l; i++)
 
             clear
 
-            if [ -n "$(printf "%s\n" "$URL" | gawk '/forums/')" ]; then
+            if [ -n "$(printf "%s\n" "$OLDURL" | gawk '/forums/')" ]; then
 
-                PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$PAGE")
+                PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$PAGE")
                 USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
                 arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
                 arraypagenametmp=$(printf "%s\n" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">|</a>' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}')")
@@ -2755,12 +2979,12 @@ for (i = 1; i in l; i++)
                 printf "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 printf "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
-            elif [ -n "$(printf "%s\n" "$URL" | gawk '/threads/')" ] || [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ] || [ "$URL" = "SRB2Archive" ]; then
+            elif [ -n "$(printf "%s\n" "$OLDURL" | gawk '/threads/')" ] || [ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ] || [ "$OLDURL" = "SRB2Archive" ]; then
 
                 if [ -z "$(printf "%s\n" "$arrayfile")" ]; then
 
                     # Browser's behaviour depends on set SRB2DLPREVIEW.
-                    if [ "$SRB2DLPREVIEW" = 1 ] && [ "$URL" != "SRB2-2.1" ] && [ "$URL" != "SRB2-2.1-Legacy" ] && [ "$URL" != "SRB2Archive" ]; then
+                    if [ "$SRB2DLPREVIEW" = 1 ] && [ "$OLDURL" != "SRB2-2.1" ] && [ "$OLDURL" != "SRB2-2.1-Legacy" ] && [ "$OLDURL" != "SRB2Archive" ]; then
 
                         if [ -n "$BROWSER" ]; then
 
@@ -2775,7 +2999,7 @@ for (i = 1; i in l; i++)
 
                     fi
 
-                    if [ "$URL" = "SRB2-2.1" ]; then
+                    if [ "$OLDURL" = "SRB2-2.1" ]; then
 
                         SRB2OLD21=$(curl -s "https://api.github.com/repos/STJr/SRB2/releases/19358575" | gawk -F'"' '/browser_download_url.*zip/ || /browser_download_url.*exe/ || /browser_download_url.*dmg/ {print $4}')
                         SOURCECODEZIP="https://api.github.com/repos/stjr/srb2/zipball/SRB2_release_2.1.25"
@@ -2783,14 +3007,14 @@ for (i = 1; i in l; i++)
                         arrayattachment=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR" "$SRB2OLD21")
                         arrayattachmentname=$(printf "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)" "$(printf "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
 
-                    elif [ "$URL" = "SRB2-2.1-Legacy" ]; then
+                    elif [ "$OLDURL" = "SRB2-2.1-Legacy" ]; then
 
                         SOURCECODEZIP="https://api.github.com/repos/PandaSRC/srb2-legacy/zipball"
                         SOURCECODETAR="https://api.github.com/repos/PandaSRC/srb2-legacy/tarball"
                         arrayattachment=$(printf "$SOURCECODEZIP\n$SOURCECODETAR")
                         arrayattachmentname=$(printf "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)")
 
-                    elif [ "$URL" = "SRB2Archive" ]; then
+                    elif [ "$OLDURL" = "SRB2Archive" ]; then
 
                         ATTACHMENTCODE=$(curl -Ls "https://files.srb2.org/srb2.org/history")
                         arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
@@ -2798,7 +3022,7 @@ for (i = 1; i in l; i++)
 
                     else
 
-                        ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$URL")
+                        ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$OLDURL")
                         MBCODE="$ATTACHMENTCODE"
                         checksrb2mb
 
@@ -2807,7 +3031,7 @@ for (i = 1; i in l; i++)
 
                     fi
 
-                    if [ -n "$arrayattachment" ] && ([ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ] || [ "$URL" = "SRB2Archive" ]); then
+                    if [ -n "$arrayattachment" ] && ([ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ] || [ "$OLDURL" = "SRB2Archive" ]); then
 
                         arrayfile=$(printf "%s\nBack2Cat\nDone" "$arrayattachment")
                         arrayfilename=$(printf "%s\n$BACK2CAT\n$DONE" "$arrayattachmentname")
@@ -2837,7 +3061,7 @@ for (i = 1; i in l; i++)
 
             fi
 
-            BACK2ADDONURL2="$URL"
+            BACK2ADDONURL2="$OLDURL"
             n=""
             while true; do
                 printf "#? "
@@ -2859,11 +3083,11 @@ for (i = 1; i in l; i++)
 
                         if [ "$OPTURL" = "Back2Cat" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="" OLD="" OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="" OLD="" OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
 
                         elif [ "$OPTURL" = "Back2Addon" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$BACK2ADDONURL" OLD=1 OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$BACK2ADDONURL" OLD=1 OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
 
                         elif [ "$OPTURL" = "Done" ]; then
 
@@ -2874,11 +3098,11 @@ for (i = 1; i in l; i++)
                             OPTFILE=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
                             OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk NR=="${n}")
 
-                            if [ "$URL" = "SRB2-2.1" ] || [ "$URL" = "SRB2-2.1-Legacy" ]; then
+                            if [ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ]; then
 
                                 FILELISTTMP="$OPTFILE"
 
-                            elif [ "$URL" = "SRB2Archive" ]; then
+                            elif [ "$OLDURL" = "SRB2Archive" ]; then
 
                                 FILELISTTMP="https://files.srb2.org/srb2.org/history/$OPTFILE"
 
@@ -2901,37 +3125,37 @@ $FILELISTNAMETMP"
 
                     elif [ "$OPTURL" = "Next" ]; then
 
-                        PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$((PAGE + 1))")
+                        PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE + 1))")
                         arraynextpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arraynextpage" != "$arraypage" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="$PAGE" URL="$URL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="$PAGE" OLDURL="$OLDURL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$OLDURL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
                         fi
 
                     elif [ "$OPTURL" = "Prev" ]; then
 
-                        PAGECODE=$(curl -Ls "https://mb.srb2.org$URL?page=$((PAGE - 2))")
+                        PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE - 2))")
                         arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arrayprevpage" = "$arraypage" ]; then
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$URL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$OLDURL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
                         else
 
-                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 2)) URL="$URL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
+                            FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 2)) OLDURL="$OLDURL" OLD=1 OLD2=1 OLD3="" FILES=0 exec "$0" --old
 
                         fi
 
                     elif [ "$OPTURL" = "Back2Cat" ]; then
 
-                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="" OLD="" OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
+                        FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="" OLD="" OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
 
                     elif [ "$OPTURL" = "Done" ]; then
 
@@ -2972,8 +3196,8 @@ $FILELISTNAMETMP"
 
             fi
 
-            URL="$OPTURL"
-            ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$URL")
+            OLDURL="$OPTURL"
+            ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$OLDURL")
             arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
             arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
 
@@ -3013,11 +3237,11 @@ $FILELISTNAMETMP"
 
                 if [ "$OPTURL" = "Back2Cat" ]; then
 
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" URL="" OLD="" OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE="" OLDURL="" OLD="" OLD2="" OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
 
                 elif [ "$OPTURL" = "Back2Addon" ]; then
 
-                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) URL="$BACK2ADDONURL2" OLD=1 OLD2=1 OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
+                    FILELIST="$FILELIST" FILELISTNAME="$FILELISTNAME" DIRECTORY="$DIRECTORY" OLDPAGE=$((PAGE - 1)) OLDURL="$BACK2ADDONURL2" OLD=1 OLD2=1 OLD3="" arrayfile="" arrayfilename="" FILES=0 exec "$0" --old
 
                 elif [ "$OPTURL" = "Done" ]; then
 
@@ -3075,7 +3299,8 @@ $FILELISTNAMETMP"
 
         if ([ "$SEARCH" = 1 ] && [ "$FILES" = 1 ] && [ -n "$SEARCHURL" ]) || ([ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -n "$SEARCHURL" ]); then
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" choosepage
             dlanother
 
         elif [ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -z "$SEARCHURL" ]; then
@@ -3151,7 +3376,8 @@ $FILELISTNAMETMP"
             MBCODE="$XFTOKEN"
             checksrb2mb
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" SEARCHURL="$SEARCHURL" choosepage
             dlanother
 
         fi
@@ -3175,7 +3401,8 @@ $FILELISTNAMETMP"
 
         if ([ "$SEARCH" = 1 ] && [ "$FILES" = 1 ] && [ -n "$SEARCHURL" ]) || ([ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -n "$SEARCHURL" ]); then
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" choosepage
             dlanother
 
         elif [ "$SEARCH" = 1 ] && [ "$FILES" = 0 ] && [ -z "$SEARCHURL" ]; then
@@ -3249,7 +3476,8 @@ $FILELISTNAMETMP"
 
             fi
 
-            SEARCHPAGE=$((SEARCHPAGE + 1)) PAGE="$SEARCHPAGE" choosepage
+            SEARCHPAGE=$((SEARCHPAGE + 1))
+            PAGE="$SEARCHPAGE" choosepage
             dlanother
 
         fi
@@ -3364,19 +3592,23 @@ $FILELISTNAMETMP"
 
         if [ "$KARTCHARACTER" = 1 ]; then
 
-            KARTCHARACTERPAGE=$((KARTCHARACTERPAGE + 1)) PAGE="$KARTCHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-characters.13/?page" choosepage
+            KARTCHARACTERPAGE=$((KARTCHARACTERPAGE + 1))
+            PAGE="$KARTCHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-characters.13/?page" choosepage
 
         elif [ "$KARTMAP" = 1 ]; then
 
-            KARTMAPPAGE=$((KARTMAPPAGE + 1)) PAGE="$KARTMAPPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-maps.14/?page" choosepage
+            KARTMAPPAGE=$((KARTMAPPAGE + 1))
+            PAGE="$KARTMAPPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-maps.14/?page" choosepage
 
         elif [ "$KARTMISC" = 1 ]; then
 
-            KARTMISCPAGE=$((KARTMISCPAGE + 1)) PAGE="$KARTMISCPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-miscellaneous.15/?page" choosepage
+            KARTMISCPAGE=$((KARTMISCPAGE + 1))
+            PAGE="$KARTMISCPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-miscellaneous.15/?page" choosepage
 
         elif [ "$KARTBUILD" = 1 ]; then
 
-            KARTBUILDPAGE=$((KARTBUILDPAGE + 1)) PAGE="$KARTBUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-custom-builds.16/?page" choosepage
+            KARTBUILDPAGE=$((KARTBUILDPAGE + 1))
+            PAGE="$KARTBUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/kart-custom-builds.16/?page" choosepage
 
         fi
 
@@ -3426,8 +3658,8 @@ $FILELISTNAMETMP"
 
             if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                URL=$(printf "%s\n" "$array" | awk NR=="${n}")
-                gawk -i inplace '!/'$URL'/ {print}' "$SRB2DLROOT/srb2dl"
+                RMURL=$(printf "%s\n" "$array" | awk NR=="${n}")
+                gawk -i inplace '!/'$RMURL'/ {print}' "$SRB2DLROOT/srb2dl"
 
                 break
 
@@ -3446,7 +3678,7 @@ $FILELISTNAMETMP"
 
         fi
 
-        printf "$SUCCESS\n%s\n\e[0m\a" "Removing URL for $(printf "%s\n" "$URL" | gawk -F'.' '{print $1}') is successful."
+        printf "$SUCCESS\n%s\n\e[0m\a" "Removing URL for $(printf "%s\n" "$RMURL" | gawk -F'.' '{print $1}') is successful."
         exit
 
         ;;
@@ -3561,205 +3793,3 @@ $FILELISTNAMETMP"
         ;;
 
 esac
-
-###SRB2###
-
-# Make variables to be remembered after rerunning script with "exec $0".
-if [ "$CHARACTER" = 1 ]; then
-
-    CHARACTER=1
-
-elif [ "$MAP" = 1 ]; then
-
-    MAP=1
-
-elif [ "$GAMETYPE" = 1 ]; then
-
-    GAMETYPE=1
-
-elif [ "$ASSET" = 1 ]; then
-
-    ASSET=1
-
-elif [ "$LUA" = 1 ]; then
-
-    LUA=1
-
-elif [ "$PLAYERCOLOR" = 1 ]; then
-
-    PLAYERCOLOR=1
-
-elif [ "$MISC" = 1 ]; then
-
-    MISC=1
-
-elif [ "$SOFTWARE" = 1 ]; then
-
-    SOFTWARE=1
-
-elif [ "$BUILD" = 1 ]; then
-
-    BUILD=1
-
-else
-
-    CHARACTER=0
-    MAP=0
-    GAMETYPE=0
-    ASSET=0
-    LUA=0
-    PLAYERCOLOR=0
-    MISC=0
-    SOFTWARE=0
-    BUILD=0
-    FILES=0
-
-    if ([ "$1" = "-r" ] || [ "$1" = "--reusable" ]) && [ -z "$DIRECTORY" ]; then
-
-        REUSABLE=1
-        DIRECTORY="$2"
-
-    elif [ -z "$DIRECTORY" ]; then
-
-        DIRECTORY="$1"
-
-    else
-
-        DIRECTORY="$DIRECTORY"
-
-    fi
-
-fi
-
-if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" = 0 ] || [ "$LUA" = 0 ] || [ "$PLAYERCOLOR" = 0 ] || [ "$MISC" = 0 ] || [ "$SOFTWARE" = 0 ] || [ "$BUILD" = 0 ]; then
-
-    # Choose SRB2 category.
-    while
-
-        clear
-        srb2logo
-        printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
-        for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
-
-        printf "#? "
-        read -r choose
-    do
-
-        unset i
-
-        if [ -n "$choose" ]; then
-
-            case $choose in
-
-                "1")
-
-                    CHARACTER=1
-                    break
-                    ;;
-
-                "2")
-
-                    MAP=1
-                    break
-                    ;;
-
-                "3")
-
-                    GAMETYPE=1
-                    break
-                    ;;
-
-                "4")
-
-                    ASSET=1
-                    break
-                    ;;
-
-                "5")
-
-                    LUA=1
-                    break
-                    ;;
-
-                "6")
-
-                    PLAYERCOLOR=1
-                    break
-                    ;;
-
-                "7")
-
-                    MISC=1
-                    break
-                    ;;
-
-                "8")
-
-                    SOFTWARE=1
-                    break
-                    ;;
-
-                "9")
-
-                    BUILD=1
-                    break
-                    ;;
-
-                "10")
-
-                    dl
-                    ;;
-
-            esac
-
-        else
-
-            printf "$NOTICE\n%s\n\e[0m" "No category has been chosen."
-            exit
-
-        fi
-
-    done
-
-fi
-
-# Switching to chosen category and page.
-if [ "$CHARACTER" = 1 ]; then
-
-    CHARACTERPAGE=$((CHARACTERPAGE + 1)) PAGE="$CHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/characters.5/?page" choosepage
-
-elif [ "$MAP" = 1 ]; then
-
-    MAPPAGE=$((MAPPAGE + 1)) PAGE="$MAPPAGE" CATURL="https://mb.srb2.org/addons/categories/maps.4/?page" choosepage
-
-elif [ "$GAMETYPE" = 1 ]; then
-
-    GAMETYPEPAGE=$((GAMETYPEPAGE + 1)) PAGE="$GAMETYPEPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-gametypes.3/?page" choosepage
-
-elif [ "$ASSET" = 1 ]; then
-
-    ASSETPAGE=$((ASSETPAGE + 1)) PAGE="$ASSETPAGE" CATURL="https://mb.srb2.org/addons/categories/assets.6/?page" choosepage
-
-elif [ "$LUA" = 1 ]; then
-
-    LUAPAGE=$((LUAPAGE + 1)) PAGE="$LUAPAGE" CATURL="https://mb.srb2.org/addons/categories/lua.7/?page" choosepage
-
-elif [ "$PLAYERCOLOR" = 1 ]; then
-
-    PLAYERCOLORPAGE=$((PLAYERCOLORPAGE + 1)) PAGE="$PLAYERCOLORPAGE" CATURL="https://mb.srb2.org/addons/categories/player-colors.11/?page" choosepage
-
-elif [ "$MISC" = 1 ]; then
-
-    MISCPAGE=$((MISCPAGE + 1)) PAGE="$MISCPAGE" CATURL="https://mb.srb2.org/addons/categories/miscellaneous.8/?page" choosepage
-
-elif [ "$SOFTWARE" = 1 ]; then
-
-    SOFTWAREPAGE=$((SOFTWAREPAGE + 1)) PAGE="$SOFTWAREPAGE" CATURL="https://mb.srb2.org/addons/categories/software.9/?page" choosepage
-
-elif [ "$BUILD" = 1 ]; then
-
-    BUILDPAGE=$((BUILDPAGE + 1)) PAGE="$BUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-builds.10/?page" choosepage
-
-fi
-
-dlanother
