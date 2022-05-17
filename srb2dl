@@ -297,10 +297,10 @@ choosefile() {
 
                 fi
 
-            fi
-
             MBCODE="$ATTACHMENTCODE"
             checksrb2mb
+
+            fi
 
             arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
             arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
