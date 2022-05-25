@@ -297,8 +297,8 @@ choosefile() {
 
                 fi
 
-            MBCODE="$ATTACHMENTCODE"
-            checksrb2mb
+                MBCODE="$ATTACHMENTCODE"
+                checksrb2mb
 
             fi
 
@@ -2566,221 +2566,6 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
         exit
         ;;
 
-    "")
-
-        ###SRB2###
-
-        # Make variables to be remembered after rerunning script with "exec $0".
-        if [ "$CHARACTER" = 1 ]; then
-
-            CHARACTER=1
-
-        elif [ "$MAP" = 1 ]; then
-
-            MAP=1
-
-        elif [ "$GAMETYPE" = 1 ]; then
-
-            GAMETYPE=1
-
-        elif [ "$ASSET" = 1 ]; then
-
-            ASSET=1
-
-        elif [ "$LUA" = 1 ]; then
-
-            LUA=1
-
-        elif [ "$PLAYERCOLOR" = 1 ]; then
-
-            PLAYERCOLOR=1
-
-        elif [ "$MISC" = 1 ]; then
-
-            MISC=1
-
-        elif [ "$SOFTWARE" = 1 ]; then
-
-            SOFTWARE=1
-
-        elif [ "$BUILD" = 1 ]; then
-
-            BUILD=1
-
-        else
-
-            CHARACTER=0
-            MAP=0
-            GAMETYPE=0
-            ASSET=0
-            LUA=0
-            PLAYERCOLOR=0
-            MISC=0
-            SOFTWARE=0
-            BUILD=0
-            FILES=0
-
-            if ([ "$1" = "-r" ] || [ "$1" = "--reusable" ]) && [ -z "$DIRECTORY" ]; then
-
-                REUSABLE=1
-                DIRECTORY="$2"
-
-            elif [ -z "$DIRECTORY" ]; then
-
-                DIRECTORY="$1"
-
-            else
-
-                DIRECTORY="$DIRECTORY"
-
-            fi
-
-        fi
-
-        if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" = 0 ] || [ "$LUA" = 0 ] || [ "$PLAYERCOLOR" = 0 ] || [ "$MISC" = 0 ] || [ "$SOFTWARE" = 0 ] || [ "$BUILD" = 0 ]; then
-
-            # Choose SRB2 category.
-            while
-
-                clear
-                srb2logo
-                printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
-                for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
-
-                printf "#? "
-                read -r choose
-            do
-
-                unset i
-
-                if [ -n "$choose" ]; then
-
-                    case $choose in
-
-                        "1")
-
-                            CHARACTER=1
-                            break
-                            ;;
-
-                        "2")
-
-                            MAP=1
-                            break
-                            ;;
-
-                        "3")
-
-                            GAMETYPE=1
-                            break
-                            ;;
-
-                        "4")
-
-                            ASSET=1
-                            break
-                            ;;
-
-                        "5")
-
-                            LUA=1
-                            break
-                            ;;
-
-                        "6")
-
-                            PLAYERCOLOR=1
-                            break
-                            ;;
-
-                        "7")
-
-                            MISC=1
-                            break
-                            ;;
-
-                        "8")
-
-                            SOFTWARE=1
-                            break
-                            ;;
-
-                        "9")
-
-                            BUILD=1
-                            break
-                            ;;
-
-                        "10")
-
-                            dl
-                            ;;
-
-                    esac
-
-                else
-
-                    printf "$NOTICE\n%s\n\e[0m" "No category has been chosen."
-                    exit
-
-                fi
-
-            done
-
-        fi
-
-        # Switching to chosen category and page.
-        if [ "$CHARACTER" = 1 ]; then
-
-            CHARACTERPAGE=$((CHARACTERPAGE + 1))
-            PAGE="$CHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/characters.5/?page" choosepage
-
-        elif [ "$MAP" = 1 ]; then
-
-            MAPPAGE=$((MAPPAGE + 1))
-            PAGE="$MAPPAGE" CATURL="https://mb.srb2.org/addons/categories/maps.4/?page" choosepage
-
-        elif [ "$GAMETYPE" = 1 ]; then
-
-            GAMETYPEPAGE=$((GAMETYPEPAGE + 1))
-            PAGE="$GAMETYPEPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-gametypes.3/?page" choosepage
-
-        elif [ "$ASSET" = 1 ]; then
-
-            ASSETPAGE=$((ASSETPAGE + 1))
-            PAGE="$ASSETPAGE" CATURL="https://mb.srb2.org/addons/categories/assets.6/?page" choosepage
-
-        elif [ "$LUA" = 1 ]; then
-
-            LUAPAGE=$((LUAPAGE + 1))
-            PAGE="$LUAPAGE" CATURL="https://mb.srb2.org/addons/categories/lua.7/?page" choosepage
-
-        elif [ "$PLAYERCOLOR" = 1 ]; then
-
-            PLAYERCOLORPAGE=$((PLAYERCOLORPAGE + 1))
-            PAGE="$PLAYERCOLORPAGE" CATURL="https://mb.srb2.org/addons/categories/player-colors.11/?page" choosepage
-
-        elif [ "$MISC" = 1 ]; then
-
-            MISCPAGE=$((MISCPAGE + 1))
-            PAGE="$MISCPAGE" CATURL="https://mb.srb2.org/addons/categories/miscellaneous.8/?page" choosepage
-
-        elif [ "$SOFTWARE" = 1 ]; then
-
-            SOFTWAREPAGE=$((SOFTWAREPAGE + 1))
-            PAGE="$SOFTWAREPAGE" CATURL="https://mb.srb2.org/addons/categories/software.9/?page" choosepage
-
-        elif [ "$BUILD" = 1 ]; then
-
-            BUILDPAGE=$((BUILDPAGE + 1))
-            PAGE="$BUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-builds.10/?page" choosepage
-
-        fi
-
-        dlanother
-
-        ;;
-
     -o | --old)
 
         if [ "$(printf "%s\n" "@" | gawk 'match($NF, /--/) {print substr($NF, RSTART, RLENGTH)}')" ]; then
@@ -2807,6 +2592,7 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
             # Choose categories for old versions of SRB2/SRB2Kart resources.
             PAGECODE=$(curl -Ls "https://mb.srb2.org")
             MBCODE="$PAGECODE"
+            clear
             checksrb2mb
             srb2oldlogo
 
@@ -3793,3 +3579,214 @@ $FILELISTNAMETMP"
         ;;
 
 esac
+
+###SRB2###
+
+# Make variables to be remembered after rerunning script with "exec $0".
+if [ "$CHARACTER" = 1 ]; then
+
+    CHARACTER=1
+
+elif [ "$MAP" = 1 ]; then
+
+    MAP=1
+
+elif [ "$GAMETYPE" = 1 ]; then
+
+    GAMETYPE=1
+
+elif [ "$ASSET" = 1 ]; then
+
+    ASSET=1
+
+elif [ "$LUA" = 1 ]; then
+
+    LUA=1
+
+elif [ "$PLAYERCOLOR" = 1 ]; then
+
+    PLAYERCOLOR=1
+
+elif [ "$MISC" = 1 ]; then
+
+    MISC=1
+
+elif [ "$SOFTWARE" = 1 ]; then
+
+    SOFTWARE=1
+
+elif [ "$BUILD" = 1 ]; then
+
+    BUILD=1
+
+else
+
+    CHARACTER=0
+    MAP=0
+    GAMETYPE=0
+    ASSET=0
+    LUA=0
+    PLAYERCOLOR=0
+    MISC=0
+    SOFTWARE=0
+    BUILD=0
+    FILES=0
+
+    if ([ "$1" = "-r" ] || [ "$1" = "--reusable" ]) && [ -z "$DIRECTORY" ]; then
+
+        REUSABLE=1
+        DIRECTORY="$2"
+
+    elif [ -z "$DIRECTORY" ]; then
+
+        DIRECTORY="$1"
+
+    else
+
+        DIRECTORY="$DIRECTORY"
+
+    fi
+
+fi
+
+if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" = 0 ] || [ "$LUA" = 0 ] || [ "$PLAYERCOLOR" = 0 ] || [ "$MISC" = 0 ] || [ "$SOFTWARE" = 0 ] || [ "$BUILD" = 0 ]; then
+
+    # Choose SRB2 category.
+    while
+
+        clear
+        srb2logo
+        printf "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$(printf "\033[1m\033[34m%s\033[0m" "Done")"; do printf "%s\n" "$((i += 1))) $loop"; done
+
+        printf "#? "
+        read -r choose
+    do
+
+        unset i
+
+        if [ -n "$choose" ]; then
+
+            case $choose in
+
+                "1")
+
+                    CHARACTER=1
+                    break
+                    ;;
+
+                "2")
+
+                    MAP=1
+                    break
+                    ;;
+
+                "3")
+
+                    GAMETYPE=1
+                    break
+                    ;;
+
+                "4")
+
+                    ASSET=1
+                    break
+                    ;;
+
+                "5")
+
+                    LUA=1
+                    break
+                    ;;
+
+                "6")
+
+                    PLAYERCOLOR=1
+                    break
+                    ;;
+
+                "7")
+
+                    MISC=1
+                    break
+                    ;;
+
+                "8")
+
+                    SOFTWARE=1
+                    break
+                    ;;
+
+                "9")
+
+                    BUILD=1
+                    break
+                    ;;
+
+                "10")
+
+                    dl
+                    ;;
+
+            esac
+
+        else
+
+            printf "$NOTICE\n%s\n\e[0m" "No category has been chosen."
+            exit
+
+        fi
+
+    done
+
+fi
+
+# Switching to chosen category and page.
+if [ "$CHARACTER" = 1 ]; then
+
+    CHARACTERPAGE=$((CHARACTERPAGE + 1))
+    PAGE="$CHARACTERPAGE" CATURL="https://mb.srb2.org/addons/categories/characters.5/?page" choosepage
+
+elif [ "$MAP" = 1 ]; then
+
+    MAPPAGE=$((MAPPAGE + 1))
+    PAGE="$MAPPAGE" CATURL="https://mb.srb2.org/addons/categories/maps.4/?page" choosepage
+
+elif [ "$GAMETYPE" = 1 ]; then
+
+    GAMETYPEPAGE=$((GAMETYPEPAGE + 1))
+    PAGE="$GAMETYPEPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-gametypes.3/?page" choosepage
+
+elif [ "$ASSET" = 1 ]; then
+
+    ASSETPAGE=$((ASSETPAGE + 1))
+    PAGE="$ASSETPAGE" CATURL="https://mb.srb2.org/addons/categories/assets.6/?page" choosepage
+
+elif [ "$LUA" = 1 ]; then
+
+    LUAPAGE=$((LUAPAGE + 1))
+    PAGE="$LUAPAGE" CATURL="https://mb.srb2.org/addons/categories/lua.7/?page" choosepage
+
+elif [ "$PLAYERCOLOR" = 1 ]; then
+
+    PLAYERCOLORPAGE=$((PLAYERCOLORPAGE + 1))
+    PAGE="$PLAYERCOLORPAGE" CATURL="https://mb.srb2.org/addons/categories/player-colors.11/?page" choosepage
+
+elif [ "$MISC" = 1 ]; then
+
+    MISCPAGE=$((MISCPAGE + 1))
+    PAGE="$MISCPAGE" CATURL="https://mb.srb2.org/addons/categories/miscellaneous.8/?page" choosepage
+
+elif [ "$SOFTWARE" = 1 ]; then
+
+    SOFTWAREPAGE=$((SOFTWAREPAGE + 1))
+    PAGE="$SOFTWAREPAGE" CATURL="https://mb.srb2.org/addons/categories/software.9/?page" choosepage
+
+elif [ "$BUILD" = 1 ]; then
+
+    BUILDPAGE=$((BUILDPAGE + 1))
+    PAGE="$BUILDPAGE" CATURL="https://mb.srb2.org/addons/categories/custom-builds.10/?page" choosepage
+
+fi
+
+dlanother
