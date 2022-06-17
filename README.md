@@ -143,12 +143,15 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
      7. Remove URL from database of downloaded files (preventing of upgrading undesired resources):
             srb2dl --removeurl
 
-   Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
+  NOTES:
+     1. Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
+
+     2. If you set "export SRB2DLAUTODIR=1" in shell configuration file, script will be able to detect path to SRB2 configuration folder and then let you choose subdirectory, where each addon will be downloaded. WARNING: parsing path to download resource as script's argument is disabled, when this variable is set.
 ```
 
 # Added feature
 
-**2022-04-14:**
-- Upgrade previously downloaded resources.
+**2022-06-17:**
+- Select and download to subdirectories within detected SRB2/SRB2Kart configuration folder.
 
-![srb2dlup](https://user-images.githubusercontent.com/16626326/163449927-9a157401-0101-422f-85c4-47b5a881dab5.gif)
+![srb2dlautodir](https://user-images.githubusercontent.com/16626326/174396281-11dd744b-95d9-4479-b8f7-b2d8282c9963.gif)
