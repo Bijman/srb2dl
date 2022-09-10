@@ -14,6 +14,7 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 # Dependencies
 - Basic system utilities like GNU Coreutils, BusyBox or macOS out-of-the-box system utilities,
 - Bash or any POSIX compliant shell,
+- Findutils,
 - Curl,
 - Gawk,
 - Ncurses,
@@ -24,15 +25,29 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 # Dependencies Installation
 **Linux:**
 1. In terminal enter this following command:
-- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install make git coreutils bash ncurses-bin curl gawk`,
-- Arch/Arch based: `sudo pacman -S --needed make git coreutils bash ncurses curl gawk`,
-- Gentoo: `sudo emerge -av git coreutils bash ncurses curl gawk`,
-- Fedora/Fedora based: `sudo dnf install make git coreutils bash ncurses curl gawk`,
-- OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils bash ncurses curl gawk`,
-- Void/Void based: `sudo xbps-install -S make git coreutils bash ncurses curl gawk`,
-- Alpine/Alpine based: `sudo apk add make git coreutils bash ncurses curl gawk`,
-- Solus/Solus based: `sudo eopkg it make git coreutils bash ncurses curl gawk`,
-- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils bash ncurses curl gawk` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
+- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install make git coreutils findutils ncurses-bin curl gawk`,
+
+- Arch/Arch based: `sudo pacman -S --needed make git coreutils findutils ncurses curl gawk`,
+
+- Gentoo: `sudo emerge -av git coreutils findutils ncurses curl gawk`,
+
+- Fedora/Fedora based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
+
+- Fedora Silverblue/Kinoite: `rpm-ostree install -A --idempotent make git coreutils findutils ncurses curl gawk`,
+
+- OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils findutils ncurses curl gawk`,
+
+- Void/Void based: `sudo xbps-install -S make git coreutils findutils ncurses curl gawk`,
+
+- Alpine/Alpine based: `sudo apk add make git coreutils findutils ncurses curl gawk`,
+
+- Solus/Solus based: `sudo eopkg it make git coreutils findutils ncurses curl gawk`,
+
+- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features nix-command --extra-experimental-features flakes` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
+
+- Immutable systems like Steam Deck's SteamOS need rootless method of getting dependencies to avoid issues with wiping out installed packages after system's update or not to be able to write to certain path, like "/usr/local":
+	- [Homebrew](https://brew.sh/): `brew install make git coreutils findutils ncurses curl gawk`,
+	- [Nix Portable](https://github.com/DavHau/nix-portable): `nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features nix-command --extra-experimental-features flakes`.
 
 **Windows:**
 1. Installing Git Bash:
@@ -47,13 +62,15 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 - Homebrew: `brew install curl gawk`,
 - MacPorts: `sudo port install curl gawk`.
 
-# Script Installation
+# Installation
 **Linux:**
-1. Enter `git clone https://github.com/Bijman/srb2dl`,
+1. Open terminal,
 
-2. Enter `sudo make install`, which will install to "/usr/bin" or "/usr/local/bin", if path exists, or just place script in your directory and change script's permissions to be executable: `chmod 755 srb2dl`.
+2. Enter `git clone https://github.com/Bijman/srb2dl`,
 
-3. Go to downloaded directory: `cd srb2bld`.
+3. Enter `sudo make install`, which will install to "/usr/local/bin". You can specify your path with variable PREFIX, for example `make install PREFIX=$HOME/.local`, which will copy script to "$HOME/.local/bin". Alternatively manually place script to your path, which is readable by shell (PATH environment variable), and change script's permissions to be executable: `chmod 755 [path to srb2dl script]`,
+
+4. Go to downloaded directory: `cd srb2dl`.
 
 **Windows:**
 1. Open Git Bash,
@@ -68,9 +85,9 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 6. Change script's permissions to be executable: `chmod 755 ~/bin/srb2dl`,
 
-7. In the opened text editor from previous step write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
+7. Open text editor for "~/.bash_profile": `nano ~/.bash_profile`,
 
-8. Write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
+8. In the opened text editor from previous step write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
 
 9. Enter `source ~/.bash_profile` or restart Cygwin or Git Bash.
 
@@ -81,7 +98,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 3. Go to downloaded directory: `cd srb2dl`,
 
-4. Enter `sudo make install`, which will install to "/usr/local/bin", if path exists. Alternatively manually place script to your path, which is readable by shell (PATH environment variable), and change script's permissions to be executable: `chmod 755 [path to srb2dl script]`.
+4. Enter `sudo make install`, which will install to "/usr/local/bin". You can specify your path with variable PREFIX, for example `make install PREFIX=$HOME/.local`, which will copy script to "$HOME/.local/bin". Alternatively manually place script to your path, which is readable by shell (PATH environment variable), and change script's permissions to be executable: `chmod 755 [path to srb2dl script]`.
 
 # Usage (from help text)
 ```
@@ -137,10 +154,12 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
 
      6. Upgrade previously downloaded resources to "$HOME/Downloads" path, according to database of URLs (only mb.srb2.org is supported):
+
             srb2dl --upgrade "$HOME/Downloads"
 
 
      7. Remove URL from database of downloaded files (preventing of upgrading undesired resources):
+
             srb2dl --removeurl
 
   NOTES:
@@ -148,10 +167,3 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
 
      2. If you set "export SRB2DLAUTODIR=1" in shell configuration file, script will be able to detect path to SRB2 configuration folder and then let you choose subdirectory, where each addon will be downloaded. WARNING: parsing path to download resource as script's argument is disabled, when this variable is set.
 ```
-
-# Added feature
-
-**2022-06-17:**
-- Select and download to subdirectories within detected SRB2/SRB2Kart configuration folder.
-
-![srb2dlautodir](https://user-images.githubusercontent.com/16626326/174396281-11dd744b-95d9-4479-b8f7-b2d8282c9963.gif)
