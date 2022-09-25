@@ -1,5 +1,15 @@
 #!/bin/sh
 
+if [ "$SRB2DLDEBUG" = 1 ]; then
+
+    set -e -x
+
+else
+
+    set -e
+
+fi
+
 # Set environment variables.
 FAILURE="\e[1;91m"
 SUCCESS="\e[1;92m"
@@ -342,11 +352,10 @@ choosefile() {
 
                 elif [ "$OPTURL" = "SRB2UncappedPlus" ]; then
 
-                    SRB2UNCAPPEDPLUS=$(curl -s "http://srb2.mooo.com/srb2builds/uncapped-plus/" | gawk -F'">|</a>' '/.exe<\/a>/ {print $3}')
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/276/repository/archive.zip?sha=uncapped-plus"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/276/repository/archive.tar.gz?sha=uncapped-plus"
-                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2UNCAPPEDPLUS")
-                    arrayfilename=$(printf "%s\nSRB2 Uncapped Plus Source Code (zip)\nSRB2 Uncapped Plus Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$SRB2UNCAPPEDPLUS")
+                    arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "SRB2 Uncapped Plus Source Code (zip)\nSRB2 Uncapped Plus Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2NetPlus" ]; then
 
@@ -1844,27 +1853,11 @@ EOF
 
         if [ -n "$d" ]; then
 
-            if [ -n "$FILENAME" ]; then
-
-                COLUMNS=27 curl -#LC - "$f" -o "$FILENAME" --output-dir "$d" 2>&1 &
-
-            elif [ -z "$FILENAME" ]; then
-
-                COLUMNS=27 curl -#LOC - "$f" --output-dir "$d" 2>&1 &
-
-            fi
+            COLUMNS=27 curl -#LC - "$f" -o "$d/$FILENAME" || printf "%s\n" "There is an issue with downloading $FILENAME" &
 
         else
 
-            if [ -n "$FILENAME" ]; then
-
-                COLUMNS=27 curl -#LC - "$f" -o "$FILENAME" 2>&1 &
-
-            elif [ -z "$FILENAME" ]; then
-
-                COLUMNS=27 curl -#LOC - "$f" 2>&1 &
-
-            fi
+            COLUMNS=27 curl -#LC - "$f" -o "$FILENAME" || printf "%s\n" "There is an issue with downloading $FILENAME" &
 
         fi
 

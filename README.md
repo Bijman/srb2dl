@@ -33,7 +33,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 - Fedora/Fedora based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
 
-- Fedora Silverblue/Kinoite: `rpm-ostree install -A --idempotent make git coreutils findutils ncurses curl gawk`,
+- Fedora Silverblue/Kinoite: `rpm-ostree install -A --allow-inactive make git coreutils findutils ncurses curl gawk`,
 
 - OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils findutils ncurses curl gawk`,
 
@@ -43,11 +43,11 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 - Solus/Solus based: `sudo eopkg it make git coreutils findutils ncurses curl gawk`,
 
-- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features nix-command --extra-experimental-features flakes` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
+- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
 
 - Immutable systems like Steam Deck's SteamOS need rootless method of getting dependencies to avoid issues with wiping out installed packages after system's update or not to be able to write to certain path, like "/usr/local":
 	- [Homebrew](https://brew.sh/): `brew install make git coreutils findutils ncurses curl gawk`,
-	- [Nix Portable](https://github.com/DavHau/nix-portable): `nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features nix-command --extra-experimental-features flakes`.
+	- [Nix Portable](https://github.com/DavHau/nix-portable): `nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'`.
 
 **Windows:**
 1. Installing Git Bash:
@@ -166,4 +166,18 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
      1. Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
 
      2. If you set "export SRB2DLAUTODIR=1" in shell configuration file, script will be able to detect path to SRB2 configuration folder and then let you choose subdirectory, where each addon will be downloaded. WARNING: parsing path to download resource as script's argument is disabled, when this variable is set.
+
+     3. Other environment variables to use. To activate them with value "1", do for example "export SRB2DLDEBUG=1":
+
+         - SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues.
 ```
+
+# Notes
+1. Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
+
+2. If you set "export SRB2DLAUTODIR=1" in shell configuration file, script will be able to detect path to SRB2 configuration folder and then let you choose subdirectory, where each addon will be downloaded. WARNING: parsing path to download resource as script's argument is disabled, when this variable is set.
+
+3. Other environment variables to use. To activate them with value "1", do for example "export SRB2DLDEBUG=1":
+
+	- SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues.
+
