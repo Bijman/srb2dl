@@ -21,10 +21,12 @@ else
 
 fi
 
+# Set environment variables.
 FAILURE="\e[1;91m"
 SUCCESS="\e[1;92m"
 NOTICE="\e[1;93m"
 MESSAGE="\e[1;94m"
+PROMPT="\e[1;97m"
 SRB2PERSONAASSETURL="addons/166/download"
 SRB2PERSONAAPPIMAGEID="1PS5QHiuWXR4NrfB_ifAb2dQ7F1tAHrT1"
 
@@ -32,7 +34,7 @@ if [ "$OS" = "Darwin" ]; then
 
     SRB2DLROOT="$HOME/Library"
 
-elif [ "$($PRINTF "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW64" ] || [ "$($PRINTF "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW32" ] || [ "$($PRINTF "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW" ]; then
+elif [ "$(printf "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW64" ] || [ "$(printf "%s\n" "$OS" | gawk -F'_' '{print $1}')" = "MINGW" ]; then
 
     SRB2DLROOT="$HOME/AppData/Roaming"
 
@@ -44,7 +46,7 @@ fi
 
 checksrb2mb() {
     # Check connection to SRB2 Message Board.
-    if [ -z "$($PRINTF "%s\n" "$MBCODE" | gawk 'match($0, /ratingStars--larger/ || /user/ || /'$XFTOKEN'/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
+    if [ -z "$(printf "%s\n" "$MBCODE" | gawk 'match($0, /ratingStars--larger/ || /user/ || /'$XFTOKEN'/) {print substr($0, RSTART, RLENGTH)}' | head -n1)" ]; then
 
         clear
         $PRINTF "$FAILURE\n%s\n\e[0m" "ERROR: Can't connect to SRB2 Message Board. Try again later or check your internet connection."
@@ -63,7 +65,7 @@ choosepage() {
     BACK2SEARCH="\033[1m\033[34mBack to search\033[0m"
     DONE="\033[1m\033[34mDone\033[0m"
 
-    if [ -z "$arrayfile" ] && [ -z "$arrayfilename" ]; then
+    if [ -z "$arrayfile" ] && [ -z "$arrayfilename" ] && [ "$SEARCH" != 1 ]; then
 
         if [ "$REUSABLE" = 1 ]; then
 
@@ -78,59 +80,59 @@ choosepage() {
     fi
 
     # Variables to show information like star rating, author, resource's title, etc.
-    STARNUMS=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'title="|">|star' '/ratingStars--larger/ {print $2}')
+    STARNUMS=$(printf "%s\n" "$PAGECODE" | gawk -F'title="|">|star' '/ratingStars--larger/ {print $2}')
     STARS=$(for i in $STARNUMS; do
         if [ "${i%%.*}" = 0 ] && [ "${i##*.}" -lt 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^0.[0-9]*$/,"☆ ☆ ☆ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^0.[0-9]*$/,"☆ ☆ ☆ ☆ ☆")'
 
         elif [ "${i%%.*}" = 1 ] && [ "${i##*.}" -lt 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^1.[0-9]*$/,"★ ☆ ☆ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^1.[0-9]*$/,"★ ☆ ☆ ☆ ☆")'
 
         elif [ "${i%%.*}" = 2 ] && [ "${i##*.}" -lt 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^2.[0-9]*$/,"★ ★ ☆ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^2.[0-9]*$/,"★ ★ ☆ ☆ ☆")'
 
         elif [ "${i%%.*}" = 3 ] && [ "${i##*.}" -lt 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^3.[0-9]*$/,"★ ★ ★ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^3.[0-9]*$/,"★ ★ ★ ☆ ☆")'
 
         elif [ "${i%%.*}" = 4 ] && [ "${i##*.}" -lt 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^4.[0-9]*$/,"★ ★ ★ ★ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^4.[0-9]*$/,"★ ★ ★ ★ ☆")'
 
         elif [ "${i%%.*}" = 5 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^5.[0-9]*$/,"★ ★ ★ ★ ★")'
+            printf "%s\n" "$i" | gawk 'gsub(/^5.[0-9]*$/,"★ ★ ★ ★ ★")'
 
         elif [ "${i%%.*}" = 0 ] && [ "${i##*.}" -ge 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^0.[0-9]*$/,"⯪ ☆ ☆ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^0.[0-9]*$/,"⯪ ☆ ☆ ☆ ☆")'
 
         elif [ "${i%%.*}" = 1 ] && [ "${i##*.}" -ge 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^1.[0-9]*$/,"★ ⯪ ☆ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^1.[0-9]*$/,"★ ⯪ ☆ ☆ ☆")'
 
         elif [ "${i%%.*}" = 2 ] && [ "${i##*.}" -ge 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^2.[0-9]*$/,"★ ★ ⯪ ☆ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^2.[0-9]*$/,"★ ★ ⯪ ☆ ☆")'
 
         elif [ "${i%%.*}" = 3 ] && [ "${i##*.}" -ge 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^3.[0-9]*$/,"★ ★ ★ ⯪ ☆")'
+            printf "%s\n" "$i" | gawk 'gsub(/^3.[0-9]*$/,"★ ★ ★ ⯪ ☆")'
 
         elif [ "${i%%.*}" = 4 ] && [ "${i##*.}" -ge 50 ]; then
 
-            $PRINTF "%s\n" "$i" | gawk 'gsub(/^4.[0-9]*$/,"★ ★ ★ ★ ⯪")'
+            printf "%s\n" "$i" | gawk 'gsub(/^4.[0-9]*$/,"★ ★ ★ ★ ⯪")'
 
         fi
 
     done)
 
-    TAGLINES=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<div class="structItem-resourceTagLine">|</div>' '/<div class="structItem-resourceTagLine">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
-    USERS=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
-    DATE=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'class="u-concealed"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">|</time></a></dd>' '/class="u-concealed"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">/ {print $2}')
+    TAGLINES=$(printf "%s\n" "$PAGECODE" | gawk -F'<div class="structItem-resourceTagLine">|</div>' '/<div class="structItem-resourceTagLine">/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
+    USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
+    DATE=$(printf "%s\n" "$PAGECODE" | gawk -F'class="u-concealed"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">|</time></a></dd>' '/class="u-concealed"><time  class="u-dt" dir="auto" datetime="*.*" data-time="*.*" data-date-string="*.*" data-time-string="*.*" title="*.*">/ {print $2}')
 
     if [ "$SEARCH" = 1 ]; then
 
@@ -148,15 +150,15 @@ choosepage() {
 
         fi
 
-        USERS=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-author="|"' '/data-author=/ {print $4}' | gawk '{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print}')
-        CATEGORIES=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<li>Category: <a href="/addons/categories/*.*">|</a></li>' '/<li>Category: <a href="\/addons\/categories/ {print $2}')
-        DATE=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<li><time  class="*.*">|</time></li>' '/<li><time  class=/ {print $2}')
+        USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|"' '/data-author=/ {print $4}' | gawk '{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print}')
+        CATEGORIES=$(printf "%s\n" "$PAGECODE" | gawk -F'<li>Category: <a href="/addons/categories/*.*">|</a></li>' '/<li>Category: <a href="\/addons\/categories/ {print $2}')
+        DATE=$(printf "%s\n" "$PAGECODE" | gawk -F'<li><time  class="*.*">|</time></li>' '/<li><time  class=/ {print $2}')
 
-        arraypagesearch=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')
+        arraypagesearch=$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')
 
-        arraypagesearchnametmp=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'">|</a>|<span class="label label--primary" dir="auto|&nbsp;</span>|<em class="textHighlight|</span><span class="label-append|</em>' '/\/addons\// && !/categories|https/ {for (i = 2; i <= NF; i++) $PRINTF "\033[1m"$i"\033[0m"; print ""}' | gawk '{for (i = 1 ; i <= NF ; i++) {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","")}}1' | gawk 'NF {gsub(/\[Reusable\]/,"\033[34;7m[Reusable]\033[0m "); print "\033[1m"$0"\033[0m"}')
+        arraypagesearchnametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'">|</a>|<span class="label label--primary" dir="auto|&nbsp;</span>|<em class="textHighlight|</span><span class="label-append|</em>' '/\/addons\// && !/categories|https/ {for (i = 2; i <= NF; i++) printf "\033[1m"$i"\033[0m"; print ""}' | gawk '{for (i = 1 ; i <= NF ; i++) {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","")}}1' | gawk 'NF {gsub(/\[Reusable\]/,"\033[34;7m[Reusable]\033[0m "); print "\033[1m"$0"\033[0m"}')
 
-        arraypagesearchname=$($PRINTF "%s\n" "$(
+        arraypagesearchname=$(printf "%s\n" "$(
             gawk -v left="$arraypagesearchnametmp" -v leftcenter="$USERS" -v rightcenter="$DATE" -v right="$CATEGORIES" 'BEGIN{
 split(left,l,/\n/)
 split(leftcenter,lc,/\n/)
@@ -168,23 +170,23 @@ for (i = 1; i in l; i++)
 
         if [ -z "$arraypagesearch" ]; then
 
-            arraypage=$($PRINTF "Back2Search\nDone")
-            arraypagename=$($PRINTF "$BACK2SEARCH\n$DONE")
+            arraypage=$(printf "Back2Search\nDone")
+            arraypagename=$(printf "$BACK2SEARCH\n$DONE")
 
         else
 
-            arraypage=$($PRINTF "%s\nPrev\nNext\nBack2Search\nDone" "$arraypagesearch")
-            arraypagename=$($PRINTF "%s\n$PREV\n$NEXT\n$BACK2SEARCH\n$DONE" "$arraypagesearchname")
+            arraypage=$(printf "%s\nPrev\nNext\nBack2Search\nDone" "$arraypagesearch")
+            arraypagename=$(printf "%s\n$PREV\n$NEXT\n$BACK2SEARCH\n$DONE" "$arraypagesearchname")
 
         fi
 
     elif [ "$BUILD" = 1 ]; then
 
-        arraypage=$($PRINTF "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
+        arraypage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
-        arraypagenametmp=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
+        arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
-        arraypagename=$($PRINTF "\033[1mSRB2\033[0m\n\033[1mSRB2 - Uncapped Plus\033[0m\n\033[1mSRB2 - NetPlus\033[0m\n\033[1mSRB2 - VR\033[0m\n\033[1mSRB2 - Persona\033[0m\n\033[1mSRB2 - Android Port\033[0m\n\033[1mSRB2 - Switch Port\033[0m\n\033[1mSRB2 2.1\033[0m\n\033[1mSRB2 2.1 - Legacy\033[0m\n\033[1mSRB2 2.1 - SEGA Genesis/Mega Drive Port\033[0m\n\033[1mSRB/SRB2 - Archived Versions\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+        arraypagename=$(printf "\033[1mSRB2\033[0m\n\033[1mSRB2 - Uncapped Plus\033[0m\n\033[1mSRB2 - NetPlus\033[0m\n\033[1mSRB2 - VR\033[0m\n\033[1mSRB2 - Persona\033[0m\n\033[1mSRB2 - Android Port\033[0m\n\033[1mSRB2 - Switch Port\033[0m\n\033[1mSRB2 2.1\033[0m\n\033[1mSRB2 2.1 - Legacy\033[0m\n\033[1mSRB2 2.1 - SEGA Genesis/Mega Drive Port\033[0m\n\033[1mSRB/SRB2 - Archived Versions\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
             gawk -v left="$arraypagenametmp" -v leftcenter="$TAGLINES" -v rightcenter="$USERS" -v right="$STARS" 'BEGIN{
 split(left,l,/\n/)
 split(leftcenter,lc,/\n/)
@@ -196,11 +198,11 @@ for (i = 1; i in l; i++)
 
     elif [ "$KARTBUILD" = 1 ]; then
 
-        arraypage=$($PRINTF "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
+        arraypage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
-        arraypagenametmp=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
+        arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
-        arraypagename=$($PRINTF "\033[1mSRB2Kart\033[0m\n\033[1mSRB2Kart - Moe Mansion\033[0m\n\033[1mSRB2Kart - VR\033[0m\n\033[1mSRB2Kart - Switch Port\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+        arraypagename=$(printf "\033[1mSRB2Kart\033[0m\n\033[1mSRB2Kart - Moe Mansion\033[0m\n\033[1mSRB2Kart - VR\033[0m\n\033[1mSRB2Kart - Switch Port\033[0m\n%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
             gawk -v left="$arraypagenametmp" -v leftcenter="$TAGLINES" -v rightcenter="$USERS" -v right="$STARS" 'BEGIN{
 split(left,l,/\n/)
 split(leftcenter,lc,/\n/)
@@ -212,11 +214,11 @@ for (i = 1; i in l; i++)
 
     else
 
-        arraypage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
+        arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
-        arraypagenametmp=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
+        arraypagenametmp=$(printf "%s\n" "$PAGECODE" | gawk -F'data-tp-primary="on">|class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">|</span></a>|</a>' '/data-tp-primary="on">/ || /class="labelLink" rel="nofollow"><span class="label label--primary" dir="auto">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}' | gawk '/\[Reusable\]/ {getline t; print "\033[7;34m"$1"\033[0m",t; next}1')
 
-        arraypagename=$($PRINTF "%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+        arraypagename=$(printf "%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
             gawk -v left="$arraypagenametmp" -v leftcenter="$TAGLINES" -v center="$USERS" -v rightcenter="$DATE" -v right="$STARS" 'BEGIN{
 split(left,l,/\n/)
 split(leftcenter,lc,/\n/)
@@ -231,7 +233,7 @@ for (i = 1; i in l; i++)
 
     if [ "$FILES" = 0 ]; then
 
-        count="$($PRINTF "%s\n" "$arraypage" | wc -l)"
+        count="$(printf "%s\n" "$arraypage" | wc -l)"
         n=""
 
         if [ "$SEARCH" != 1 ]; then
@@ -247,12 +249,12 @@ for (i = 1; i in l; i++)
 
         while true; do
 
-            $PRINTF "#? "
+            $PRINTF "$PROMPT%s\e[0m" "#? "
             read -r n
 
             if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                OPTURL=$($PRINTF "%s\n" "$arraypage" | gawk 'NR=='"${n}"'')
+                OPTURL=$(printf "%s\n" "$arraypage" | gawk 'NR=='"${n}"'')
                 break
 
             else
@@ -283,7 +285,7 @@ choosefile() {
 
             if [ -n "$BROWSER" ] && [ "$FILES" = 0 ] && [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2NetPlus" ] && [ "$OPTURL" != "SRB2VR" ] && [ "$OPTURL" != "SRB2Persona" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-Legacy" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVR" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
 
-                $PRINTF "%s\n\n" "Opening link to files."
+                $PRINTF "$MESSAGE%s\n\n\e[0m" "Opening link to files. Please wait.."
                 $BROWSER "https://mb.srb2.org/addons/$OPTURL" > /dev/null &
 
             elif [ -x "/usr/bin/w3m" ] && [ "$FILES" = 0 ] && [ "$OPTURL" != "SRB2" ] && [ "$OPTURL" != "SRB2UncappedPlus" ] && [ "$OPTURL" != "SRB2NetPlus" ] && [ "$OPTURL" != "SRB2VR" ] && [ "$OPTURL" != "SRB2Persona" ] && [ "$OPTURL" != "SRB2Android" ] && [ "$OPTURL" != "SRB2Switch" ] && [ "$OPTURL" != "SRB2-2.1" ] && [ "$OPTURL" != "SRB2-2.1-Legacy" ] && [ "$OPTURL" != "SRB2-2.1-MegaDrive" ] && [ "$OPTURL" != "SRB2Archive" ] && [ "$OPTURL" != "SRB2Kart" ] && [ "$OPTURL" != "SRB2KartMoeMansion" ] && [ "$OPTURL" != "SRB2KartVR" ] && [ "$OPTURL" != "SRB2KartSwitch" ]; then
@@ -307,8 +309,8 @@ choosefile() {
                 if [ -z "$DOWNLOADHEADER" ]; then
 
                     LATESTCODE=$(curl -s "https://mb.srb2.org/addons/$OPTURL/download/")
-                    LATEST=$($PRINTF "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF{print}')
-                    LATESTNAME=$($PRINTF "%s\n" "$LATESTCODE" | gawk -F'<h3 class="contentRow-title">|</h3>' '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) {print $2}' | gawk 'NF{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$","");print}')
+                    LATEST=$(printf "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF{print}')
+                    LATESTNAME=$(printf "%s\n" "$LATESTCODE" | gawk -F'<h3 class="contentRow-title">|</h3>' '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) {print $2}' | gawk 'NF{gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$","");print}')
 
                 else
 
@@ -322,30 +324,30 @@ choosefile() {
 
             fi
 
-            arrayattachment=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
-            arrayattachmentname=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
+            arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
+            arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
 
             if [ "$SEARCH" = 1 ]; then
 
                 if [ -z "$LATEST" ] && [ -z "$arrayattachment" ]; then
 
-                    arrayfile=$($PRINTF "Back2SearchResult\nBack2Search\nDone")
-                    arrayfilename=$($PRINTF "$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE")
+                    arrayfile=$(printf "Back2SearchResult\nBack2Search\nDone")
+                    arrayfilename=$(printf "$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE")
 
                 elif [ -z "$LATEST" ]; then
 
-                    arrayfile=$($PRINTF "%s\nBack2SearchResult\nBack2Search\nDone" "$arrayattachment")
-                    arrayfilename=$($PRINTF "%s\n$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE" "$arrayattachmentname")
+                    arrayfile=$(printf "%s\nBack2SearchResult\nBack2Search\nDone" "$arrayattachment")
+                    arrayfilename=$(printf "%s\n$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE" "$arrayattachmentname")
 
                 elif [ -z "$arrayattachment" ]; then
 
-                    arrayfile=$($PRINTF "$LATEST\nBack2SearchResult\nBack2Search\nDone")
-                    arrayfilename=$($PRINTF "$LATESTNAME\n$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE")
+                    arrayfile=$(printf "$LATEST\nBack2SearchResult\nBack2Search\nDone")
+                    arrayfilename=$(printf "$LATESTNAME\n$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE")
 
                 else
 
-                    arrayfile=$($PRINTF "$LATEST\n%s\nBack2SearchResult\nBack2Search\nDone" "$arrayattachment")
-                    arrayfilename=$($PRINTF "$LATESTNAME\n%s\n$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE" "$arrayattachmentname")
+                    arrayfile=$(printf "$LATEST\n%s\nBack2SearchResult\nBack2Search\nDone" "$arrayattachment")
+                    arrayfilename=$(printf "$LATESTNAME\n%s\n$BACK2SEARCHRESULT\n$BACK2SEARCH\n$DONE" "$arrayattachmentname")
 
                 fi
 
@@ -357,30 +359,30 @@ choosefile() {
                     SRB2APPIMAGE=$(curl -s "https://api.github.com/repos/GoldenTails/SRB2/releases/latest" | gawk -F'"' '/browser_download_url.*.AppImage/ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/STJr/SRB2/zipball"
                     SOURCECODETAR="https://api.github.com/repos/STJr/SRB2/tarball"
-                    arrayfile=$($PRINTF "$SRB2\n$SRB2APPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "$($PRINTF "%s\n" "$SRB2" | gawk -F'/' '{print $NF}')\n$($PRINTF "%s\n" "$SRB2APPIMAGE" | gawk -F'/' '{print $NF}')\nSRB2 Source Code (zip)\nSRB2 Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$SRB2\n$SRB2APPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "$(printf "%s\n" "$SRB2" | gawk -F'/' '{print $NF}')\n$(printf "%s\n" "$SRB2APPIMAGE" | gawk -F'/' '{print $NF}')\nSRB2 Source Code (zip)\nSRB2 Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2UncappedPlus" ]; then
 
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/276/repository/archive.zip?sha=uncapped-plus"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/276/repository/archive.tar.gz?sha=uncapped-plus"
-                    arrayfile=$($PRINTF "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "SRB2 Uncapped Plus Source Code (zip)\nSRB2 Uncapped Plus Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "SRB2 Uncapped Plus Source Code (zip)\nSRB2 Uncapped Plus Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2NetPlus" ]; then
 
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/275/repository/archive.zip?sha=master"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/275/repository/archive.tar.gz?sha=master"
-                    arrayfile=$($PRINTF "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "SRB2 NetPlus Source Code (zip)\nSRB2 NetPlus Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "SRB2 NetPlus Source Code (zip)\nSRB2 NetPlus Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2VR" ]; then
 
                     SRB2VR=$(curl -s "https://git.do.srb2.org/api/v4/projects/261/releases" | gawk '{gsub('/^{/',"{\n") || gsub('/}$/',"\n}") || gsub('/,/',",\n"); print}' | gawk '/uploads/ {split($0,a,"\\)|\\(");print a[2]"\n"a[4]"\n"a[6]}' | gawk '!/default/ && NF')
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/261/repository/archive.zip?sha=openvr"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/261/repository/archive.tar.gz?sha=openvr"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2VR")
-                    arrayfilename=$($PRINTF "%s\nSRB2 VR Source Code (zip)\nSRB2 VR Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2VR" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2VR")
+                    arrayfilename=$(printf "%s\nSRB2 VR Source Code (zip)\nSRB2 VR Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2VR" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2Persona" ]; then
 
@@ -388,53 +390,53 @@ choosefile() {
                     SRB2PERSONAAPPIMAGE="https://drive.google.com/uc?id=$SRB2PERSONAAPPIMAGEID"
                     SOURCECODEZIP="https://git.do.srb2.org/api/v4/projects/97/repository/archive.zip?sha=srb2p_22"
                     SOURCECODETAR="https://git.do.srb2.org/api/v4/projects/97/repository/archive.tar.gz?sha=srb2p_22"
-                    arrayfile=$($PRINTF "$SRB2PERSONA\n$SRB2PERSONAAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "$(curl -X GET -LIs "https://mb.srb2.org/$SRB2PERSONAASSETURL" | gawk -F'"' '{IGNORECASE=1} /Content-Disposition:/ {print $2}')\n$(curl -X GET -LIs "https://drive.google.com/uc?id=$SRB2PERSONAAPPIMAGEID" | gawk -F'"' '{IGNORECASE=1} /Content-Disposition:/ {print $2}')\nSRB2 Persona Source Code (zip)\nSRB2 Persona Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$SRB2PERSONA\n$SRB2PERSONAAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "$(curl -X GET -LIs "https://mb.srb2.org/$SRB2PERSONAASSETURL" | gawk -F'"' '{IGNORECASE=1} /Content-Disposition:/ {print $2}')\n$(curl -X GET -LIs "https://drive.google.com/uc?id=$SRB2PERSONAAPPIMAGEID" | gawk -F'"' '{IGNORECASE=1} /Content-Disposition:/ {print $2}')\nSRB2 Persona Source Code (zip)\nSRB2 Persona Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2Android" ]; then
 
                     SRB2ANDROID=$(curl -s "https://api.github.com/repos/Lactozilla/SRB2-Android/releases" | gawk -F'"' '/browser_download_url.*./ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/Lactozilla/SRB2-Android/zipball"
                     SOURCECODETAR="https://api.github.com/repos/Lactozilla/SRB2-Android/tarball"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2ANDROID")
-                    arrayfilename=$($PRINTF "%s\nSRB2 Android Source Code (zip)\nSRB2 Android Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2ANDROID" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2ANDROID")
+                    arrayfilename=$(printf "%s\nSRB2 Android Source Code (zip)\nSRB2 Android Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2ANDROID" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2Switch" ]; then
 
                     SRB2SWITCH=$(curl -s "https://api.github.com/repos/heyjoeway/SRB2/releases" | gawk -F'"' '/browser_download_url.*./ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/heyjoeway/SRB2/zipball"
                     SOURCECODETAR="https://api.github.com/repos/heyjoeway/SRB2/tarball"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2SWITCH")
-                    arrayfilename=$($PRINTF "%s\nSRB2 Switch Source Code (zip)\nSRB2 Switch Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2SWITCH" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2SWITCH")
+                    arrayfilename=$(printf "%s\nSRB2 Switch Source Code (zip)\nSRB2 Switch Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2SWITCH" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2-2.1" ]; then
 
                     SRB2OLD21=$(curl -s "https://api.github.com/repos/STJr/SRB2/releases/19358575" | gawk -F'"' '/browser_download_url.*zip/ || /browser_download_url.*exe/ || /browser_download_url.*dmg/ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/STJr/SRB2/zipball/SRB2_release_2.1.25"
                     SOURCECODETAR="https://api.github.com/repos/STJr/SRB2/tarball/SRB2_release_2.1.25"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2OLD21")
-                    arrayfilename=$($PRINTF "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2OLD21")
+                    arrayfilename=$(printf "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2-2.1-Legacy" ]; then
 
                     SOURCECODEZIP="https://api.github.com/repos/PandaSRC/srb2-legacy/zipball"
                     SOURCECODETAR="https://api.github.com/repos/PandaSRC/srb2-legacy/tarball"
-                    arrayfile=$($PRINTF "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2-2.1-MegaDrive" ]; then
 
                     SRB2MEGADRIVE=$(curl -s "https://api.github.com/repos/mazmazz/SRB2/releases" | gawk -F'"' '/browser_download_url.*md/ && !/.msi/ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/mazmazz/SRB2/zipball/SRB2_release_2.1.23a"
                     SOURCECODETAR="https://api.github.com/repos/mazmazz/SRB2/tarball/SRB2_release_2.1.23a"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2MEGADRIVE")
-                    arrayfilename=$($PRINTF "%s\nSRB2 2.1 SEGA Genesis/Mega Drive Source Code (zip)\nSRB2 2.1 SEGA Genesis/Mega Drive Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2MEGADRIVE" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2MEGADRIVE")
+                    arrayfilename=$(printf "%s\nSRB2 2.1 SEGA Genesis/Mega Drive Source Code (zip)\nSRB2 2.1 SEGA Genesis/Mega Drive Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2MEGADRIVE" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2Archive" ]; then
 
                     SRB2ARCHIVE=$(curl -s "https://files.srb2.org/srb2.org/history/" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
-                    arrayfile=$($PRINTF "%s\nBack2Addon\nBack2Cat\nDone" "$SRB2ARCHIVE")
-                    arrayfilename=$($PRINTF "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$SRB2ARCHIVE")
+                    arrayfile=$(printf "%s\nBack2Addon\nBack2Cat\nDone" "$SRB2ARCHIVE")
+                    arrayfilename=$(printf "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$SRB2ARCHIVE")
 
                 elif [ "$OPTURL" = "SRB2Kart" ]; then
 
@@ -442,8 +444,8 @@ choosefile() {
                     SRB2KARTAPPIMAGE=$(curl -s "https://api.github.com/repos/Lonsfor/srb2k-appimage/releases/latest" | gawk -F'"' '!/moe|.zsync/ && /browser_download_url.*.AppImage/ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/STJr/Kart-Public/zipball"
                     SOURCECODETAR="https://api.github.com/repos/STJr/Kart-Public/tarball"
-                    arrayfile=$($PRINTF "$SRB2KART\n$SRB2KARTAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "%s\n$($PRINTF "%s\n" "$SRB2KARTAPPIMAGE" | gawk -F'/' '{print $NF}')\nSRB2Kart Source Code (zip)\nSRB2Kart Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2KART" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "$SRB2KART\n$SRB2KARTAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "%s\n$(printf "%s\n" "$SRB2KARTAPPIMAGE" | gawk -F'/' '{print $NF}')\nSRB2Kart Source Code (zip)\nSRB2Kart Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2KART" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2KartMoeMansion" ]; then
 
@@ -451,44 +453,44 @@ choosefile() {
                     SRB2KARTMOEMANSIONAPPIMAGE=$(curl -s "https://api.github.com/repos/Lonsfor/srb2k-appimage/releases/latest" | gawk -F'"' '!/.zsync/ && /browser_download_url.*moe*.*.AppImage/ {print $4}')
                     SOURCECODEZIP="https://gitlab.com/api/v4/projects/19955163/repository/archive.zip"
                     SOURCECODETAR="https://gitlab.com/api/v4/projects/19955163/repository/archive.tar.gz"
-                    arrayfile=$($PRINTF "$SRB2KARTMOEMANSION\n$SRB2KARTMOEMANSIONAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "$SRB2KARTMOEMANSION\n$($PRINTF "%s\n" "$SRB2KARTMOEMANSIONAPPIMAGE" | gawk -F'/' '{print $NF}')\nSRB2Kart Moe Mansion Source Code (zip)\nSRB2Kart Moe Mansion Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$SRB2KARTMOEMANSION\n$SRB2KARTMOEMANSIONAPPIMAGE\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "$SRB2KARTMOEMANSION\n$(printf "%s\n" "$SRB2KARTMOEMANSIONAPPIMAGE" | gawk -F'/' '{print $NF}')\nSRB2Kart Moe Mansion Source Code (zip)\nSRB2Kart Moe Mansion Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ "$OPTURL" = "SRB2KartVR" ]; then
 
                     SRB2KARTVR=$(curl -s "https://gitlab.com/api/v4/projects/24705991/releases" | gawk '{gsub('/^{/',"{\n") || gsub('/}$/',"\n}") || gsub('/,/',",\n"); print}' | gawk '/uploads/ {split($0,a,"\\)|\\(");print a[2]"\n"a[4]"\n"a[6]}' | gawk '!/default/ && NF')
                     SOURCECODEZIP="https://gitlab.com/api/v4/projects/24705991/repository/archive.zip?sha=very-cool-renderer"
                     SOURCECODETAR="https://gitlab.com/api/v4/projects/24705991/repository/archive.tar.gz?sha=very-cool-renderer"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2KARTVR")
-                    arrayfilename=$($PRINTF "%s\nSRB2Kart VR Source Code (zip)\nSRB2Kart VR Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2KARTVR" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2KARTVR")
+                    arrayfilename=$(printf "%s\nSRB2Kart VR Source Code (zip)\nSRB2Kart VR Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2KARTVR" | gawk -F'/' '{print $NF}')")
 
                 elif [ "$OPTURL" = "SRB2KartSwitch" ]; then
 
                     SRB2KARTSWITCH=$(curl -s "https://api.github.com/repos/heyjoeway/Kart-Public/releases" | gawk -F'"' '/browser_download_url.*./ {print $4}')
                     SOURCECODEZIP="https://api.github.com/repos/heyjoeway/Kart-Public/zipball"
                     SOURCECODETAR="https://api.github.com/repos/heyjoeway/Kart-Public/tarball"
-                    arrayfile=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2KARTSWITCH")
-                    arrayfilename=$($PRINTF "%s\nSRB2Kart Switch Source Code (zip)\nSRB2Kart Switch Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$SRB2KARTSWITCH" | gawk -F'/' '{print $NF}')")
+                    arrayfile=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR\nBack2Addon\nBack2Cat\nDone" "$SRB2KARTSWITCH")
+                    arrayfilename=$(printf "%s\nSRB2Kart Switch Source Code (zip)\nSRB2Kart Switch Source Code (tar.gz)\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$SRB2KARTSWITCH" | gawk -F'/' '{print $NF}')")
 
                 elif [ -z "$LATEST" ] && [ -z "$arrayattachment" ]; then
 
-                    arrayfile=$($PRINTF "Back2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "Back2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 elif [ -z "$LATEST" ] && [ -n "$arrayattachment" ]; then
 
-                    arrayfile=$($PRINTF "%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
-                    arrayfilename=$($PRINTF "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
+                    arrayfile=$(printf "%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
+                    arrayfilename=$(printf "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
 
                 elif [ -n "$LATEST" ] && [ -z "$arrayattachment" ]; then
 
-                    arrayfile=$($PRINTF "$LATEST\nBack2Addon\nBack2Cat\nDone")
-                    arrayfilename=$($PRINTF "$LATESTNAME\n$BACK2ADDON\n$BACK2CAT\n$DONE")
+                    arrayfile=$(printf "$LATEST\nBack2Addon\nBack2Cat\nDone")
+                    arrayfilename=$(printf "$LATESTNAME\n$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                 else
 
-                    arrayfile=$($PRINTF "$LATEST\n%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
-                    arrayfilename=$($PRINTF "$LATESTNAME\n%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
+                    arrayfile=$(printf "$LATEST\n%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
+                    arrayfilename=$(printf "$LATESTNAME\n%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
 
                 fi
 
@@ -496,18 +498,18 @@ choosefile() {
 
         fi
 
-        count=$($PRINTF "%s\n" "$arrayfile" | wc -l)
+        count=$(printf "%s\n" "$arrayfile" | wc -l)
         n=""
         $PRINTF "%s\n" "$arrayfilename" | gawk '{print NR")", $0}'
         while true; do
 
-            $PRINTF "#? "
+            $PRINTF "$PROMPT%s\e[0m" "#? "
             read -r n
 
             if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                OPTFILE=$($PRINTF "%s\n" "$arrayfile" | gawk 'NR=='"${n}"'')
-                OPTFILENAME=$($PRINTF "%s\n" "$arrayfilename" | gawk 'NR=='"${n}"'')
+                OPTFILE=$(printf "%s\n" "$arrayfile" | gawk 'NR=='"${n}"'')
+                OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk 'NR=='"${n}"'')
 
                 if [ "$OPTFILE" = "Back2Addon" ]; then
 
@@ -865,7 +867,7 @@ choosefile() {
 
                     elif [ "$OPTURL" = "SRB2UncappedPlus" ]; then
 
-                        if [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ]; then
+                        if [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ]; then
 
                             FILELISTTMP="$OPTFILE"
 
@@ -877,7 +879,7 @@ choosefile() {
 
                     elif [ "$OPTURL" = "SRB2VR" ]; then
 
-                        if [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ]; then
+                        if [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ]; then
 
                             FILELISTTMP="$OPTFILE"
 
@@ -889,7 +891,7 @@ choosefile() {
 
                     elif [ "$OPTURL" = "SRB2Persona" ]; then
 
-                        if [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/dropbox.com/ {print}')" ] || [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ] || [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/drive.google.com/ {print}')" ]; then
+                        if [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/dropbox.com/ {print}')" ] || [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/git.do.srb2.org/ {print}')" ] || [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/drive.google.com/ {print}')" ]; then
 
                             FILELISTTMP="$OPTFILE"
 
@@ -905,7 +907,7 @@ choosefile() {
 
                     elif [ "$OPTURL" = "SRB2KartMoeMansion" ]; then
 
-                        if [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/gitlab.com/ {print}')" ] || [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/github.com/ {print}')" ]; then
+                        if [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/gitlab.com/ {print}')" ] || [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/github.com/ {print}')" ]; then
 
                             FILELISTTMP="$OPTFILE"
 
@@ -917,7 +919,7 @@ choosefile() {
 
                     elif [ "$OPTURL" = "SRB2KartVR" ]; then
 
-                        if [ -n "$($PRINTF "%s\n" "$OPTFILE" | gawk '/gitlab.com/ {print}')" ]; then
+                        if [ -n "$(printf "%s\n" "$OPTFILE" | gawk '/gitlab.com/ {print}')" ]; then
 
                             FILELISTTMP="$OPTFILE"
 
@@ -933,22 +935,22 @@ choosefile() {
 
                     fi
 
-                    if [ -n "$($PRINTF "%s\n" "$FILELISTTMP" | gawk '/mb.srb2.org/ {print}')" ]; then
+                    if [ -n "$(printf "%s\n" "$FILELISTTMP" | gawk '/mb.srb2.org/ {print}')" ]; then
 
                         THREADNAME="$OPTURLTHREAD$THREADNAME"
                         FILELISTCODE=$(curl -X GET -LIs "$FILELISTTMP")
                         THREADLIST="$THREADLIST
-$THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP \"$($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')\""
+$THREADNAME $(printf "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP \"$(printf "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')\""
 
                     fi
 
                     FILELIST="$FILELIST
 $FILELISTTMP"
-                    FILELIST=$($PRINTF "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
+                    FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
                     FILELISTNAMETMP="$OPTFILENAME"
                     FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
-                    FILELISTNAME=$($PRINTF "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
+                    FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
 
                 fi
                 break
@@ -1316,19 +1318,19 @@ $FILELISTNAMETMP"
 
         if [ "$SEARCH" = 1 ]; then
 
-            arrayprevpage=$($PRINTF "%s\nPrev\nNext\nBack2Search\nDone" "$(curl -s "$SEARCHURL&page=$((PAGE - 1))" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')")
+            arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Search\nDone" "$(curl -s "$SEARCHURL&page=$((PAGE - 1))" | gawk -F'<a href="|</a>' '/addons/ {split($2,a,"\""); print a[1]}' | gawk -F'/' '!/\/addons\/$|latest-reviews|categories/ && NF {print $3}')")
 
         elif [ "$BUILD" = 1 ]; then
 
-            arrayprevpage=$($PRINTF "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
+            arrayprevpage=$(printf "SRB2\nSRB2UncappedPlus\nSRB2NetPlus\nSRB2VR\nSRB2Persona\nSRB2Android\nSRB2Switch\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2-2.1-MegaDrive\nSRB2Archive\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         elif [ "$KARTBUILD" = 1 ]; then
 
-            arrayprevpage=$($PRINTF "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
+            arrayprevpage=$(printf "SRB2Kart\nSRB2KartMoeMansion\nSRB2KartVR\nSRB2KartSwitch\n%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         else
 
-            arrayprevpage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
+            arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(curl -s "$CATURL=$((PAGE - 1))" | gawk -F'"|/updates|/addons/' '/<dd>/ {print $3}' | gawk 'NF{print}')")
 
         fi
 
@@ -1851,23 +1853,23 @@ dl() {
 
     DL=$(
         paste /dev/fd/3 /dev/fd/4 3<<- EOF 4<<- EOF
-$($PRINTF "%s\n" "$FILELIST" | gawk '!/^$/ {print}')
+$(printf "%s\n" "$FILELIST" | gawk '!/^$/ {print}')
 EOF
-$($PRINTF "%s\n" "$DIRECTORY" | gawk '!/^$/ {print}')
+$(printf "%s\n" "$DIRECTORY" | gawk '!/^$/ {print}')
 EOF
     )
 
-    $PRINTF "%s\n" "$DL" | while read -r f d; do
+    printf "%s\n" "$DL" | while read -r f d; do
 
         FILENAME=$(curl -X GET -LIs "$f" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')
 
         if [ -n "$d" ]; then
 
-            COLUMNS=27 curl -#LC - "$f" -o "$d/$FILENAME" || $PRINTF "$FAILURE%s\n\e[0m" "There is an issue with downloading $FILENAME" &
+            COLUMNS=27 curl -#LC - "$f" -o "$d/$FILENAME" || $PRINTF "$SUCCESS\n%s\n\e[0m" "There is an issue with downloading $FILENAME" &
 
         else
 
-            COLUMNS=27 curl -#LC - "$f" -o "$FILENAME" || $PRINTF "$FAILURE%s\n\e[0m" "There is an issue with downloading $FILENAME" &
+            COLUMNS=27 curl -#LC - "$f" -o "$FILENAME" || $PRINTF "$SUCCESS\n%s\n\e[0m" "There is an issue with downloading $FILENAME" &
 
         fi
 
@@ -1881,12 +1883,12 @@ EOF
 
     DATABASE=$(
         paste /dev/fd/3 /dev/fd/4 3<<- EOF 4<<- EOF
-$($PRINTF "%s\n" "$THREADLIST" | gawk '!/^$/ {print}')
+$(printf "%s\n" "$THREADLIST" | gawk '!/^$/ {print}')
 EOF
-$($PRINTF "%s\n" "$DIRECTORY" | gawk '!/^$/ {print "\""$0"\""}')
+$(printf "%s\n" "$DIRECTORY" | gawk '!/^$/ {print "\""$0"\""}')
 EOF
     )
-    $PRINTF "%s\n" "$DATABASE" | gawk '!/^ [0-9]/ && NF{gsub("\t"," ");print}' >> "$SRB2DLROOT/srb2dl"
+    printf "%s\n" "$DATABASE" | gawk '!/^ [0-9]/ && NF{gsub("\t"," ");print}' >> "$SRB2DLROOT/srb2dl"
     sort -u "$SRB2DLROOT/srb2dl" | gawk '!/^ "\// {print}' > /tmp/srb2dl
     mv /tmp/srb2dl "$SRB2DLROOT/srb2dl"
 
@@ -1896,12 +1898,12 @@ EOF
 
 dlanother() {
     clear
-    $PRINTF "\033[1m%s\n\033[0m" "Filelist: $FILELISTNAME"
+    $PRINTF "$PROMPT%s\e[0m" "Filelist: $FILELISTNAME"
 
     # Download on current path or typed from "srb2dl [path to download files]".
     if [ "$SRB2DLAUTODIR" = 1 ] && [ -z "$DIRECTORY" ]; then
 
-        if [ "$($PRINTF "%s\n" "$OPTS" | gawk '{print $1}')" = "-k" ] || [ "$($PRINTF "%s\n" "$OPTS" | gawk '{print $1}')" = "--kart" ]; then
+        if [ "$(printf "%s\n" "$OPTS" | gawk '{print $1}')" = "-k" ] || [ "$(printf "%s\n" "$OPTS" | gawk '{print $1}')" = "--kart" ]; then
 
             if [ "$(uname)" = "Linux" ]; then
 
@@ -1925,21 +1927,21 @@ dlanother() {
 
             fi
 
-            if [ "$($PRINTF "%s\n" "$DIRECTORYROOT" | wc -l)" -gt 1 ]; then
+            if [ "$(printf "%s\n" "$DIRECTORYROOT" | wc -l)" -gt 1 ]; then
 
                 $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose configuration directory by typing number and then pressing enter. Press enter or ctrl+c to quit."
-                array=$($PRINTF "%s\n" "$DIRECTORYROOT")
-                count=$($PRINTF "%s\n" "$DIRECTORYROOT" | wc -l)
+                array=$(printf "%s\n" "$DIRECTORYROOT")
+                count=$(printf "%s\n" "$DIRECTORYROOT" | wc -l)
                 n=""
                 $PRINTF "%s\n" "$array" | gawk '{print NR")", $0}'
                 while true; do
 
-                    $PRINTF "#? "
+                    $PRINTF "$PROMPT%s\e[0m" "#? "
                     read -r n
 
                     if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                        export DIRECTORYROOT=$($PRINTF "%s\n" "$array" | gawk NR=="${n}")
+                        export DIRECTORYROOT=$(printf "%s\n" "$array" | gawk NR=="${n}")
                         break
 
                     else
@@ -1966,16 +1968,16 @@ $DIRECTORY"
 
         if [ -z "$DIRECTORYTMP" ]; then
 
-            $PRINTF "\033[1m\n%s\n\033[0m" "Directory: $DIRECTORY"
+            $PRINTF "$PROMPT\n\n%s\e[0m" "Directory: $DIRECTORY"
 
         else
 
-            $PRINTF "\033[1m\n%s\n\033[0m" "Directory: $DIRECTORY
+            $PRINTF "$PROMPT\n\n%s\e[0m" "Directory: $DIRECTORY
 $DIRECTORYROOT/$DIRECTORYTMP"
 
         fi
 
-        $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose directory to download resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
+        $PRINTF "$MESSAGE\n\n%s\n\e[0m" "Please choose directory to download resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
         if [ -n "$arraydir" ]; then
 
@@ -1987,17 +1989,17 @@ $DIRECTORYROOT/$DIRECTORYTMP"
 
         fi
 
-        count="$($PRINTF "%s\n" "$arraydir" | wc -l)"
+        count="$(printf "%s\n" "$arraydir" | wc -l)"
         n=""
         $PRINTF "%s\n" "$arraydir" | gawk '{print NR")", $0}'
         while true; do
 
-            $PRINTF "#? "
+            $PRINTF "$PROMPT%s\e[0m" "#? "
             read -r n
 
             if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                DIRECTORYTMP=$($PRINTF "%s\n" "$arraydir" | gawk NR=="${n}")
+                DIRECTORYTMP=$(printf "%s\n" "$arraydir" | gawk NR=="${n}")
                 DIRECTORY="$DIRECTORY
 $DIRECTORYROOT/$DIRECTORYTMP"
                 break
@@ -2012,22 +2014,22 @@ $DIRECTORYROOT/$DIRECTORYTMP"
         done
 
         clear
-        $PRINTF "\033[1m%s\n\033[0m" "Filelist: $FILELISTNAME"
-        $PRINTF "\033[1m\n%s\n\033[0m" "Directory: $DIRECTORY"
+        $PRINTF "$PROMPT%s\e[0m" "Filelist: $FILELISTNAME"
+        $PRINTF "$PROMPT\n\n%s\e[0m" "Directory: $DIRECTORY"
 
     else
 
-        $PRINTF "\033[1m\n%s\n\033[0m" "Directory:
-$($PRINTF "%s\n" "$DIRECTORY" | gawk '!a[$0]++ {print}')"
+        $PRINTF "$PROMPT\n\n%s\n\e[0m" "Directory:
+$(printf "%s\n" "$DIRECTORY" | gawk '!a[$0]++ {print}')"
 
     fi
 
-    $PRINTF "\033[1m\033[34m\n%s\n\033[0m" "Do you want to download other stuff?"
+    $PRINTF "$MESSAGE\n\n%s\n\e[0m" "Do you want to download other stuff?"
     # Making sure to stack list of selected files ready to download.
     while
 
-        for loop in "Yes" "No"; do $PRINTF "%s\n" "$((i += 1))) $loop"; done
-        $PRINTF '#? '
+        for loop in "Yes" "No"; do printf "%s\n" "$((i += 1))) $loop"; done
+        $PRINTF "$PROMPT%s\e[0m" "#? "
         read -r choose
     do
 
@@ -2413,7 +2415,7 @@ case "$2" in
                 srb2kartlogo
                 $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 for loop in "Kart Characters" "Kart Maps" "Kart Miscellaneous" "Kart Builds" "$($PRINTF "\033[1m\033[34m%s\033[0m" "Done")"; do $PRINTF "%s\n" "$((i += 1))) $loop"; done
-                $PRINTF "#? "
+                $PRINTF "$PROMPT%s\e[0m" "#? "
                 read -r choose
             do
 
@@ -2523,12 +2525,12 @@ case "$2" in
 
             if [ -n "$3" ]; then
 
-                if [ "$($PRINTF "%s\n" "$*" | gawk '{print $1}')" = "-r" ] || [ "$($PRINTF "%s\n" "$*" | gawk '{print $1}')" = "--reusable" ]; then
+                if [ "$(printf "%s\n" "$*" | gawk '{print $1}')" = "-r" ] || [ "$(printf "%s\n" "$*" | gawk '{print $1}')" = "--reusable" ]; then
 
                     REUSABLE=1
                     shift 2
                     OPTS="$*"
-                    ENDARG=$($PRINTF "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
+                    ENDARG=$(printf "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
 
                     if [ "$ENDARG" = "/" ]; then
 
@@ -2564,15 +2566,15 @@ case "$2" in
             # Search resource functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
             SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$($PRINTF "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
-            XFTOKEN=$($PRINTF "%s\n" "$SEARCHCOOKIES" | tail -n1)
-            SEARCHFORM="$($PRINTF '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n'"$SEARCHQUERY"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
+            XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
+            SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n'"$SEARCHQUERY"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
             SEARCHURL=$(curl -s 'https://mb.srb2.org/search/search' -H 'accept: application/json, text/javascript' -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary'"$WEBKITRANDOM"'' -H 'cookie: '"$XF_CSRF"'' --data-binary "$SEARCHFORM" --compressed | gawk -F'"' '/redirect/ {print $4}')
 
             if [ "$REUSABLE" = 1 ]; then
 
-                SEARCHURL=$($PRINTF "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
+                SEARCHURL=$(printf "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
 
             fi
 
@@ -2613,12 +2615,12 @@ case "$2" in
             if [ -n "$3" ]; then
 
                 # Checks to make sure --reusable option does not become part of search query.
-                if [ "$($PRINTF "%s\n" "$*" | gawk '{print $1}')" = "-r" ] || [ "$($PRINTF "%s\n" "$*" | gawk '{print $1}')" = "--reusable" ]; then
+                if [ "$(printf "%s\n" "$*" | gawk '{print $1}')" = "-r" ] || [ "$(printf "%s\n" "$*" | gawk '{print $1}')" = "--reusable" ]; then
 
                     REUSABLE=1
                     shift 2
                     OPTS="$*"
-                    ENDARG=$($PRINTF "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
+                    ENDARG=$(printf "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
 
                     if [ "$ENDARG" = "/" ]; then
 
@@ -2654,15 +2656,15 @@ case "$2" in
             # Search user functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
             SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$($PRINTF "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
-            XFTOKEN=$($PRINTF "%s\n" "$SEARCHCOOKIES" | tail -n1)
-            SEARCHFORM="$($PRINTF '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n'"$SEARCHQUERYUSER"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
+            XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
+            SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n'"$SEARCHQUERYUSER"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
             SEARCHURL=$(curl -s 'https://mb.srb2.org/search/search' -H 'accept: application/json, text/javascript' -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary'"$WEBKITRANDOM"'' -H 'cookie: '"$XF_CSRF"'' --data-binary "$SEARCHFORM" --compressed | gawk -F'"' '/redirect/ {print $4}')
 
             if [ "$REUSABLE" = 1 ]; then
 
-                SEARCHURL=$($PRINTF "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
+                SEARCHURL=$(printf "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
 
             fi
 
@@ -2720,10 +2722,6 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
      1. Previewing resources is available by setting \"export SRB2DLPREVIEW=1\" and optionally variable BROWSER (for example \"export BROWSER=firefox\") in shell configuration file. Default previewer is w3m, if installed.
 
      2. If you set \"export SRB2DLAUTODIR=1\" in shell configuration file, script will be able to detect path to SRB2 configuration folder and then let you choose subdirectory, where each addon will be downloaded. WARNING: parsing path to download resource as script's argument is disabled, when this variable is set.
-
-     3. Other environment variables to use. To activate them with value \"1\", do for example \"export SRB2DLDEBUG=1\":
-
-        - SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues.
 "
         exit
         ;;
@@ -2760,20 +2758,20 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
             checksrb2mb
             srb2oldlogo
 
-            arraypage=$($PRINTF "%s\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2Archive" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
-            arraypagename=$($PRINTF "%s\nSRB2 2.1 Builds and Source Code\nSRB2 2.1 Legacy Builds and Source Code\nSRB/SRB2 Archived Versions" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
-            count="$($PRINTF "%s\n" "$arraypage" | wc -l)"
+            arraypage=$(printf "%s\nSRB2-2.1\nSRB2-2.1-Legacy\nSRB2Archive" "$(printf "%s\n" "$PAGECODE" | gawk -F'href="|"' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {print $2}')")
+            arraypagename=$(printf "%s\nSRB2 2.1 Builds and Source Code\nSRB2 2.1 Legacy Builds and Source Code\nSRB/SRB2 Archived Versions" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="/forums/*.*/" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/Obsoleted *.* Releases \([0-9]*.*\)|Outdated *.* Releases \([0-9]*.*\)/ {gsub("&amp;","\\&"); print $2}')")
+            count="$(printf "%s\n" "$arraypage" | wc -l)"
             n=""
             $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose SRB2 version by typing number and then pressing enter. Press enter or ctrl+c to quit."
             $PRINTF "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
             while true; do
 
-                $PRINTF "#? "
+                $PRINTF "$PROMPT%s\e[0m" "#? "
                 read -r n
 
                 if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                    OPTURL=$($PRINTF "%s\n" "$arraypage" | gawk NR=="${n}")
+                    OPTURL=$(printf "%s\n" "$arraypage" | gawk NR=="${n}")
                     OLDURL="$OPTURL"
                     break
 
@@ -2792,13 +2790,13 @@ Usage: srb2dl [OPTIONS] <search-query> <directory-path>
 
             clear
 
-            if [ -n "$($PRINTF "%s\n" "$OLDURL" | gawk '/obsoleted|outdated-releases-0-x-1-x.53/')" ]; then
+            if [ -n "$(printf "%s\n" "$OLDURL" | gawk '/obsoleted|outdated-releases-0-x-1-x.53/')" ]; then
 
                 PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$PAGE")
-                USERS=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
-                arraypage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
-                arraypagenametmp=$($PRINTF "%s\n" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">|</a>' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}')")
-                arraypagename=$($PRINTF "%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+                USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
+                arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
+                arraypagenametmp=$(printf "%s\n" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">|</a>' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}')")
+                arraypagename=$(printf "%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
                     gawk -v left="$arraypagenametmp" -v right="$USERS" 'BEGIN{
 split(left,l,/\n/)
 split(right,r,/\n/)
@@ -2823,25 +2821,25 @@ for (i = 1; i in l; i++)
             else
 
                 PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$PAGE")
-                arraypage=$($PRINTF "%s\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<a href="|"' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
-                arraypagename=$($PRINTF "%s\n$BACK2CAT\n$DONE" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
+                arraypage=$(printf "%s\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="|"' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
+                arraypagename=$(printf "%s\n$BACK2CAT\n$DONE" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">|</a>' '/<a href="*.*" data-xf-init="element-tooltip" data-shortcut="node-description">/ && !/Contest/ {print $2}')")
                 $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
 
             fi
 
             BACK2ADDONURL="$OLDURL"
-            count="$($PRINTF "%s\n" "$arraypage" | wc -l)"
+            count="$(printf "%s\n" "$arraypage" | wc -l)"
             n=""
             $PRINTF "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
             while true; do
 
-                $PRINTF "#? "
+                $PRINTF "$PROMPT%s\e[0m" "#? "
                 read -r n
 
                 if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                    OPTURL=$($PRINTF "%s\n" "$arraypage" | gawk NR=="${n}")
+                    OPTURL=$(printf "%s\n" "$arraypage" | gawk NR=="${n}")
 
                     if [ "$OPTURL" = "Next" ] || [ "$OPTURL" = "Prev" ]; then
 
@@ -2856,7 +2854,7 @@ for (i = 1; i in l; i++)
                     if [ "$OPTURL" = "Next" ]; then
 
                         PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE + 1))")
-                        arraynextpage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
+                        arraynextpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arraynextpage" != "$arraypage" ]; then
 
@@ -2871,7 +2869,7 @@ for (i = 1; i in l; i++)
                     elif [ "$OPTURL" = "Prev" ]; then
 
                         PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE - 2))")
-                        arrayprevpage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
+                        arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arrayprevpage" = "$arraypage" ]; then
 
@@ -2912,13 +2910,13 @@ for (i = 1; i in l; i++)
 
             clear
 
-            if [ -n "$($PRINTF "%s\n" "$OLDURL" | gawk '/forums/')" ]; then
+            if [ -n "$(printf "%s\n" "$OLDURL" | gawk '/forums/')" ]; then
 
                 PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$PAGE")
-                USERS=$($PRINTF "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
-                arraypage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
-                arraypagenametmp=$($PRINTF "%s\n" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">|</a>' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}')")
-                arraypagename=$($PRINTF "%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
+                USERS=$(printf "%s\n" "$PAGECODE" | gawk -F'data-author="|">' '/data-author="/ {gsub("&#039;","\47") || gsub("&amp;","\\&") || gsub("&quot;","\"") || gsub("^.$",""); print $2}')
+                arraypage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
+                arraypagenametmp=$(printf "%s\n" "$(printf "%s\n" "$PAGECODE" | gawk -F'<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">|</a>' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$",""); print "\033[1m"$2"\033[0m"}')")
+                arraypagename=$(printf "%s\n$PREV\n$NEXT\n$BACK2CAT\n$DONE" "$(
                     gawk -v left="$arraypagenametmp" -v right="$USERS" 'BEGIN{
 split(left,l,/\n/)
 split(right,r,/\n/)
@@ -2926,21 +2924,21 @@ for (i = 1; i in l; i++)
 {print l[i] " - " "\033[37mUser: "r[i]"\033[0m"}}'
                 )")
 
-                count="$($PRINTF "%s\n" "$arraypage" | wc -l)"
+                count="$(printf "%s\n" "$arraypage" | wc -l)"
                 $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose resource by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 $PRINTF "%s\n" "$arraypagename" | gawk '{print NR")", $0}'
 
-            elif [ -n "$($PRINTF "%s\n" "$OLDURL" | gawk '/threads/')" ] || [ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ] || [ "$OLDURL" = "SRB2Archive" ]; then
+            elif [ -n "$(printf "%s\n" "$OLDURL" | gawk '/threads/')" ] || [ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ] || [ "$OLDURL" = "SRB2Archive" ]; then
 
-                if [ -z "$($PRINTF "%s\n" "$arrayfile")" ]; then
+                if [ -z "$(printf "%s\n" "$arrayfile")" ]; then
 
                     # Browser's behaviour depends on set SRB2DLPREVIEW.
                     if [ "$SRB2DLPREVIEW" = 1 ] && [ "$OLDURL" != "SRB2-2.1" ] && [ "$OLDURL" != "SRB2-2.1-Legacy" ] && [ "$OLDURL" != "SRB2Archive" ]; then
 
                         if [ -n "$BROWSER" ]; then
 
-                            $PRINTF "%s\n\n" "Opening link to files."
-                            "$BROWSER" "https://mb.srb2.org/$OPTURL" > /dev/null &
+                            $PRINTF "$MESSAGE%s\n\n\e[0m" "Opening link to files."
+                            $BROWSER "https://mb.srb2.org/$OPTURL" > /dev/null &
 
                         elif [ -x "/usr/bin/w3m" ]; then
 
@@ -2955,21 +2953,21 @@ for (i = 1; i in l; i++)
                         SRB2OLD21=$(curl -s "https://api.github.com/repos/STJr/SRB2/releases/19358575" | gawk -F'"' '/browser_download_url.*zip/ || /browser_download_url.*exe/ || /browser_download_url.*dmg/ {print $4}')
                         SOURCECODEZIP="https://api.github.com/repos/stjr/srb2/zipball/SRB2_release_2.1.25"
                         SOURCECODETAR="https://api.github.com/repos/stjr/srb2/tarball/SRB2_release_2.1.25"
-                        arrayattachment=$($PRINTF "%s\n$SOURCECODEZIP\n$SOURCECODETAR" "$SRB2OLD21")
-                        arrayattachmentname=$($PRINTF "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)" "$($PRINTF "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
+                        arrayattachment=$(printf "%s\n$SOURCECODEZIP\n$SOURCECODETAR" "$SRB2OLD21")
+                        arrayattachmentname=$(printf "%s\nSRB2 2.1 Source Code (zip)\nSRB2 2.1 Source Code (tar.gz)" "$(printf "%s\n" "$SRB2OLD21" | gawk -F'/' '{print $NF}')")
 
                     elif [ "$OLDURL" = "SRB2-2.1-Legacy" ]; then
 
                         SOURCECODEZIP="https://api.github.com/repos/PandaSRC/srb2-legacy/zipball"
                         SOURCECODETAR="https://api.github.com/repos/PandaSRC/srb2-legacy/tarball"
-                        arrayattachment=$($PRINTF "$SOURCECODEZIP\n$SOURCECODETAR")
-                        arrayattachmentname=$($PRINTF "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)")
+                        arrayattachment=$(printf "$SOURCECODEZIP\n$SOURCECODETAR")
+                        arrayattachmentname=$(printf "SRB2 2.1 Legacy Source Code (zip)\nSRB2 2.1 Legacy Source Code (tar.gz)")
 
                     elif [ "$OLDURL" = "SRB2Archive" ]; then
 
                         ATTACHMENTCODE=$(curl -Ls "https://files.srb2.org/srb2.org/history")
-                        arrayattachment=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
-                        arrayattachmentname=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
+                        arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
+                        arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</a>' '(/.zip/ || /.exe/) && !/&gt;/ {print $3}')
 
                     else
 
@@ -2977,25 +2975,25 @@ for (i = 1; i in l; i++)
                         MBCODE="$ATTACHMENTCODE"
                         checksrb2mb
 
-                        arrayattachment=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
-                        arrayattachmentname=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
+                        arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
+                        arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
 
                     fi
 
                     if [ -n "$arrayattachment" ] && ([ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ] || [ "$OLDURL" = "SRB2Archive" ]); then
 
-                        arrayfile=$($PRINTF "%s\nBack2Cat\nDone" "$arrayattachment")
-                        arrayfilename=$($PRINTF "%s\n$BACK2CAT\n$DONE" "$arrayattachmentname")
+                        arrayfile=$(printf "%s\nBack2Cat\nDone" "$arrayattachment")
+                        arrayfilename=$(printf "%s\n$BACK2CAT\n$DONE" "$arrayattachmentname")
 
                     elif [ -n "$arrayattachment" ]; then
 
-                        arrayfile=$($PRINTF "%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
-                        arrayfilename=$($PRINTF "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
+                        arrayfile=$(printf "%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
+                        arrayfilename=$(printf "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
 
                     else
 
-                        arrayfile=$($PRINTF "Back2Addon\nBack2Cat\nDone")
-                        arrayfilename=$($PRINTF "$BACK2ADDON\n$BACK2CAT\n$DONE")
+                        arrayfile=$(printf "Back2Addon\nBack2Cat\nDone")
+                        arrayfilename=$(printf "$BACK2ADDON\n$BACK2CAT\n$DONE")
 
                     fi
 
@@ -3006,7 +3004,7 @@ for (i = 1; i in l; i++)
 
                 fi
 
-                count="$($PRINTF "%s\n" "$arrayfile" | wc -l)"
+                count="$(printf "%s\n" "$arrayfile" | wc -l)"
                 $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 $PRINTF "%s\n" "$arrayfilename" | gawk '{print NR")", $0}'
 
@@ -3015,22 +3013,22 @@ for (i = 1; i in l; i++)
             BACK2ADDONURL2="$OLDURL"
             n=""
             while true; do
-                $PRINTF "#? "
+                $PRINTF "$PROMPT%s\e[0m" "#? "
                 read -r n
 
                 if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
                     if [ -n "$arrayfile" ]; then
 
-                        OPTURL=$($PRINTF "%s\n" "$arrayfile" | gawk NR=="${n}")
+                        OPTURL=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
 
                     else
 
-                        OPTURL=$($PRINTF "%s\n" "$arraypage" | gawk NR=="${n}")
+                        OPTURL=$(printf "%s\n" "$arraypage" | gawk NR=="${n}")
 
                     fi
 
-                    if [ -n "$($PRINTF "%s\n" "$arrayfile")" ]; then
+                    if [ -n "$(printf "%s\n" "$arrayfile")" ]; then
 
                         if [ "$OPTURL" = "Back2Cat" ]; then
 
@@ -3046,8 +3044,8 @@ for (i = 1; i in l; i++)
 
                         elif [ "$OPTURL" != "Back2Cat" ] || [ "$OPTURL" != "Back2Addon" ]; then
 
-                            OPTFILE=$($PRINTF "%s\n" "$arrayfile" | gawk NR=="${n}")
-                            OPTFILENAME=$($PRINTF "%s\n" "$arrayfilename" | gawk NR=="${n}")
+                            OPTFILE=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
+                            OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk NR=="${n}")
 
                             if [ "$OLDURL" = "SRB2-2.1" ] || [ "$OLDURL" = "SRB2-2.1-Legacy" ]; then
 
@@ -3065,17 +3063,17 @@ for (i = 1; i in l; i++)
 
                             FILELIST="$FILELIST
 $FILELISTTMP"
-                            FILELIST=$($PRINTF "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
+                            FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
                             FILELISTNAMETMP="$OPTFILENAME"
                             FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
-                            FILELISTNAME=$($PRINTF "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
+                            FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
 
                             OPTURLTHREAD="$OLDURL"
-                            THREADNAME=$($PRINTF "%s\n" "$OPTURLTHREAD" | gawk -F'/' '{print $3}')
+                            THREADNAME=$(printf "%s\n" "$OPTURLTHREAD" | gawk -F'/' '{print $3}')
                             FILELISTCODE=$(curl -X GET -LIs "$FILELISTTMP")
                             THREADLIST="$THREADLIST
-$THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP \"$($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')\""
+$THREADNAME $(printf "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP \"$(printf "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')\""
 
                             OLD=1 OLD2=1 dlanother
 
@@ -3084,7 +3082,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
                     elif [ "$OPTURL" = "Next" ]; then
 
                         PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE + 1))")
-                        arraynextpage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
+                        arraynextpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arraynextpage" != "$arraypage" ]; then
 
@@ -3099,7 +3097,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
                     elif [ "$OPTURL" = "Prev" ]; then
 
                         PAGECODE=$(curl -Ls "https://mb.srb2.org$OLDURL?page=$((PAGE - 2))")
-                        arrayprevpage=$($PRINTF "%s\nPrev\nNext\nBack2Cat\nDone" "$($PRINTF "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
+                        arrayprevpage=$(printf "%s\nPrev\nNext\nBack2Cat\nDone" "$(printf "%s\n" "$PAGECODE" | gawk -F '<a href="|"' '/<a href="*.*" class="" data-tp-primary="on" data-xf-init="preview-tooltip" data-preview-url="*.*">/ {print $2}')")
 
                         if [ "$arrayprevpage" = "$arraypage" ]; then
 
@@ -3136,15 +3134,17 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
         fi
 
-        if [ -z "$($PRINTF "%s\n" "$arrayfile")" ]; then
+        if [ -z "$(printf "%s\n" "$arrayfile")" ]; then
+
+            clear
 
             if [ "$SRB2DLPREVIEW" = 1 ]; then
 
                 # Browser's behaviour depends on set SRB2DLPREVIEW.
                 if [ -n "$BROWSER" ]; then
 
-                    $PRINTF "%s\n\n" "Opening link to files."
-                    "$BROWSER" "https://mb.srb2.org/$OPTURL" > /dev/null &
+                    $PRINTF "$MESSAGE%s\n\n\e[0m" "Opening link to files."
+                    $BROWSER "https://mb.srb2.org/$OPTURL" > /dev/null &
 
                 elif [ -x "/usr/bin/w3m" ]; then
 
@@ -3156,18 +3156,18 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
             OLDURL="$OPTURL"
             ATTACHMENTCODE=$(curl -Ls "https://mb.srb2.org$OLDURL")
-            arrayattachment=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
-            arrayattachmentname=$($PRINTF "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
+            arrayattachment=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}')
+            arrayattachmentname=$(printf "%s\n" "$ATTACHMENTCODE" | gawk -F'">|</span>' '/title/ {split($2,a,"<"); print a[1]}' | gawk '(/.zip$/ || /.7z$/ || /.rar$/ || /.pk3$/ || /.wad$/ || /.lua$/ || /.exe$/ || /.soc$/ || /.ZIP$/ || /.7Z$/ || /.RAR$/ || /.PK3$/ || /.WAD$/ || /.LUA$/ || /.EXE$/ || /.SOC$/) && NF {gsub("&#039;","\47") gsub("&amp;","\\&") gsub("&quot;","\"") gsub("^.$","");print}')
 
             if [ -n "$arrayattachment" ]; then
 
-                arrayfile=$($PRINTF "%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
-                arrayfilename=$($PRINTF "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
+                arrayfile=$(printf "%s\nBack2Addon\nBack2Cat\nDone" "$arrayattachment")
+                arrayfilename=$(printf "%s\n$BACK2ADDON\n$BACK2CAT\n$DONE" "$arrayattachmentname")
 
             else
 
-                arrayfile=$($PRINTF "Back2Addon\nBack2Cat\nDone")
-                arrayfilename=$($PRINTF "$BACK2ADDON\n$BACK2CAT\n$DONE")
+                arrayfile=$(printf "Back2Addon\nBack2Cat\nDone")
+                arrayfilename=$(printf "$BACK2ADDON\n$BACK2CAT\n$DONE")
 
             fi
 
@@ -3178,7 +3178,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
         fi
 
-        count="$($PRINTF "%s\n" "$arrayfile" | wc -l)"
+        count="$(printf "%s\n" "$arrayfile" | wc -l)"
         n=""
         clear
         $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose file by typing number and then pressing enter. Press enter or ctrl+c to quit."
@@ -3186,12 +3186,12 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
         while true; do
 
-            $PRINTF "#? "
+            $PRINTF "$PROMPT%s\e[0m" "#? "
             read -r n
 
             if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                OPTURL=$($PRINTF "%s\n" "$arrayfile" | gawk NR=="${n}")
+                OPTURL=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
 
                 if [ "$OPTURL" = "Back2Cat" ]; then
 
@@ -3207,22 +3207,22 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                 elif [ "$OPTURL" != "Back2Cat" ] || [ "$OPTURL" != "Back2Addon" ]; then
 
-                    OPTFILE=$($PRINTF "%s\n" "$arrayfile" | gawk NR=="${n}")
-                    OPTFILENAME=$($PRINTF "%s\n" "$arrayfilename" | gawk NR=="${n}")
+                    OPTFILE=$(printf "%s\n" "$arrayfile" | gawk NR=="${n}")
+                    OPTFILENAME=$(printf "%s\n" "$arrayfilename" | gawk NR=="${n}")
                     FILELISTTMP="https://mb.srb2.org/$OPTFILE"
                     FILELIST="$FILELIST
 $FILELISTTMP"
-                    FILELIST=$($PRINTF "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
+                    FILELIST=$(printf "%s\n" "$FILELIST" | gawk '!a[$0]++ {print}')
                     FILELISTNAMETMP="$OPTFILENAME"
                     FILELISTNAME="$FILELISTNAME
 $FILELISTNAMETMP"
-                    FILELISTNAME=$($PRINTF "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
+                    FILELISTNAME=$(printf "%s\n" "$FILELISTNAME" | gawk '!a[$0]++ {print}')
 
                     OPTURLTHREAD="$OLDURL"
-                    THREADNAME=$($PRINTF "%s\n" "$OPTURLTHREAD" | gawk -F'/' '{print $3}')
+                    THREADNAME=$(printf "%s\n" "$OPTURLTHREAD" | gawk -F'/' '{print $3}')
                     FILELISTCODE=$(curl -X GET -LIs "$FILELISTTMP")
                     THREADLIST="$THREADLIST
-$THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP \"$($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')\""
+$THREADNAME $(printf "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1) $FILELISTTMP \"$(printf "%s\n" "$FILELISTCODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')\""
 
                     OLD=1 OLD2=1 OLD3=1 dlanother
 
@@ -3279,12 +3279,12 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                 fi
 
-                if [ "$($PRINTF "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "-r" ] || [ "$($PRINTF "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "--reusable" ]; then
+                if [ "$(printf "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "-r" ] || [ "$(printf "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "--reusable" ]; then
 
                     REUSABLE=1
                     shift
                     OPTS="$*"
-                    SEARCHQUERY=$($PRINTF "%s\n" "$OPTS" | gawk 'gsub(/-r|--reusable/,"")')
+                    SEARCHQUERY=$(printf "%s\n" "$OPTS" | gawk 'gsub(/-r|--reusable/,"")')
                     SEARCHQUERY="${SEARCHQUERY% *}"
 
                     if [ "$SRB2DLAUTODIR" != 1 ]; then
@@ -3293,7 +3293,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                     fi
 
-                elif [ "$($PRINTF "%s\n" "$*" | gawk '{print $NF}')" = "-r" ] || [ "$($PRINTF "%s\n" "$*" | gawk '{print $NF}')" = "--reusable" ]; then
+                elif [ "$(printf "%s\n" "$*" | gawk '{print $NF}')" = "-r" ] || [ "$(printf "%s\n" "$*" | gawk '{print $NF}')" = "--reusable" ]; then
 
                     REUSABLE=1
                     shift
@@ -3310,7 +3310,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                     shift
                     OPTS="$*"
-                    ENDARG=$($PRINTF "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
+                    ENDARG=$(printf "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
 
                     if [ "$ENDARG" = "/" ]; then
 
@@ -3346,15 +3346,15 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
             # Search resource functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
             SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$($PRINTF "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
-            XFTOKEN=$($PRINTF "%s\n" "$SEARCHCOOKIES" | tail -n1)
-            SEARCHFORM="$($PRINTF '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n'"$SEARCHQUERY"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
+            XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
+            SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n'"$SEARCHQUERY"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
             SEARCHURL=$(curl -s 'https://mb.srb2.org/search/search' -H 'accept: application/json, text/javascript' -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary'"$WEBKITRANDOM"'' -H 'cookie: '"$XF_CSRF"'' --data-binary "$SEARCHFORM" --compressed | gawk -F'"' '/redirect/ {print $4}')
 
             if [ "$REUSABLE" = 1 ]; then
 
-                SEARCHURL=$($PRINTF "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
+                SEARCHURL=$(printf "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
 
             fi
 
@@ -3402,12 +3402,12 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
                 fi
 
                 # Checks to make sure --reusable option does not become part of search query.
-                if [ "$($PRINTF "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "-r" ] || [ "$($PRINTF "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "--reusable" ]; then
+                if [ "$(printf "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "-r" ] || [ "$(printf "%s\n" "$*" | gawk '{print $((NF - 1))}')" = "--reusable" ]; then
 
                     REUSABLE=1
                     shift
                     OPTS="$*"
-                    SEARCHQUERYUSER=$($PRINTF "%s\n" "$OPTS" | gawk 'gsub(/-r|--reusable/,"")')
+                    SEARCHQUERYUSER=$(printf "%s\n" "$OPTS" | gawk 'gsub(/-r|--reusable/,"")')
                     SEARCHQUERYUSER="${SEARCHQUERYUSER% *}"
 
                     if [ "$SRB2DLAUTODIR" != 1 ]; then
@@ -3416,7 +3416,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                     fi
 
-                elif [ "$($PRINTF "%s\n" "$*" | gawk '{print $NF}')" = "-r" ] || [ "$($PRINTF "%s\n" "$*" | gawk '{print $NF}')" = "--reusable" ]; then
+                elif [ "$(printf "%s\n" "$*" | gawk '{print $NF}')" = "-r" ] || [ "$(printf "%s\n" "$*" | gawk '{print $NF}')" = "--reusable" ]; then
 
                     REUSABLE=1
                     shift
@@ -3433,7 +3433,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                     shift
                     OPTS="$*"
-                    ENDARG=$($PRINTF "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
+                    ENDARG=$(printf "%s\n" "$OPTS" | gawk 'match($NF, /\//) {print substr($NF, RSTART, RLENGTH)}')
 
                     if [ "$ENDARG" = "/" ]; then
 
@@ -3469,15 +3469,15 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
             # Search user functionality.
             WEBKITRANDOM=$(date | md5sum | gawk '{print substr($1,length($1)-14)}')
             SEARCHCOOKIES=$(curl -is https://mb.srb2.org/search | gawk -F'=|"|;' '/xf2_csrf|xfToken/ {gsub(/^[\t]+/,""); print $2$9}')
-            XF_CSRF=$($PRINTF "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
-            XFTOKEN=$($PRINTF "%s\n" "$SEARCHCOOKIES" | tail -n1)
-            SEARCHFORM="$($PRINTF '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n'"$SEARCHQUERYUSER"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
+            XF_CSRF=$(printf "%s\n" "xf2_csrf=$SEARCHCOOKIES" | head -n1)
+            XFTOKEN=$(printf "%s\n" "$SEARCHCOOKIES" | tail -n1)
+            SEARCHFORM="$(printf '%b_' '------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="keywords"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[users]"\r\n\r\n'"$SEARCHQUERYUSER"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[newer_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[older_than]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[prefixes][]"\r\n\r\n'"$REUSABLE"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[categories][]"\r\n\r\n\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="c[child_categories]"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="order"\r\n\r\ndate\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="search_type"\r\n\r\nresource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfRequestUri"\r\n\r\n/search/?type=resource\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfWithData"\r\n\r\n1\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfToken"\r\n\r\n'"$XFTOKEN"'\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'\r\nContent-Disposition: form-data; name="_xfResponseType"\r\n\r\njson\r\n------WebKitFormBoundary'"$WEBKITRANDOM"'--\r\n')"
             SEARCHFORM="${SEARCHFORM%_}"
             SEARCHURL=$(curl -s 'https://mb.srb2.org/search/search' -H 'accept: application/json, text/javascript' -H 'content-type: multipart/form-data; boundary=----WebKitFormBoundary'"$WEBKITRANDOM"'' -H 'cookie: '"$XF_CSRF"'' --data-binary "$SEARCHFORM" --compressed | gawk -F'"' '/redirect/ {print $4}')
 
             if [ "$REUSABLE" = 1 ]; then
 
-                SEARCHURL=$($PRINTF "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
+                SEARCHURL=$(printf "%s\n" "$SEARCHURL" | gawk '{gsub(/\[/,"\\[") gsub(/\]/,"\\]");print}')
 
             fi
 
@@ -3547,7 +3547,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
                 srb2kartlogo
                 $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
                 for loop in "Kart Characters" "Kart Maps" "Kart Miscellaneous" "Kart Builds" "$($PRINTF "\033[1m\033[34m%s\033[0m" "Done")"; do $PRINTF "%s\n" "$((i += 1))) $loop"; done
-                $PRINTF "#? "
+                $PRINTF "$PROMPT%s\e[0m" "#? "
                 read -r choose
             do
 
@@ -3658,17 +3658,17 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
         $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose URL by typing number and then pressing enter. Press enter or ctrl+c to quit."
         array=$(gawk '{print $1}' "$SRB2DLROOT/srb2dl" | sort -u)
         arrayname=$(gawk -F'.' '{print $1}' "$SRB2DLROOT/srb2dl" | sort -u)
-        count="$($PRINTF "%s\n" "$array" | wc -l)"
+        count="$(printf "%s\n" "$array" | wc -l)"
         n=""
         $PRINTF "%s\n" "$arrayname" | gawk '{print NR")", $0}'
         while true; do
 
-            $PRINTF "#? "
+            $PRINTF "$PROMPT%s\e[0m" "#? "
             read -r n
 
             if [ -n "$n" ] && [ "$n" -eq "$n" ] && [ "$n" -gt 0 ] && [ "$n" -le "$count" ]; then
 
-                RMURL=$($PRINTF "%s\n" "$array" | gawk NR=="${n}")
+                RMURL=$(printf "%s\n" "$array" | gawk NR=="${n}")
                 gawk -i inplace '!/'$RMURL'/ {print}' "$SRB2DLROOT/srb2dl"
 
                 break
@@ -3688,7 +3688,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
         fi
 
-        $PRINTF "$SUCCESS\n%s\n\e[0m\a" "Removing URL for $($PRINTF "%s\n" "$RMURL" | gawk -F'.' '{print $1}') is successful."
+        $PRINTF "$SUCCESS\n%s\n\e[0m\a" "Removing URL for $(printf "%s\n" "$RMURL" | gawk -F'.' '{print $1}') is successful."
         exit
 
         ;;
@@ -3714,17 +3714,17 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
         while read -r u; do
 
-            FILETHREAD=$($PRINTF "%s\n" "$u" | gawk '{print $1}' | gawk -F'.' '{print $2}')
-            FILESIZE=$($PRINTF "%s\n" "$u" | gawk '{print $2}')
-            FILEURL=$($PRINTF "%s\n" "$u" | gawk '{print $3}')
-            FILENAME=$($PRINTF "%s\n" "$u" | gawk -F'"' '{print $2}')
-            DIRECTORY=$($PRINTF "%s\n" "$u" | gawk -F'"' '{print $4}')
+            FILETHREAD=$(printf "%s\n" "$u" | gawk '{print $1}' | gawk -F'.' '{print $2}')
+            FILESIZE=$(printf "%s\n" "$u" | gawk '{print $2}')
+            FILEURL=$(printf "%s\n" "$u" | gawk '{print $3}')
+            FILENAME=$(printf "%s\n" "$u" | gawk -F'"' '{print $2}')
+            DIRECTORY=$(printf "%s\n" "$u" | gawk -F'"' '{print $4}')
             FILETHREADCODE=$(curl -sL "https://mb.srb2.org/threads/$FILETHREAD")
-            LATEST=$($PRINTF "%s\n" "$FILETHREADCODE" | gawk -F'"' '/addons*.*download/ {print $2}')
+            LATEST=$(printf "%s\n" "$FILETHREADCODE" | gawk -F'"' '/addons*.*download/ {print $2}')
 
             if [ -z "$LATEST" ]; then
 
-                LATEST=$($PRINTF "%s\n" "$FILETHREADCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}' | gawk '!a[$0]++ {print "/"$0}' | head -n1)
+                LATEST=$(printf "%s\n" "$FILETHREADCODE" | gawk -F'href="|"' '/attachments/ && (/.zip/ || /.7z/ || /.rar/ || /.pk3/ || /.wad/ || /.lua/ || /.exe/ || /.soc/ || /.ZIP/ || /.7Z/ || /.RAR/ || /.PK3/ || /.WAD/ || /.LUA/ || /.EXE/ || /.SOC/) && NF {print $4}' | gawk -F'/' '{print $2"/"$3}' | gawk '!/^\/$/ {print}' | gawk '!a[$0]++ {print "/"$0}' | head -n1)
 
             fi
 
@@ -3733,7 +3733,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
             if [ -z "$DOWNLOADHEADER" ]; then
 
                 LATESTCODE=$(curl -s "https://mb.srb2.org$LATEST")
-                LATEST=$($PRINTF "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF{print}')
+                LATEST=$(printf "%s\n" "$LATESTCODE" | gawk -F'a href="|" class' '/version/ {print $2}' | gawk 'NF{print}')
 
             fi
 
@@ -3741,14 +3741,14 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
             for l in $LATEST; do
 
-                REMOTEFILETHREAD=$($PRINTF "%s\n" "$FILETHREADCODE" | gawk -F'"|/' '/og:url/ {print $8}')
+                REMOTEFILETHREAD=$(printf "%s\n" "$FILETHREADCODE" | gawk -F'"|/' '/og:url/ {print $8}')
                 REMOTEFILEURL="https://mb.srb2.org$l"
                 REMOTEFILECODE=$(curl -X GET -sLI "$REMOTEFILEURL")
-                REMOTEFILESIZE=$($PRINTF "%s\n" "$REMOTEFILECODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1)
+                REMOTEFILESIZE=$(printf "%s\n" "$REMOTEFILECODE" | gawk -F'Content-Length: ' '{IGNORECASE=1} /Content-Length:/ {gsub("\r","");print $NF}' | tail -n1)
 
-                REMOTEFILENAME=$($PRINTF "%s\n" "$REMOTEFILECODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')
+                REMOTEFILENAME=$(printf "%s\n" "$REMOTEFILECODE" | gawk -F'=|;' '{IGNORECASE=1} /Content-Disposition:/ {gsub("\r|\"","");print $3}')
 
-                if [ "$REMOTEFILESIZE" != "$FILESIZE" ] && [ "$($PRINTF "%s\n" "$REMOTEFILENAME" | gawk -F'.' '{IGNORECASE=1} {gsub("V[0-9]|[0-9]|-|_|'\''| ","");print toupper($1)}')" = "$($PRINTF "%s\n" "$FILENAME" | gawk -F'.' '{IGNORECASE=1} {gsub("V[0-9]|[0-9]|-|_|'\''| ","");print toupper($1)}')" ]; then
+                if [ "$REMOTEFILESIZE" != "$FILESIZE" ] && [ "$(printf "%s\n" "$REMOTEFILENAME" | gawk -F'.' '{IGNORECASE=1} {gsub("V[0-9]|[0-9]|-|_|'\''| ","");print toupper($1)}')" = "$(printf "%s\n" "$FILENAME" | gawk -F'.' '{IGNORECASE=1} {gsub("V[0-9]|[0-9]|-|_|'\''| ","");print toupper($1)}')" ]; then
 
                     if [ -n "$2" ] && [ "$SRB2DLAUTODIR" != 1 ]; then
 
@@ -3784,7 +3784,7 @@ $THREADNAME $($PRINTF "%s\n" "$FILELISTCODE" | gawk -F'Content-Length: ' '{IGNOR
 
                     fi
 
-                    FILEURL=$($PRINTF "%s\n" "$FILEURL" | gawk '{gsub("/","\\/") gsub("?","\\?");print}')
+                    FILEURL=$(printf "%s\n" "$FILEURL" | gawk '{gsub("/","\\/") gsub("?","\\?");print}')
 
                     if [ -n "$(gawk '/'$FILEURL'/ && /'$FILESIZE'/ {print}' "$SRB2DLROOT/srb2dl")" ]; then
 
@@ -3894,7 +3894,7 @@ if [ "$CHARACTER" = 0 ] || [ "$MAP" = 0 ] || [ "$GAMETYPE" = 0 ] || [ "$ASSET" =
         $PRINTF "$MESSAGE\n%s\n\e[0m" "Please choose category by typing number and then pressing enter. Press enter or ctrl+c to quit."
         for loop in "Characters" "Maps" "Gametypes" "Assets" "Lua" "Player Colors" "Miscellaneous" "Software" "Builds" "$($PRINTF "\033[1m\033[34m%s\033[0m" "Done")"; do $PRINTF "%s\n" "$((i += 1))) $loop"; done
 
-        $PRINTF "#? "
+        $PRINTF "$PROMPT%s\e[0m" "#? "
         read -r choose
     do
 
