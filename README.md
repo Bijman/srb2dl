@@ -5,6 +5,7 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 # Features
 - Browsing SRB2/SRB2Kart content by categories,
 - Downloading multiple resources at the same time,
+- Downloading resource by addon ID,
 - Searching content by keyword or user,
 - Filtering content by reusable,
 - Upgrade previously downloaded content,
@@ -29,13 +30,17 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 - Arch/Arch based: `sudo pacman -S --needed make git coreutils findutils ncurses curl gawk`,
 
-- Gentoo: `sudo emerge -av git coreutils findutils ncurses curl gawk`,
+- Gentoo: `sudo emerge -av dev-vcs/git sys-apps/coreutils sys-apps/findutils sys-libs/ncurses net-misc/curl sys-apps/gawk`,
 
 - Fedora/Fedora based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
 
-- Fedora Silverblue/Kinoite: `rpm-ostree install -A --allow-inactive make git coreutils findutils ncurses curl gawk`,
+- Fedora Silverblue/Fedora Kinoite/Fedora Onyx/Fedora Sericea: `rpm-ostree install -A --allow-inactive make git coreutils findutils ncurses curl gawk`,
 
-- OpenSUSE/OpenSUSE based: `sudo zypper in make git coreutils findutils ncurses curl gawk`,
+- RHEL/RHEL based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
+
+- openSUSE Leap/openSUSE Tumbleweed/openSUSE Leap based/openSUSE Tumbleweed based: `sudo zypper in make git coreutils findutils ncurses curl gawk`,
+
+- openSUSE MicroOS/openSUSE MicroOS based: `sudo transactional-update pkg in make git coreutils findutils ncurses curl gawk`,
 
 - Void/Void based: `sudo xbps-install -S make git coreutils findutils ncurses curl gawk`,
 
@@ -43,11 +48,11 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 - Solus/Solus based: `sudo eopkg it make git coreutils findutils ncurses curl gawk`,
 
-- NixOS/NixOS based: `sudo nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
+- NixOS/NixOS based: `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
 
 - Immutable systems like Steam Deck's SteamOS need rootless method of getting dependencies to avoid issues with wiping out installed packages after system's update or not to be able to write to certain path, like "/usr/local":
 	- [Homebrew](https://brew.sh/): `brew install make git coreutils findutils ncurses curl gawk`,
-	- [Nix Portable](https://github.com/DavHau/nix-portable): `nix-env -i gnumake git coreutils findutils ncurses curl gawk` or `nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'`.
+	- [Nix Portable](https://github.com/DavHau/nix-portable): `nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'`.
 
 **Windows:**
 1. Installing Git Bash:
@@ -104,11 +109,15 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 ```
 Download SRB2/SRB2Kart addons, software and builds.
 
-Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
+Usage: srb2dl [OPTIONS...] <ID/search-query> <directory-path>
 
   OPTIONS:
 
      -h, --help                             Show this help text.
+
+     -hst, --history      <ID>              Choose version of resource by addon ID and download it.
+
+     -i, --id             <ID>              Download resource by addon ID.
 
      -k, --kart                             Go to SRB2Kart resources.
 
@@ -161,6 +170,16 @@ Usage: srb2dl [OPTIONS...] <search-query> <directory-path>
      7. Remove URL from database of downloaded files (preventing of upgrading undesired resources):
 
             srb2dl --removeurl
+
+
+     8. Download resource by addon ID:
+
+            srb2dl --id 3457
+
+
+     9. Choose version of resource by addon ID and download it:
+
+            srb2dl --history 3457
 
   NOTES:
      1. Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.
