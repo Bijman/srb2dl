@@ -109,15 +109,15 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 ```
 Download SRB2/SRB2Kart addons, software and builds.
 
-Usage: srb2dl [OPTIONS...] <ID/search-query> <directory-path>
+Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
 
   OPTIONS:
 
      -h, --help                             Show this help text.
 
-     -hst, --history      <ID>              Choose version of resource by addon ID and download it.
+     -hst, --history      <addon-id>        Choose version of resource by mb.srb2.org addon ID and download it.
 
-     -i, --id             <ID>              Download resource by addon ID.
+     -i, --id             <addon-id>        Download resource by mb.srb2.org addon ID.
 
      -k, --kart                             Go to SRB2Kart resources.
 
@@ -172,14 +172,14 @@ Usage: srb2dl [OPTIONS...] <ID/search-query> <directory-path>
             srb2dl --removeurl
 
 
-     8. Download resource by addon ID:
+     8. Download resource by addon ID and download it to "$HOME/Downloads" path:
 
-            srb2dl --id 3457
+            srb2dl --id 3457 "$HOME/Downloads"
 
 
-     9. Choose version of resource by addon ID and download it:
+     9. Choose version of resource by addon ID and download it to "$HOME/Downloads" path:
 
-            srb2dl --history 3457
+            srb2dl --history 3457 "$HOME/Downloads"
 
   NOTES:
      1. Previewing resources is available by setting "export SRB2DLPREVIEW=1" and optionally variable BROWSER (for example "export BROWSER=firefox") in shell configuration file. Default previewer is w3m, if installed.

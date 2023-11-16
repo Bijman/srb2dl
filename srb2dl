@@ -2809,11 +2809,11 @@ case "$1" in
         $PRINTF "%s\n" "
 Download SRB2/SRB2Kart addons, software and builds.
 
-Usage: srb2dl [OPTIONS] <ID/search-query> <directory-path>
+Usage: srb2dl [OPTIONS] <addon-id/search-query> <directory-path>
   OPTIONS:
      -h, --help                             Show this help text.
-     -hst, --history      <ID>              Choose version of resource by addon ID and download it.
-     -i, --id             <ID>              Download resource by addon ID.
+     -hst, --history      <addon-id>        Choose version of resource by mb.srb2.org addon ID and download it.
+     -i, --id             <addon-id>        Download resource by mb.srb2.org addon ID.
      -k, --kart                             Go to SRB2Kart resources.
      -lu, --listurl                         List URL from database of downloaded files.
      -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions.
@@ -2845,11 +2845,11 @@ Usage: srb2dl [OPTIONS] <ID/search-query> <directory-path>
      7. Remove URL from database of downloaded files (preventing of upgrading undesired resources):
             srb2dl --removeurl
 
-     8. Download resource by addon ID:
-            srb2dl --id 3457
+     8. Download resource by addon ID and download it to \"\$HOME/Downloads\" path:
+            srb2dl --id 3457 \"\$HOME/Downloads\"
 
-     9. Choose version of resource by addon ID and download it:
-            srb2dl --history 3457
+     9. Choose version of resource by addon ID and download it to \"\$HOME/Downloads\" path:
+            srb2dl --history 3457 \"\$HOME/Downloads\"
 
 
   NOTES:
