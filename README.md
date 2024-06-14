@@ -1,15 +1,15 @@
-This script extracts links and information from mb.srb2.org, GitHub and GitLab and lists them in a simple format including title, author, upload/update date and category. This allows more straightforward and centralized approach to downloading everything related to SRB2 and SRB2Kart.
+This script extracts links and information from mb.srb2.org, GitHub and GitLab and lists them in a simple format including title, author, upload/update date and category. This allows more straightforward and centralized approach to downloading everything related to SRB2, SRB2Kart and Ring Racers.
 
 ![srb2dl](https://github.com/Bijman/srb2dl/assets/16626326/4ba1ecbc-965c-4233-80ab-e7c92f66acaf)
 
 # Features
-- Browsing SRB2/SRB2Kart content by categories,
+- Browsing SRB2/SRB2Kart/Ring Racers content by categories,
 - Downloading multiple resources at the same time,
 - Downloading resource by addon ID,
 - Searching content by keyword or user,
 - Filtering content by reusable,
 - Upgrade previously downloaded content,
-- Added vanilla SRB2/SRB2Kart builds and custom builds (source code included),
+- Added vanilla SRB2/SRB2Kart/Ring Racers builds and custom builds (source code included),
 - Runs on Linux, Windows (Cygwin, Git Bash) and MacOS.
 
 # Dependencies
@@ -107,7 +107,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 # Usage (from help text)
 ```
-Download SRB2/SRB2Kart addons, software and builds.
+Download SRB2/SRB2Kart/Ring Racers addons, software and builds.
 
 Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
 
@@ -121,9 +121,11 @@ Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
 
      -k, --kart                             Go to SRB2Kart resources.
 
+     -kr, --ringracers                      Go to Ring Racers resources.
+
      -lu, --listurl                         List URL from database of downloaded files.
 
-     -o, --old                              Go to archived resources for previous SRB2/SRB2Kart versions.
+     -o, --old                              Go to archived resources for previous SRB2/SRB2Kart/Ring Racers versions.
 
      -ru, --removeurl                       Remove URL from database of downloaded files (preventing of upgrading undesired resources).
 
@@ -142,9 +144,9 @@ Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
             srb2dl "$HOME/Downloads"
 
 
-     2. Go to SRB2Kart resources and download them to current directory:
+     2. Go to Ring Racers resources and download them to current directory:
 
-            srb2dl --kart
+            srb2dl --ringracers
 
 
      3. Search for Sonic related content:
@@ -157,7 +159,7 @@ Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
             srb2dl --search-user "user123" --reusable
 
 
-     5. Go to archived resources for previous SRB2/SRB2Kart versions and download them to "$HOME/Downloads" path (-r/--reusable option is not supported for -o/--old):
+     5. Go to archived resources for previous SRB2/SRB2Kart/Ring Racers versions and download them to "$HOME/Downloads" path (-r/--reusable option is not supported for -o/--old):
 
             srb2dl --old "$HOME/Downloads"
 
