@@ -34,7 +34,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 - Fedora/Fedora based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
 
-- Fedora Silverblue/Fedora Kinoite/Universal Blue (Baazite, Aurora): `rpm-ostree install -A --allow-inactive make git coreutils findutils ncurses curl gawk`,
+- Fedora Silverblue/Fedora Kinoite/Universal Blue (Bazzite, Aurora): `rpm-ostree install -A --allow-inactive make git coreutils findutils ncurses curl gawk`,
 
 - RHEL/RHEL based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
 
