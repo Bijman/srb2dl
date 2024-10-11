@@ -42,7 +42,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 - openSUSE MicroOS/openSUSE MicroOS based: `sudo transactional-update pkg in make git coreutils findutils ncurses curl gawk`,
 
-- Void/Void based: `sudo xbps-install -S make git coreutils findutils ncurses curl gawk`,
+- Void/Void based: `sudo xbps-install make git coreutils findutils ncurses curl gawk`,
 
 - Alpine/Alpine based: `sudo apk add make git coreutils findutils ncurses curl gawk`,
 
