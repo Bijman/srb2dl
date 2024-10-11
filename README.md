@@ -51,7 +51,7 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 - NixOS/NixOS based: `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
 
 - Immutable systems like Steam Deck's SteamOS need rootless method of getting dependencies to avoid issues with wiping out installed packages after system's update or not to be able to write to certain path, like "/usr/local":
-	- [Homebrew](https://brew.sh/): `brew install make git coreutils findutils ncurses curl gawk`.
+	- Install dependencies with package manager [Homebrew](https://brew.sh/): `brew install make git coreutils findutils ncurses curl gawk`.
 
 **Windows:**
 1. Installing Git Bash:
