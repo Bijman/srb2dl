@@ -72,28 +72,18 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 
 2. Enter `git clone https://github.com/Bijman/srb2dl`,
 
-3. Enter `sudo make install`, which will install to "/usr/local/bin". You can specify your path with variable PREFIX, for example `make install PREFIX=$HOME/.local`, which will copy script to "$HOME/.local/bin". Alternatively manually place script to your path, which is readable by shell (PATH environment variable), and change script's permissions to be executable: `chmod 755 [path to srb2dl script]`,
+3. Go to downloaded directory: `cd srb2dl`.
 
-4. Go to downloaded directory: `cd srb2dl`.
+4. Enter `sudo make install`, which will install to "/usr/local/bin". You can specify your path with variable PREFIX, for example `make install PREFIX=$HOME/.local`, which will copy script to "$HOME/.local/bin". Alternatively manually place script to your path, which is readable by shell (PATH environment variable), and change script's permissions to be executable: `chmod 755 [path to srb2dl script]`,
 
 **Windows:**
 1. Open Git Bash,
 
-2. Go to your user directory (usuallly "C:/Users/[Your username]"): `cd ~`,
+2. Enter `git clone https://github.com/Bijman/srb2dl`,
 
-3. Enter `git clone https://github.com/Bijman/srb2dl`,
+3. Go to downloaded directory: `cd srb2dl`,
 
-4. Create directory "bin" with command: `mkdir ~/bin`,
-
-5. Copy script to "~/bin": `cp ~/srb2dl/srb2dl ~/bin`,
-
-6. Change script's permissions to be executable: `chmod 755 ~/bin/srb2dl`,
-
-7. Open text editor for "~/.bash_profile": `nano ~/.bash_profile`,
-
-8. In the opened text editor from previous step write new path to executables with environment variable PATH like `export PATH="~/bin:$PATH"` in "~/.bash_profile",
-
-9. Enter `source ~/.bash_profile` or restart Cygwin or Git Bash.
+4. Enter `install -Dm755 srb2dl -t /usr/local/bin`.
 
 **MacOS:**
 1. Open terminal,
