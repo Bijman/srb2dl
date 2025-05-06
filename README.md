@@ -179,7 +179,10 @@ Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
 
      3. Other environment variables to use. To activate them with value "1", do for example "export SRB2DLDEBUG=1":
 
-         - SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues.
+         - SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues,
+         - SRB2DLNODUPLICATES - Remove entries to the same file in script's database and leave only one with chosen path while downloading or updating the resource,
+         - SRB2DLUSERAGENT - Apply user-agent string to open "https://mb.srb2.org". Use it, if you encounter Cloudflare anti-bot challenge on web browser. Copy user-agent string from: "https://webbrowsertools.com/useragent",
+         - SRB2DLCOOKIE - Apply cookie session of https://mb.srb2.org. Follow "https://developer.chrome.com/docs/devtools/application/cookies" or "https://firefox-source-docs.mozilla.org/devtools-user/storage_inspector/index.html", to get cookie session to opened "https://mb.srb2.org" page from your web browser - Chrome or Firefox. Use it, if you encounter Cloudflare anti-bot challenge on web browser.
 ```
 
 # Notes
@@ -189,5 +192,7 @@ Usage: srb2dl [OPTIONS...] <addon-id/search-query> <directory-path>
 
 3. Other environment variables to use. To activate them with value "1", do for example "export SRB2DLDEBUG=1":
 
-	- SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues.
-
+	- SRB2DLDEBUG - Getting verbose output from script. Useful for reporting issues in https://github.com/bijman/srb2dl/issues,
+	- SRB2DLNODUPLICATES - Remove entries to the same file in script's database and leave only one with chosen path while downloading or updating the resource,
+	- SRB2DLUSERAGENT - Apply user-agent string to open "https://mb.srb2.org". Use it, if you encounter Cloudflare anti-bot challenge on web browser. Copy user-agent string from: "https://webbrowsertools.com/useragent",
+	- SRB2DLCOOKIE - Apply cookie session of https://mb.srb2.org. Follow "https://developer.chrome.com/docs/devtools/application/cookies" or "https://firefox-source-docs.mozilla.org/devtools-user/storage_inspector/index.html", to get cookie session to opened "https://mb.srb2.org" page from your web browser - Chrome or Firefox. Use it, if you encounter Cloudflare anti-bot challenge on web browser.
