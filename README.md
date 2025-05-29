@@ -16,6 +16,7 @@ This script extracts links and information from mb.srb2.org, GitHub and GitLab a
 - Basic system utilities like GNU Coreutils, BusyBox or macOS out-of-the-box system utilities,
 - Bash or any POSIX compliant shell,
 - Findutils,
+- Which,
 - Curl,
 - Gawk,
 - Ncurses,
@@ -26,32 +27,32 @@ Additionally, Windows users need to have installed Cygwin or Git Bash to run thi
 # Dependencies Installation
 **Linux:**
 1. In terminal enter this following command:
-- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install make git coreutils findutils ncurses-bin curl gawk`,
+- Debian/Ubuntu/Debian based/Ubuntu based: `sudo apt install make git debianutils coreutils findutils ncurses-bin curl gawk`,
 
-- Arch/Arch based: `sudo pacman -S --needed make git coreutils findutils ncurses curl gawk`,
+- Arch/Arch based: `sudo pacman -S --needed make git which coreutils findutils ncurses curl gawk`,
 
-- Gentoo/Gentoo based: `sudo emerge -av dev-vcs/git sys-apps/coreutils sys-apps/findutils sys-libs/ncurses net-misc/curl sys-apps/gawk`,
+- Gentoo/Gentoo based: `sudo emerge -av dev-vcs/git sys-apps/which sys-apps/coreutils sys-apps/findutils sys-libs/ncurses net-misc/curl sys-apps/gawk`,
 
-- Fedora/Fedora based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
+- Fedora/Fedora based: `sudo dnf install make git which coreutils findutils ncurses curl gawk`,
 
-- Fedora Silverblue/Fedora Kinoite/Universal Blue (Bazzite, Aurora): `rpm-ostree install -A --allow-inactive make git coreutils findutils ncurses curl gawk`,
+- Fedora Silverblue/Fedora Kinoite/Universal Blue (Bazzite, Aurora): `rpm-ostree install -A --allow-inactive make git which coreutils findutils ncurses curl gawk`,
 
-- RHEL/RHEL based: `sudo dnf install make git coreutils findutils ncurses curl gawk`,
+- RHEL/RHEL based: `sudo dnf install make git which coreutils findutils ncurses curl gawk`,
 
-- openSUSE Leap/openSUSE Tumbleweed/openSUSE Leap based/openSUSE Tumbleweed based: `sudo zypper in make git coreutils findutils ncurses curl gawk`,
+- openSUSE Leap/openSUSE Tumbleweed/openSUSE Leap based/openSUSE Tumbleweed based: `sudo zypper in make git which coreutils findutils ncurses curl gawk`,
 
-- openSUSE MicroOS/openSUSE MicroOS based: `sudo transactional-update pkg in make git coreutils findutils ncurses curl gawk`,
+- openSUSE MicroOS/openSUSE MicroOS based: `sudo transactional-update pkg in make git which coreutils findutils ncurses curl gawk`,
 
-- Void/Void based: `sudo xbps-install make git coreutils findutils ncurses curl gawk`,
+- Void/Void based: `sudo xbps-install make git which coreutils findutils ncurses curl gawk`,
 
-- Alpine/Alpine based: `sudo apk add make git coreutils findutils ncurses curl gawk`,
+- Alpine/Alpine based: `sudo apk add make git which coreutils findutils ncurses curl gawk`,
 
-- Solus/Solus based: `sudo eopkg it make git coreutils findutils ncurses curl gawk`,
+- Solus/Solus based: `sudo eopkg it make git which coreutils findutils ncurses curl gawk`,
 
-- NixOS/NixOS based: `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
+- NixOS/NixOS based: `sudo nix profile install nixpkgs#gnumake nixpkgs#git nixpkgs#which nixpkgs#coreutils nixpkgs#findutils nixpkgs#ncurses nixpkgs#curl nixpkgs#gawk --extra-experimental-features 'nix-command flakes'` or set those packages in "environment.systemPackages = with pkgs;" in "/etc/nixos/configuration.nix", and then enter `sudo nixos-rebuild switch`.
 
 - Immutable systems like Steam Deck's SteamOS need rootless method of getting dependencies to avoid issues with wiping out installed packages after system's update or not to be able to write to certain path, like "/usr/local":
-	- Install dependencies with package manager [Homebrew](https://brew.sh/): `brew install make git coreutils findutils ncurses curl gawk`.
+	- Install dependencies with package manager [Homebrew](https://brew.sh/): `brew install make git gnu-which coreutils findutils ncurses curl gawk`.
 
 **Windows:**
 1. Installing Git Bash:

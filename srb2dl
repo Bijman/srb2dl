@@ -5175,9 +5175,10 @@ EOF
 
         fi
 
+        TMPDIR=$(mktemp -d)
         printf "%s\n" "$DATABASE" | gawk '!/^ [0-9]/ && NF{gsub("\t"," "); print}' >> "$SRB2DLROOT/srb2dl"
-        sort -u "$SRB2DLROOT/srb2dl" | gawk '!/^ "\// {print}' > /tmp/srb2dl
-        mv /tmp/srb2dl "$SRB2DLROOT/srb2dl"
+        sort -u "$SRB2DLROOT/srb2dl" | gawk '!/^ "\// {print}' > "$TMPDIR/srb2dl"
+        mv "$TMPDIR/srb2dl" "$SRB2DLROOT/srb2dl"
 
         $PRINTF "$SUCCESS\n%s\n\e[0m\a" "Downloading is successful."
         exit
@@ -8330,8 +8331,9 @@ $THREADNAME $(printf "%s\n" "$FILELISTCODE" | gawk -F'etag: ' '{IGNORECASE=1} /e
 
         done < "$SRB2DLROOT/srb2dl" | cat
 
-        sort -u "$SRB2DLROOT/srb2dl" > /tmp/srb2dl
-        mv /tmp/srb2dl "$SRB2DLROOT/srb2dl"
+        TMPDIR=$(mktemp -d)
+        sort -u "$SRB2DLROOT/srb2dl" > "$TMPDIR/srb2dl"
+        mv "$TMPDIR/srb2dl" "$SRB2DLROOT/srb2dl"
         $PRINTF "$SUCCESS\n%s\n\e[0m\a" "Upgrading is successful."
         exit
 
